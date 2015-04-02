@@ -25,4 +25,9 @@ public class Controller {
 		
 		//spawn a thread to check messages from client
 	}
+	
+	public static void main(String []args) {
+		Controller c = new Controller();
+		c.start();
+	}
 }
