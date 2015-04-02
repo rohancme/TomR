@@ -31,8 +31,6 @@ public class Client {
 		HeartBeatMessage beat = new HeartBeatMessage(ownerAddress);
 		
 		beat.toJSON(connection.getOutputStream(), beat);
-		connection.getOutputStream().flush();
-		
 	}
 	
 	public void closeConnection() throws IOException {
