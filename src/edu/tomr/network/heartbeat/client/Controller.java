@@ -23,6 +23,12 @@ public class Controller extends Thread {
 		this.selfAddress = new ConnectionAddress(selfIp, selfPortNo);
 	}
 
+	public void initSendClose() throws InterruptedException, IOException {
+		this.initializeClientBeater();
+		this.startHeartBeats();
+		this.clientBeater.closeConnection();
+	}
+	
 	public void initializeClientBeater() {
 		clientBeater = new Client(this.serverAddress);
 		try {
@@ -45,9 +51,12 @@ public class Controller extends Thread {
 	
 	public void run() {
 		try {
-			clientBeater.sendHeartBeat(selfAddress);
+			this.initSendClose();
 		} catch (IOException e) {
 			System.out.println("run: IO exception while sending heartbeat");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			
 			e.printStackTrace();
 		}
 	}
@@ -58,7 +67,7 @@ public class Controller extends Thread {
 		int serverPortNo = 8080, selfPortNo = Integer.parseInt(args[1]);
 		
 		Controller clientController = new Controller(serverIp, serverPortNo, selfIp, selfPortNo);
-		clientController.initializeClientBeater();
+		/*clientController.initializeClientBeater();
 		try {
 			clientController.startHeartBeats();
 		} catch (InterruptedException e) {
@@ -71,10 +80,8 @@ public class Controller extends Thread {
 				System.out.println("client main: finally: IO exception");
 				e.printStackTrace();
 			}
-		}
+		}*/
+		clientController.start();
 	}
 	
-	/*class Handler extends Thread {
-		
-	}*/
 }

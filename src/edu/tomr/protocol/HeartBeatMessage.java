@@ -23,6 +23,8 @@ public class HeartBeatMessage extends Message {
 		this.timeStamp = timeStamp;
 	}
 	
+	public HeartBeatMessage(){}
+	
 	public HeartBeatMessage(ConnectionAddress sender) {
 		
 		this.sender = sender;
@@ -32,7 +34,7 @@ public class HeartBeatMessage extends Message {
 	@Override
 	public String toString() {
 		
-		return new StringBuilder().append(sender.getIpAddress()).append(sender.getPortNumber()).toString();
+		return new StringBuilder().append(sender.getIpAddress()).append(':').append(sender.getPortNumber()).toString();
 	}
 	
 	

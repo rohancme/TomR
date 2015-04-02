@@ -35,7 +35,7 @@ public class Client {
 		
 	}
 	
-	public void destory() throws IOException {
+	public void closeConnection() throws IOException {
 		
 		connection.close();
 	}
