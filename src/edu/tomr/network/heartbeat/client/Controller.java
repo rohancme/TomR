@@ -25,7 +25,7 @@ public class Controller extends Thread {
 
 	public void initSendClose() throws InterruptedException, IOException {
 		this.initializeClientBeater();
-		this.startHeartBeats();
+		this.clientBeater.sendHeartBeat(this.selfAddress);
 		this.clientBeater.closeConnection();
 	}
 	
@@ -81,7 +81,12 @@ public class Controller extends Thread {
 				e.printStackTrace();
 			}
 		}*/
-		clientController.start();
+		try {
+			clientController.startHeartBeats();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
