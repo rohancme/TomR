@@ -1,7 +1,7 @@
 package edu.tomr.protocol;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.StringWriter;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -9,9 +9,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public abstract class Message {
 	
-	public void toJSON(OutputStream stream, Message message) throws JsonGenerationException, 
+	static StringWriter writer;
+	
+	public String toJSON(Message message) throws JsonGenerationException, 
 		JsonMappingException, IOException {
 		
-		new ObjectMapper().writeValue(stream, message);
+		writer = new StringWriter();
+		new ObjectMapper().writeValue(writer, message);
+		
+		return writer.toString();
 	}
 }
