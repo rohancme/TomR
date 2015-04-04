@@ -10,6 +10,7 @@ public class TestNeighborConnection {
 		NW_Request req=new NW_Request("Testing123!");
 		
 		nc.send_request(req);
+		//nc.send_request(req);
 
 	}
 
