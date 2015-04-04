@@ -2,8 +2,8 @@ package network;
 
 import java.util.UUID;
 
-import requests.CloseRequest;
-import requests.NewClientConnectionRequest;
+import network.requests.CloseRequest;
+import network.requests.NewClientConnectionRequest;
 
 public class NetworkModule {
 	

@@ -1,4 +1,4 @@
-package requests;
+package network.requests;
 
 import static network.NetworkConstants.Requests;
 
