@@ -9,7 +9,7 @@ import network.NetworkConstants.Requests;
 public abstract class NWRequest {
 	
 	protected final String request_id;
-	protected final String request_type;
+	private final String request_type;
 	protected final Message payload;
 	
 	protected NWRequest(String req_id,Requests request,Message msg){

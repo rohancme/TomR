@@ -17,7 +17,7 @@ public class TestNeighborConnection {
 		
 		NeighborConnection nc=new NeighborConnection("192.168.1.138",5555);
 		
-		StartupRequest req=myNetworkModule.getNewStartupRequest(new StartupMessage("GET JIGGY WITH IT"));
+		NetworkPacket req=myNetworkModule.getNewStartupRequest(new StartupMessage("GET JIGGY WITH IT"));
 		
 		nc.send_request(req);
 

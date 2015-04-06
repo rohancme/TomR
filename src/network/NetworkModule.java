@@ -35,17 +35,12 @@ public class NetworkModule {
 	        while (addresses.hasMoreElements()){
 	            InetAddress ip = addresses.nextElement();
 	            if (ip instanceof Inet4Address){
-
 	                if (ip.isSiteLocalAddress()){
-
 	                    ipAddress = ip.getHostAddress();
 	                }
-
 	            }
-
 	        }
-	    }
-	    
+	    }	    
 	    if(ipAddress==null){
 	    	throw new NetworkException("Error initializing IP address. Try defining the IP address in the config file.");
 	    }
@@ -63,25 +58,26 @@ public class NetworkModule {
 	}
 	
 	
-	NewClientConnectionRequest getNewClientConnectionRequest(Message msg){
+	NetworkPacket<NewClientConnectionRequest> getNewClientConnectionRequest(Message msg){
 		NewClientConnectionRequest request=new NewClientConnectionRequest(this.generate_req_id(),msg);
-		return request;
+		return new NetworkPacket<NewClientConnectionRequest>(request);
 	}
 	
-	NewNeighborConnectionRequest getNewNeighborConnectionRequest(Message msg){
+	NetworkPacket<NewNeighborConnectionRequest> getNewNeighborConnectionRequest(Message msg){
 		NewNeighborConnectionRequest request=new NewNeighborConnectionRequest(this.generate_req_id(),msg);
-		return request;
+		return new NetworkPacket<NewNeighborConnectionRequest>(request);
 	}
 	
-	CloseRequest getNewCloseRequest(Message msg){	
+	NetworkPacket<CloseRequest> getNewCloseRequest(Message msg){	
 		CloseRequest request=new CloseRequest(this.generate_req_id(),msg);
-		return request;
+		return new NetworkPacket<CloseRequest>(request);
 	}
 	
-	StartupRequest getNewStartupRequest(Message msg){	
+	NetworkPacket<StartupRequest> getNewStartupRequest(Message msg){	
 		StartupRequest request=new StartupRequest(this.generate_req_id(),msg);
-		return request;
+		return new NetworkPacket<StartupRequest>(request);
 	}
+	
 	
 	
 

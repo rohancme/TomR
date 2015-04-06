@@ -19,7 +19,7 @@ public class NeighborConnection extends Connection{
 	}
 	
 	
-	void send_request(NWRequest request){
+	void send_request(NetworkPacket packet){
 		ObjectMapper mapper = new ObjectMapper();
 		DataOutputStream output_stream=null;
 		try {
@@ -31,8 +31,8 @@ public class NeighborConnection extends Connection{
 		}
 		
 		try {
-			mapper.writeValue(System.out, request);
-			mapper.writeValue(output_stream, request);
+			mapper.writeValue(System.out, packet);
+			mapper.writeValue(output_stream, packet);
 		} catch (JsonGenerationException e) {
 			System.out.println("Problem Generating JSON");
 			e.printStackTrace();
