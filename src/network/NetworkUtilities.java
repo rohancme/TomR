@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.UUID;
 
 import network.requests.CloseRequest;
+import network.requests.DBRequest;
 import network.requests.NewClientConnectionRequest;
 import network.requests.NewNeighborConnectionRequest;
 import network.requests.StartupRequest;
@@ -15,11 +16,11 @@ import edu.tomr.protocol.CloseMessage;
 import edu.tomr.protocol.Message;
 import edu.tomr.protocol.Message.*;
 
-public class NetworkModule {
+public class NetworkUtilities {
 	
 	String IP;
 	
-	NetworkModule() throws NetworkException{
+	NetworkUtilities() throws NetworkException{
 		//following code is from:http://stackoverflow.com/a/18945245
 		String ipAddress = null;
 	    Enumeration<NetworkInterface> net = null;
@@ -49,7 +50,7 @@ public class NetworkModule {
 	    }
 	}
 	
-	NetworkModule(String IP){
+	NetworkUtilities(String IP){
 		this.IP=IP;
 	}
 	
@@ -78,7 +79,9 @@ public class NetworkModule {
 		return new NetworkPacket<StartupRequest>(request);
 	}
 	
-	
-	
+	NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
+		DBRequest request=new DBRequest(this.generate_req_id(),msg);
+		return new NetworkPacket<DBRequest>(request);
+	}
 
 }

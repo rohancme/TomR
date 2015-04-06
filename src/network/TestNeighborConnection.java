@@ -7,10 +7,10 @@ public class TestNeighborConnection {
 
 	public static void main(String[] args) {
 		
-		NetworkModule myNetworkModule=null;
+		NetworkUtilities myNetworkModule=null;
 		
 		try {
-			myNetworkModule=new NetworkModule();
+			myNetworkModule=new NetworkUtilities();
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}

@@ -52,7 +52,7 @@ public class Simple_Server {
 		
 		
 		return sb.toString();*/
-		System.out.println(msg.toJSON());
+		System.out.println(msg.toJSON(msg));
 		
 		return null;
 	}

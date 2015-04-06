@@ -1,7 +1,5 @@
 package network.requests;
 
-import java.io.Serializable;
-
 import edu.tomr.protocol.Message;
 import network.NetworkConstants.Requests;
 
