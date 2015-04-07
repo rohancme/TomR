@@ -11,7 +11,7 @@ public class NetworkPacket<T>{
 	public T request;
 	public final String type;
 	
-	NetworkPacket(T request){
+	public NetworkPacket(T request){
 		
 		this.type=((NWRequest)request).getRequestType();
 		this.request=request;

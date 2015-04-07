@@ -18,7 +18,7 @@ public class NetworkUtilities {
 	
 	String IP;
 	
-	NetworkUtilities() throws NetworkException{
+	public NetworkUtilities() throws NetworkException{
 		//following code is from:http://stackoverflow.com/a/18945245
 		String ipAddress = null;
 	    Enumeration<NetworkInterface> net = null;
@@ -48,36 +48,36 @@ public class NetworkUtilities {
 	    }
 	}
 	
-	NetworkUtilities(String IP){
+	public NetworkUtilities(String IP){
 		this.IP=IP;
 	}
 	
-	String generate_req_id(){
+	public String generate_req_id(){
 		return (IP+UUID.randomUUID());
 	}
 	
 	
-	NetworkPacket<NewClientConnectionRequest> getNewClientConnectionRequest(Message msg){
+	public NetworkPacket<NewClientConnectionRequest> getNewClientConnectionRequest(Message msg){
 		NewClientConnectionRequest request=new NewClientConnectionRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<NewClientConnectionRequest>(request);
 	}
 	
-	NetworkPacket<NewNeighborConnectionRequest> getNewNeighborConnectionRequest(Message msg){
+	public NetworkPacket<NewNeighborConnectionRequest> getNewNeighborConnectionRequest(Message msg){
 		NewNeighborConnectionRequest request=new NewNeighborConnectionRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<NewNeighborConnectionRequest>(request);
 	}
 	
-	NetworkPacket<CloseRequest> getNewCloseRequest(Message msg){	
+	public NetworkPacket<CloseRequest> getNewCloseRequest(Message msg){	
 		CloseRequest request=new CloseRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<CloseRequest>(request);
 	}
 	
-	NetworkPacket<StartupRequest> getNewStartupRequest(Message msg){	
+	public NetworkPacket<StartupRequest> getNewStartupRequest(Message msg){	
 		StartupRequest request=new StartupRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<StartupRequest>(request);
 	}
 	
-	NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
+	public NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
 		DBRequest request=new DBRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<DBRequest>(request);
 	}

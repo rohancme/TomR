@@ -4,6 +4,8 @@ import edu.tomr.protocol.StartupMessage;
 import network.requests.StartupRequest;
 
 public class TestNeighborConnection {
+	
+	//Need new one
 
 	public static void main(String[] args) {
 		
@@ -17,9 +19,9 @@ public class TestNeighborConnection {
 		
 		NeighborConnection nc=new NeighborConnection("192.168.1.138",5555);
 		
-		NetworkPacket req=myNetworkModule.getNewStartupRequest(new StartupMessage("GET JIGGY WITH IT"));
+		//NetworkPacket req=myNetworkModule.getNewStartupRequest(new StartupMessage("GET JIGGY WITH IT"));
 		
-		nc.send_request(req);
+		//nc.send_request(req);
 
 	}
 

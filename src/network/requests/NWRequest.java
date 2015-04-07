@@ -24,4 +24,11 @@ public abstract class NWRequest {
 	public String getRequestID(){
 		return this.request_id;
 	}
+
+
+	public Message getPayload() {
+		return payload;
+	}
+	
+	
 }
