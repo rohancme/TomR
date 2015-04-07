@@ -32,7 +32,8 @@ public class CentralStarterClass {
 		IPAddresses.add("");
 		
 		//make the last one connectFirst
-		for(int i=0;i<IPAddresses.size()-1;i++){
+		int i;
+		for(i=0;i<IPAddresses.size()-1;i++){
 			ArrayList<String> neighbors=generateNeighborList(i,IPAddresses);
 			StartupMessage msg=new StartupMessage("Testing123",neighbors);
 			NetworkPacket<StartupRequest> packet=utils.getNewStartupRequest(msg);
@@ -42,6 +43,15 @@ public class CentralStarterClass {
 			temp_connection.send_request(packet);
 
 		}
+		
+		ArrayList<String> neighbors=generateNeighborList(i,IPAddresses);
+		StartupMessage msg=new StartupMessage("Testing123",neighbors,true);
+		NetworkPacket<StartupRequest> packet=utils.getNewStartupRequest(msg);
+		
+		Connection temp_connection=new Connection(IPAddresses.get(i),startupMsgPort);
+		
+		temp_connection.send_request(packet);
+		
 	}
 
 	private static ArrayList<String> generateNeighborList(int i,
