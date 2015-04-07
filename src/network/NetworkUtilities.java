@@ -12,9 +12,7 @@ import network.requests.DBRequest;
 import network.requests.NewClientConnectionRequest;
 import network.requests.NewNeighborConnectionRequest;
 import network.requests.StartupRequest;
-import edu.tomr.protocol.CloseMessage;
 import edu.tomr.protocol.Message;
-import edu.tomr.protocol.Message.*;
 
 public class NetworkUtilities {
 	

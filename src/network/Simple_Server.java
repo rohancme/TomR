@@ -3,7 +3,6 @@ package network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -34,7 +33,6 @@ public class Simple_Server {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Scanner sc=null;
 		ObjectMapper mapper = new ObjectMapper();
 		Message msg=null;
 		try {

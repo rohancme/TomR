@@ -1,9 +1,7 @@
 package network.requests;
 
 import static network.NetworkConstants.*;
-import edu.tomr.protocol.CloseMessage;
 import edu.tomr.protocol.Message;
-import network.NetworkConstants;
 import network.NetworkConstants.Requests;
 
 public abstract class NWRequest {

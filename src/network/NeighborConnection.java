@@ -2,11 +2,6 @@ package network;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
-import network.requests.NWRequest;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -19,6 +14,7 @@ public class NeighborConnection extends Connection{
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	void send_request(NetworkPacket packet){
 		ObjectMapper mapper = new ObjectMapper();
 		DataOutputStream output_stream=null;

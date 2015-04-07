@@ -1,7 +1,5 @@
 package network;
 
-import java.io.Serializable;
-
 import network.requests.NWRequest;
 
 public class NetworkPacket<T>{
