@@ -6,7 +6,7 @@ public final class NetworkConstants {
 	}
 	
 	public static enum Requests{
-		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION
+		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE
 	}
 	
 	public static String requestToString(Requests req){
@@ -17,6 +17,8 @@ public final class NetworkConstants {
 			case DB_OPERATION: return "DB_OPERATION";
 			case NEW_NEIGHBOR_CONNECTION: return "NEW_NEIGHBOR_CONNECTION";
 			case STARTUP: return "STARTUP";
+		default:
+			break;
 		}
 		
 		return null;

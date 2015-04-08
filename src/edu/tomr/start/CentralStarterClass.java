@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import edu.tomr.protocol.StartupMessage;
 import network.Connection;
 import network.NetworkException;
-import network.NetworkPacket;
 import network.NetworkUtilities;
-import network.requests.StartupRequest;
+import network.requests.NWRequest;
 
 public class CentralStarterClass {
 	
@@ -27,7 +26,7 @@ public class CentralStarterClass {
 		
 		ArrayList<String> IPAddresses=new ArrayList<String>();
 		
-		IPAddresses.add("");
+		IPAddresses.add("10.139.60.15");
 		IPAddresses.add("");
 		IPAddresses.add("");
 		
@@ -36,21 +35,21 @@ public class CentralStarterClass {
 		for(i=0;i<IPAddresses.size()-1;i++){
 			ArrayList<String> neighbors=generateNeighborList(i,IPAddresses);
 			StartupMessage msg=new StartupMessage("Testing123",neighbors);
-			NetworkPacket<StartupRequest> packet=utils.getNewStartupRequest(msg);
+			NWRequest startupRequest=utils.getNewStartupRequest(msg);
 			
 			Connection temp_connection=new Connection(IPAddresses.get(i),startupMsgPort);
 			
-			temp_connection.send_request(packet);
+			temp_connection.send_request(startupRequest);
 
 		}
 		
 		ArrayList<String> neighbors=generateNeighborList(i,IPAddresses);
 		StartupMessage msg=new StartupMessage("Testing123",neighbors,true);
-		NetworkPacket<StartupRequest> packet=utils.getNewStartupRequest(msg);
+		NWRequest startupRequest=utils.getNewStartupRequest(msg);
 		
 		Connection temp_connection=new Connection(IPAddresses.get(i),startupMsgPort);
 		
-		temp_connection.send_request(packet);
+		temp_connection.send_request(startupRequest);
 		
 	}
 

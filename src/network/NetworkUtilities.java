@@ -7,12 +7,9 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.UUID;
 
-import network.requests.CloseRequest;
-import network.requests.DBRequest;
-import network.requests.NewClientConnectionRequest;
-import network.requests.NewNeighborConnectionRequest;
-import network.requests.StartupRequest;
-import edu.tomr.protocol.Message;
+import network.requests.NWRequest;
+import edu.tomr.protocol.NeighborMessage;
+import edu.tomr.protocol.StartupMessage;
 
 public class NetworkUtilities {
 	
@@ -57,29 +54,29 @@ public class NetworkUtilities {
 	}
 	
 	
-	public NetworkPacket<NewClientConnectionRequest> getNewClientConnectionRequest(Message msg){
+	/*public NetworkPacket<NewClientConnectionRequest> getNewClientConnectionRequest(Message msg){
 		NewClientConnectionRequest request=new NewClientConnectionRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<NewClientConnectionRequest>(request);
+	}*/
+	
+	public NWRequest getNewNeighborConnectionRequest(NeighborMessage msg){
+		NWRequest request=new NWRequest(this.generate_req_id(),msg);
+		return request;
 	}
 	
-	public NetworkPacket<NewNeighborConnectionRequest> getNewNeighborConnectionRequest(Message msg){
-		NewNeighborConnectionRequest request=new NewNeighborConnectionRequest(this.generate_req_id(),msg);
-		return new NetworkPacket<NewNeighborConnectionRequest>(request);
-	}
-	
-	public NetworkPacket<CloseRequest> getNewCloseRequest(Message msg){	
+	/*public NWRequest getNewCloseRequest(Message msg){	
 		CloseRequest request=new CloseRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<CloseRequest>(request);
+	}*/
+		
+	public NWRequest getNewStartupRequest(StartupMessage msg){	
+		NWRequest request=new NWRequest(this.generate_req_id(),msg);
+		return request;
 	}
 	
-	public NetworkPacket<StartupRequest> getNewStartupRequest(Message msg){	
-		StartupRequest request=new StartupRequest(this.generate_req_id(),msg);
-		return new NetworkPacket<StartupRequest>(request);
-	}
-	
-	public NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
+	/*public NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
 		DBRequest request=new DBRequest(this.generate_req_id(),msg);
 		return new NetworkPacket<DBRequest>(request);
-	}
+	}*/
 
 }

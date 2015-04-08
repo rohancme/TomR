@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import network.requests.NWRequest;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,8 +27,7 @@ public class Connection {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public void send_request(NetworkPacket packet){
+	public void send_request(NWRequest request){
 		ObjectMapper mapper = new ObjectMapper();
 		DataOutputStream output_stream=null;
 		try {
@@ -38,8 +39,8 @@ public class Connection {
 		}
 		
 		try {
-			mapper.writeValue(System.out, packet);
-			mapper.writeValue(output_stream, packet);
+			mapper.writeValue(System.out, request);
+			mapper.writeValue(output_stream, request);
 		} catch (JsonGenerationException e) {
 			System.out.println("Problem Generating JSON");
 			e.printStackTrace();

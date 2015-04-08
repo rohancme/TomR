@@ -4,19 +4,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import network.requests.CloseRequest;
-import network.requests.DBRequest;
 import network.requests.NWRequest;
-import network.requests.NewClientConnectionRequest;
-import network.requests.NewNeighborConnectionRequest;
-import network.requests.StartupRequest;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class ConnectionHandler {
 	
-	ServerSocket serverSocket;
-	Socket clientSocket;
+	protected ServerSocket serverSocket;
+	protected Socket clientSocket;
 	
 	public ConnectionHandler(int incoming_port) {
 		
@@ -38,47 +34,18 @@ public class ConnectionHandler {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected NWRequest getNextRequest(){
 		
 		ObjectMapper mapper = new ObjectMapper();
-		NetworkPacket packet=null;
+		NWRequest request=null;
 		try {
-			packet=mapper.readValue(clientSocket.getInputStream(),NetworkPacket.class);
+			request=mapper.readValue(clientSocket.getInputStream(), NWRequest.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return extractRequest(packet);
-	}
-
-
-	@SuppressWarnings("rawtypes")
-	private NWRequest extractRequest(NetworkPacket packet) {
-		
-		switch(packet.type){
-			
-			case "NEW_NEIGHBOR_CONNECTION": NewNeighborConnectionRequest neighborRequest=(NewNeighborConnectionRequest) packet.request;
-											return neighborRequest;
-			
-			case "DB_OPERATION": DBRequest dBRequest=(DBRequest) packet.request;
-								 return dBRequest;
-			
-			case "STARTUP": StartupRequest startupRequest=(StartupRequest) packet.request;
-							return startupRequest;
-							
-			case "CLOSE": CloseRequest closeRequest=(CloseRequest) packet.request;
-						  return closeRequest;
-						  
-			case "NEW_CLIENT_CONNECTION": NewClientConnectionRequest newClientRequest=(NewClientConnectionRequest) packet.request;
-										  return newClientRequest;
-										  
-			default: System.out.println("Invalid request. Currently Ignoring");
-			
-		}
-		
-		return null;
+		return request;
 	}
 
 

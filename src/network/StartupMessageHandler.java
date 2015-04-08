@@ -1,6 +1,6 @@
 package network;
 
-import network.requests.StartupRequest;
+import network.requests.NWRequest;
 
 //don't think this needs to be a separate thread currently
 public class StartupMessageHandler extends ConnectionHandler{
@@ -9,9 +9,9 @@ public class StartupMessageHandler extends ConnectionHandler{
 		super(incoming_port);
 	}
 	
-	public StartupRequest getRequest() throws NetworkException{
+	public NWRequest getRequest() throws NetworkException{
 		initializeClientSocket();
-		return (StartupRequest) getNextRequest();
+		return getNextRequest();
 	}
 
 }

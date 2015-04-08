@@ -3,11 +3,17 @@ package edu.tomr.protocol;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class StartupMessage extends Message {
 
-	private String msg;
-	private boolean connectFirst;
-	private ArrayList<String> neighborList;
+	@JsonProperty private String msg;
+	@JsonProperty private boolean connectFirst;
+	@JsonProperty private ArrayList<String> neighborList;
+	
+	public StartupMessage(){
+	
+	}
 	
 	public StartupMessage(String msg,List<String> neighbors){
 		this.msg=msg;

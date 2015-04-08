@@ -7,7 +7,7 @@ import network.NeighborConnection;
 import network.NeighborConnectionHandler;
 import network.NetworkException;
 import network.StartupMessageHandler;
-import network.requests.StartupRequest;
+import network.requests.NWRequest;
 
 public class NodeStarterClass {
 	
@@ -20,7 +20,7 @@ public class NodeStarterClass {
 		
 		//1. Wait for the startup message
 		StartupMessageHandler myStartupHandler=new StartupMessageHandler(startupMsgPort);
-		StartupRequest startupRequest=null;
+		NWRequest startupRequest=null;
 		try {
 			startupRequest=myStartupHandler.getRequest();
 		} catch (NetworkException e) {
@@ -28,7 +28,7 @@ public class NodeStarterClass {
 		}
 		
 		//Extract information about who to connect with and in what order
-		StartupMessage startupMessage=(StartupMessage) startupRequest.getPayload();
+		StartupMessage startupMessage=(StartupMessage) startupRequest.getStartupMessage();
 		//Use following:
 		//NeighborConnection in order to establish a connection with neighbor
 		//NeighborConnectionHandler in order to accept and continue receiving requests from a neighbor
