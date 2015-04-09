@@ -2,6 +2,7 @@ package edu.tomr.start;
 
 import java.util.ArrayList;
 
+import edu.tomr.node.base.Node;
 import edu.tomr.protocol.StartupMessage;
 import network.NeighborConnection;
 import network.NeighborConnectionHandler;
@@ -15,6 +16,11 @@ public class NodeStarterClass {
 	static int neighborServerPort=5001;
 	static int selfServerPort=5002;
 	
+	private Node dbNode;
+	
+	private void initDbNode(String ipAddress) {
+		this.dbNode = new Node(ipAddress);
+	}
 
 	public static void main(String[] args) {
 		
@@ -65,7 +71,6 @@ public class NodeStarterClass {
 			}
 			
 		}
-		
 		
 		//Still need to implement listening for Client Requests	
 		
