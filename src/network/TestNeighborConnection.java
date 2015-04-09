@@ -1,7 +1,6 @@
 package network;
 
 import edu.tomr.protocol.StartupMessage;
-import network.requests.StartupRequest;
 
 public class TestNeighborConnection {
 	
