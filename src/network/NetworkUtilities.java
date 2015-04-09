@@ -13,7 +13,7 @@ import edu.tomr.protocol.StartupMessage;
 
 public class NetworkUtilities {
 	
-	String IP;
+	private final String IP;
 	
 	public NetworkUtilities() throws NetworkException{
 		//following code is from:http://stackoverflow.com/a/18945245
@@ -47,6 +47,10 @@ public class NetworkUtilities {
 	
 	public NetworkUtilities(String IP){
 		this.IP=IP;
+	}
+	
+	public String getSelfIP(){
+		return this.IP;
 	}
 	
 	public String generate_req_id(){
