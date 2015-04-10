@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Controller {
+public class ServerBeatController {
 
 	Map<String, Date> clients;
 	Server beatServer;
@@ -27,7 +27,7 @@ public class Controller {
 	}
 	
 	public static void main(String []args) {
-		Controller c = new Controller();
+		ServerBeatController c = new ServerBeatController();
 		c.start();
 	}
 }

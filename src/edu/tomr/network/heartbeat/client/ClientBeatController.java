@@ -5,18 +5,18 @@ import java.net.UnknownHostException;
 
 import edu.tomr.network.base.ConnectionAddress;
 
-public class Controller extends Thread {
+public class ClientBeatController extends Thread {
 
 	private ConnectionAddress serverAddress;
 	private ConnectionAddress selfAddress;
 	private Client clientBeater;
 	
-	public Controller(String serverIp, int serverPortNo) {
+	public ClientBeatController(String serverIp, int serverPortNo) {
 		
 		this.serverAddress = new ConnectionAddress(serverIp, serverPortNo);
 	}
 	
-	public Controller(String serverIp, int serverPortNo, String selfIp,
+	public ClientBeatController(String serverIp, int serverPortNo, String selfIp,
 			int selfPortNo) {
 		
 		this(serverIp, serverPortNo);
@@ -66,7 +66,7 @@ public class Controller extends Thread {
 		String serverIp = "", selfIp = args[0];
 		int serverPortNo = 8080, selfPortNo = Integer.parseInt(args[1]);
 		
-		Controller clientController = new Controller(serverIp, serverPortNo, selfIp, selfPortNo);
+		ClientBeatController clientController = new ClientBeatController(serverIp, serverPortNo, selfIp, selfPortNo);
 		/*clientController.initializeClientBeater();
 		try {
 			clientController.startHeartBeats();
