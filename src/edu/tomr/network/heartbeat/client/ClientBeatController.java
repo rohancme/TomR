@@ -11,7 +11,7 @@ public class ClientBeatController extends Thread {
 	private ConnectionAddress selfAddress;
 	private Client clientBeater;
 	
-	public ClientBeatController(String serverIp, int serverPortNo) {
+	private ClientBeatController(String serverIp, int serverPortNo) {
 		
 		this.serverAddress = new ConnectionAddress(serverIp, serverPortNo);
 	}

@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Calendar;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import edu.tomr.exception.NodeGoneDownException;
 import edu.tomr.protocol.HeartBeatMessage;
 
 public class Server {
@@ -30,26 +33,26 @@ public class Server {
 		this.controller = controller;
 		this.portNumber = portNumber;
 	}
-	
+
 	public void startServer() throws IOException{
 		System.out.println("started listening for connections");
 		server = new ServerSocket(this.portNumber);
 		try {
-            while (true) {
-                new Handler(server.accept()).start();
-            }
-        } finally {
-            server.close();
-        }
+			while (true) {
+				new Handler(server.accept()).start();
+			}
+		} finally {
+			server.close();
+		}
 	}
-	
+
 	private class Handler extends Thread {
 		private Socket client;
-		
+
 		public Handler(Socket client){
 			this.client = client;
 		}
-		
+
 		public void run() {
 			HeartBeatMessage message = null;
 			BufferedReader in = null;
@@ -59,29 +62,32 @@ public class Server {
 				System.out.println("Server:run buff reader");
 				e1.printStackTrace();
 			}
-			
+
 			ObjectMapper mapper = new ObjectMapper();
-            try {
-            	
-            	message = mapper.readValue(in, HeartBeatMessage.class);
+			try {
+
+				message = mapper.readValue(in, HeartBeatMessage.class);
 			} catch (JsonParseException | JsonMappingException e) {
-				
+
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("object deserialed error");
 				e.printStackTrace();
 			}
-            if (message == null) {
-                return;
-            }
-            synchronized (controller.clients) {
-                
-            	System.out.println("updated ip address and timestamp for server at: "
-            			+message.toString()+" with time: "+message.getTimeStamp());
-            	controller.clients.put(message.toString(), message.getTimeStamp());
-            }
-            
-            try {
+			if (message == null) {
+				return;
+			}
+			synchronized (controller.clients) {
+
+				System.out.println("updated ip address and timestamp for server at: "
+						+message.toString()+" with time: "+message.getTimeStamp());
+				if(controller.clients.containsKey(message.toString())) {
+					new TimerCheck(message.toString()).start();
+				}
+				controller.clients.put(message.toString(), message.getTimeStamp().getTime());
+			}
+
+			try {
 				client.close();
 			} catch (IOException e) {
 				System.out.println("client connection closed");
@@ -89,4 +95,44 @@ public class Server {
 			}
 		}
 	}
+
+	private class TimerCheck extends Thread {
+
+		private String clientKey;
+
+		public TimerCheck(String clientKey) {
+			this.clientKey = clientKey;
+		}
+
+		public void run() {
+			boolean running = true;
+
+			while(running) {
+				try {
+					Thread.sleep(5000);
+					checkTiming(controller.clients);
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				} catch (NodeGoneDownException e) {
+
+					System.out.println("NodeGoneDownException thrown");
+					running = false;
+					e.printStackTrace();
+				}
+			}
+
+			System.out.println("Checker thread stopping");
+			controller.clients.remove(clientKey);
+		}
+
+		public void checkTiming(Map<String, Long> clients) throws NodeGoneDownException {
+
+			Long d = clients.get(clientKey);
+			if((Calendar.getInstance().getTimeInMillis() - d) > 6000 ) {
+				throw new NodeGoneDownException("Node at address "+clientKey+" is down");
+			}
+		}
+	}
+
 }
