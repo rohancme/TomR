@@ -14,7 +14,7 @@ import edu.tomr.protocol.HeartBeatMessage;
 
 public class Server {
 
-	private Controller controller;
+	private ServerBeatController controller;
 	private int portNumber;
 	private ServerSocket server;
 
@@ -26,7 +26,7 @@ public class Server {
 		this.portNumber = portNumber;
 	}
 
-	public Server(Controller controller, int portNumber) {
+	public Server(ServerBeatController controller, int portNumber) {
 		this.controller = controller;
 		this.portNumber = portNumber;
 	}
