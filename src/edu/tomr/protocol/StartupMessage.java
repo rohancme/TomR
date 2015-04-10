@@ -10,20 +10,29 @@ public class StartupMessage extends Message {
 	@JsonProperty private String msg;
 	@JsonProperty private boolean connectFirst;
 	@JsonProperty private ArrayList<String> neighborList;
+	@JsonProperty private List<String> nodeList;
 	
 	public StartupMessage(){
 	
 	}
 	
-	public StartupMessage(String msg,List<String> neighbors){
-		this.msg=msg;
-		connectFirst=false;
+	private StartupMessage(String msg, List<String> nodeList){
+		this.msg = msg;
+		this.nodeList = nodeList;
+	}
+	
+	public StartupMessage(String msg, List<String> neighbors, List<String> nodeList){
+		
+		this(msg, nodeList);
 		//in case the neighbor list is a list of a different kind
 		neighborList=new ArrayList<String>();
 		neighborList.addAll(neighbors);
+		
 	}
 	
-	public StartupMessage(String msg,List<String> neighbors,boolean connectFirst){
+	public StartupMessage(String msg,List<String> neighbors, List<String> nodeList, boolean connectFirst){
+		
+		this(msg, nodeList);
 		this.connectFirst=connectFirst;
 		this.msg=msg;
 		//in case the neighbor list is a list of a different kind
@@ -53,6 +62,14 @@ public class StartupMessage extends Message {
 
 	public void setNeighborList(ArrayList<String> neighborList) {
 		this.neighborList = neighborList;
+	}
+
+	public List<String> getNodeList() {
+		return nodeList;
+	}
+
+	public void setNodeList(List<String> nodeList) {
+		this.nodeList = nodeList;
 	}
 
 }
