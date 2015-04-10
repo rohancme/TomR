@@ -1,7 +1,7 @@
 package edu.tomr.node.base;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import edu.tomr.hash.IConsistentHashing;
 import edu.tomr.node.map.operations.IMapOperation;
@@ -27,7 +27,7 @@ public class Node {
 	public Node(String selfIpAdd){
 		
 		this.selfIpAddress = selfIpAdd;
-		inMemMap = new HashMap<String, byte[]>();
+		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		operation = new MapOperation(inMemMap);
 		if(hasher == null){
 			//instantiate hasher
