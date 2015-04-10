@@ -14,10 +14,6 @@ public class ConfigParams {
 	private static final String propertyFileName = "tomr.config";
 	private static final String tomrEnvVar = "TOMR_PROPS";
 
-	static {
-		loadProperties();
-	}
-	
 	public static void loadProperties() {
 
 		String propFilePath = System.getenv(tomrEnvVar);
@@ -53,6 +49,15 @@ public class ConfigParams {
 			return val.trim();
 		
 		return null;
+	}
+	
+	public static int getIntProperty(String key) {
+		
+		String val = prop.getProperty(key);
+		if(null != val)
+			return Integer.parseInt(val.trim());
+		
+		return -1;
 	}
 	
 	public static List<String> getIpAddresses() {
