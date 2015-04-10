@@ -1,21 +1,20 @@
 package edu.tomr.network.heartbeat.server;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerBeatController {
 
-	Map<String, Date> clients;
+	static int beatPortNumber = 8080;
+	
+	Map<String, Long> clients;
 	Server beatServer;
 	
 	public void start() {
 		
-		int portNumber = 8080;
-		
-		clients = new HashMap<String, Date>();
-		beatServer = new Server(this, portNumber);
+		clients = new HashMap<String, Long>();
+		beatServer = new Server(this, beatPortNumber);
 		try {
 			beatServer.startServer();
 		} catch (IOException e) {
