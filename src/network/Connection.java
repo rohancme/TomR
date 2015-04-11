@@ -10,6 +10,7 @@ import network.requests.NWRequest;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.JsonGenerator;
 
 public class Connection {
 	
@@ -29,6 +30,7 @@ public class Connection {
 	
 	public void send_request(NWRequest request){
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 		DataOutputStream output_stream=null;
 		try {
 			output_stream= new DataOutputStream(socket.getOutputStream());
@@ -39,7 +41,7 @@ public class Connection {
 		}
 		
 		try {
-			mapper.writeValue(System.out, request);
+			//mapper.writeValue(System.out, request);
 			mapper.writeValue(output_stream, request);
 		} catch (JsonGenerationException e) {
 			System.out.println("Problem Generating JSON");

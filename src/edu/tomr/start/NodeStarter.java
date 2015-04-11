@@ -23,7 +23,7 @@ public class NodeStarter {
 	static int selfBeatPost = 5010;
 	
 	static {
-		 ConfigParams.loadProperties();
+		 //ConfigParams.loadProperties();
 	}
 	
 	private Node dbNode;
