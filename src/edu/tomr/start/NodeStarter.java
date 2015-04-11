@@ -1,24 +1,25 @@
 package edu.tomr.start;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import edu.tomr.network.heartbeat.client.ClientBeatController;
-import edu.tomr.node.base.Node;
-import edu.tomr.protocol.StartupMessage;
-import edu.tomr.utils.ConfigParams;
 import network.NeighborConnection;
 import network.NeighborConnectionHandler;
 import network.NetworkException;
 import network.NetworkUtilities;
 import network.StartupMessageHandler;
 import network.requests.NWRequest;
+import edu.tomr.network.heartbeat.client.ClientBeatController;
+import edu.tomr.node.base.Node;
+import edu.tomr.protocol.NeighborMessage;
+import edu.tomr.protocol.StartupMessage;
+import edu.tomr.utils.ConfigParams;
 
-//TODO: Still need to implement listening for Client Requests	
-public class NodeStarterClass {
+public class NodeStarter {
 	
 	static int startupMsgPort=5000;
 	static int neighborServerPort=5001;
-	static int selfServerPort=5002;
+	static int selfServerPort=5001;
 	static int selfBeatPost = 5010;
 	
 	static {
@@ -26,29 +27,27 @@ public class NodeStarterClass {
 	}
 	
 	private Node dbNode;
-	private ArrayList<NeighborConnection> neighborConnections;
-	
 	private ClientBeatController beatController;
 	
-	public NodeStarterClass() {
+	public NodeStarter() {
 		NetworkUtilities utils = null;
-		this.neighborConnections = new ArrayList<NeighborConnection>();
+		List<NeighborConnection> neighborConnections = new ArrayList<NeighborConnection>();
 		try {
 			utils = new NetworkUtilities();
-			initDbNode(utils.getSelfIP());
+			initDbNode(utils.getSelfIP(), neighborConnections);
 		} catch (NetworkException e) {
 			
 			System.out.println("Exception in obaining IP address");
 			e.printStackTrace();
 		}
-		beatController = new ClientBeatController(ConfigParams.getProperty("SERVER_IP"), 
-				ConfigParams.getIntProperty("SERVER_PORT_NO"), utils.getSelfIP(), selfBeatPost);
+		//beatController = new ClientBeatController(ConfigParams.getProperty("SERVER_IP"), 
+			//	ConfigParams.getIntProperty("SERVER_PORT_NO"), utils.getSelfIP(), selfBeatPost);
 		
 	}
 	
 	
-	private void initDbNode(String ipAddress) {
-		this.dbNode = new Node(ipAddress);
+	private void initDbNode(String ipAddress, List<NeighborConnection> neighborConnections) {
+		this.dbNode = new Node(ipAddress, neighborConnections);
 	}
 	
 	private void startBeatClient() {
@@ -103,22 +102,25 @@ public class NodeStarterClass {
 		if(connectFirst){
 			//first connect
 			for(String neighborIP:startupMessage.getNeighborList()){
-				NeighborConnection connection=new NeighborConnection(neighborIP,neighborServerPort);
-				neighborConnections.add(connection);
+				NeighborConnection connection=new NeighborConnection(neighborIP, neighborServerPort);
+				dbNode.setNeighborConnection(connection);
 			}
 			//then listen
 			Thread incomingConnectionsThread=new Thread(incomingNeighborConnectionHandler);
 			incomingConnectionsThread.start();
 		}
 		else{
+			System.out.println("Listening for connection");
 			//listen
 			Thread incomingConnectionsThread=new Thread(incomingNeighborConnectionHandler);
 			incomingConnectionsThread.start();
+			System.out.println("Listening for connection after");
 			//then connect
 			for(String neighborIP:startupMessage.getNeighborList()){
-				NeighborConnection connection=new NeighborConnection(neighborIP,neighborServerPort);
-				neighborConnections.add(connection);
+				NeighborConnection connection=new NeighborConnection(neighborIP, neighborServerPort);
+				dbNode.setNeighborConnection(connection);
 			}
+			System.out.println("Listening for connection after 2");
 			
 		}
 		
@@ -126,9 +128,25 @@ public class NodeStarterClass {
 	
 	public static void main(String[] args) {
 		
-		NodeStarterClass nodeStarter = new NodeStarterClass();
+		NodeStarter nodeStarter = new NodeStarter();
 		//nodeStarter.startBeatClient();
 		nodeStarter.startNode();
+		
+		NetworkUtilities myUtils=null;
+		try {
+			myUtils=new NetworkUtilities();
+		} catch (NetworkException e) {
+
+			e.printStackTrace();
+		}
+		
+		NeighborMessage msg=new NeighborMessage();
+
+		NWRequest req=myUtils.getNewNeighborConnectionRequest(msg);
+		
+		for(NeighborConnection nc: nodeStarter.dbNode.getNeighbors()){
+			nc.send_request(req);
+		}
 		
 	}
 
