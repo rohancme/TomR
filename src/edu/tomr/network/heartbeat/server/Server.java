@@ -12,7 +12,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import edu.tomr.exception.NodeGoneDownException;
+import edu.tomr.heartbeat.exception.NodeGoneDownException;
 import edu.tomr.protocol.HeartBeatMessage;
 
 public class Server {

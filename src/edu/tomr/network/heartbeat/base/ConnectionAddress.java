@@ -1,4 +1,4 @@
-package edu.tomr.network.base;
+package edu.tomr.network.heartbeat.base;
 
 public final class ConnectionAddress {
 

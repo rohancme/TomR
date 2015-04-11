@@ -3,7 +3,7 @@ package edu.tomr.network.heartbeat.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import edu.tomr.network.base.ConnectionAddress;
+import edu.tomr.network.heartbeat.base.ConnectionAddress;
 
 public class ClientBeatController extends Thread {
 

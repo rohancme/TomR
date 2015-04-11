@@ -3,7 +3,7 @@ package edu.tomr.protocol;
 import java.util.Calendar;
 import java.util.Date;
 
-import edu.tomr.network.base.ConnectionAddress;
+import edu.tomr.network.heartbeat.base.ConnectionAddress;
 
 public class HeartBeatMessage extends Message {
 

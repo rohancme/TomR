@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import edu.tomr.network.base.ConnectionAddress;
+import edu.tomr.network.heartbeat.base.ConnectionAddress;
 import edu.tomr.protocol.HeartBeatMessage;
 
 public class Client {

@@ -1,40 +1,16 @@
 package edu.tomr.protocol;
 
-public class ClientMessage extends Message {
+public class ClientMessage extends DBMessage {
 	
-	private final ClientRequestType requestType;
-	private String destinationNodeIpAddress;
-	private final ClientRequestPayload payload;
-	
-	public ClientMessage(ClientRequestType requestType, String ipAddress,
-			ClientRequestPayload payload) {
+	public ClientMessage(ClientRequestType requestType, ClientRequestPayload payload,
+			String reqestId) {
 		
-		this.requestType = requestType;
-		this.destinationNodeIpAddress = ipAddress;
-		this.payload = payload;
+		super(requestType, payload, reqestId);
 	}
 	
 	public ClientMessage() {
 		
-		this.requestType = null;
-		this.destinationNodeIpAddress = null;
-		this.payload = null;
-	}
-
-	public ClientRequestPayload getPayload() {
-		return payload;
-	}
-
-	public String getDestinationNode() {
-		return destinationNodeIpAddress;
-	}
-
-	public void setDestinationNode(String destinationNodeIpAddress) {
-		this.destinationNodeIpAddress = destinationNodeIpAddress;
-	}
-
-	public ClientRequestType getRequestType() {
-		return requestType;
+		super(null, null, null);
 	}
 
 }

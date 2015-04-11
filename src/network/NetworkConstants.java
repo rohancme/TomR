@@ -12,6 +12,7 @@ public final class NetworkConstants {
 	public static String requestToString(Requests req){
 		
 		switch(req){
+			case  NEIGHBOR_MESSAGE: return "NEIGHBOR_MESSAGE";
 			case CLOSE: return "CLOSE";
 			case NEW_CLIENT_CONNECTION: return "NEW_CLIENT_CONNECTION";
 			case DB_OPERATION: return "DB_OPERATION";
