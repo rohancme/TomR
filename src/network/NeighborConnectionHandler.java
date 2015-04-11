@@ -17,7 +17,10 @@ public class NeighborConnectionHandler extends ConnectionHandler implements Runn
 		//listen and handle all requests
 		while(true){
 			NWRequest request=getNextRequest();
-			System.out.println("Received new request of type:"+request.getRequestType());
+			
+			//this needs to be modified to call the relevant methods to handle the request
+			if(request!=null)
+				System.out.println("Received new request of type:"+request.getRequestType());
 		}
 		
 	}
