@@ -1,4 +1,4 @@
-package edu.tomr.exception;
+package edu.tomr.heartbeat.exception;
 
 public class NodeGoneDownException extends Exception {
 
