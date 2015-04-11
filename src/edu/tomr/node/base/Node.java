@@ -3,6 +3,7 @@ package edu.tomr.node.base;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.tomr.hash.ConsistentHashing;
 import edu.tomr.hash.IConsistentHashing;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
@@ -17,7 +18,6 @@ public class Node {
 	
 	private Map<String, byte[]> inMemMap;
 	private IMapOperation operation;
-	private static IConsistentHashing hasher;
 	private final String selfIpAddress;
 	
 	public String getSelfAddress() {
@@ -29,10 +29,7 @@ public class Node {
 		this.selfIpAddress = selfIpAdd;
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		operation = new MapOperation(inMemMap);
-		if(hasher == null){
-			//instantiate hasher
-			//hasher =  new ConsistentHashing();
-		}
+		
 	}
 	
 	/**
@@ -45,7 +42,7 @@ public class Node {
 	public boolean handleClientRequest(ClientMessage message) {
 		
 		boolean isToForward;
-		String ipAddress = hasher.calculateNode(message.getPayload().getKey());
+		String ipAddress = ConsistentHashing.getNode(message.getPayload().getKey());
 		message.setDestinationNode(ipAddress);
 		
 		if(ipAddress.equalsIgnoreCase(getSelfAddress())) {
