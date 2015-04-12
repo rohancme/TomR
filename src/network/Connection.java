@@ -43,8 +43,6 @@ public class Connection {
 		try {
 			//mapper.writeValue(System.out, request);
 			mapper.writeValue(output_stream, request);
-			//end of message marker.
-			output_stream.writeChar('\n');
 			output_stream.flush();
 		} catch (JsonGenerationException e) {
 			System.out.println("Problem Generating JSON");

@@ -44,10 +44,10 @@ public class ConnectionHandler {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		NWRequest request=null;
-		//currently using scanner. Scanner waits for a newLine character which marks the end of an object
-		if(inputScanner.hasNextLine()){
+		//currently using scanner
+		if(inputScanner.hasNext()){
 			try {
-				request=mapper.readValue(inputScanner.nextLine(), NWRequest.class);
+				request=mapper.readValue(inputScanner.next(), NWRequest.class);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
