@@ -17,10 +17,7 @@ import edu.tomr.utils.ConfigParams;
 
 public class NodeStarter {
 	
-	static int startupMsgPort=5000;
-	static int neighborServerPort=5001;
-	static int selfServerPort=5001;
-	static int selfBeatPost = 5010;
+	private static int selfBeatPost = 5010;
 	
 	static {
 		 //ConfigParams.loadProperties();
@@ -66,65 +63,7 @@ public class NodeStarter {
 		handleNeighborConnections(startUpRequest);
 	}
 	
-	private NWRequest getStartUpRequest(int startUpMsgPort) {
-		
-		//1. Wait for the startup message
-		StartupMessageHandler myStartupHandler=new StartupMessageHandler(startupMsgPort);
-		NWRequest startupRequest=null;
-		try {
-			startupRequest=myStartupHandler.getRequest();
-		} catch (NetworkException e) {
-			e.printStackTrace();
-		}
-		
-		return startupRequest;
-	}
-
-	private void handleNeighborConnections(NWRequest startUpRequest) {
-		
-		//Extract information about who to connect with and in what order
-		StartupMessage startupMessage=(StartupMessage) startUpRequest.getStartupMessage();
-		//Use following:
-		//NeighborConnection in order to establish a connection with neighbor
-		//NeighborConnectionHandler in order to accept and continue receiving requests from a neighbor
-		
-		boolean connectFirst=startupMessage.isConnectFirst();
-		
-		//neighborConnections = new ArrayList<NeighborConnection>();
-		NeighborConnectionHandler incomingNeighborConnectionHandler = null;
-		try {
-			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort);
-		} catch (NetworkException e) {
-			e.printStackTrace();
-		}
-		
-		
-		if(connectFirst){
-			//first connect
-			for(String neighborIP:startupMessage.getNeighborList()){
-				NeighborConnection connection=new NeighborConnection(neighborIP, neighborServerPort);
-				dbNode.setNeighborConnection(connection);
-			}
-			//then listen
-			Thread incomingConnectionsThread=new Thread(incomingNeighborConnectionHandler);
-			incomingConnectionsThread.start();
-		}
-		else{
-			System.out.println("Listening for connection");
-			//listen
-			Thread incomingConnectionsThread=new Thread(incomingNeighborConnectionHandler);
-			incomingConnectionsThread.start();
-			System.out.println("Listening for connection after");
-			//then connect
-			for(String neighborIP:startupMessage.getNeighborList()){
-				NeighborConnection connection=new NeighborConnection(neighborIP, neighborServerPort);
-				dbNode.setNeighborConnection(connection);
-			}
-			System.out.println("Listening for connection after 2");
-			
-		}
-		
-	}
+	
 	
 	public static void main(String[] args) {
 		

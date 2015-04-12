@@ -7,16 +7,22 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.DBMessage;
 import network.NetworkConstants;
 
 public class NWRequest {
 	
 	@JsonProperty protected final String request_id;
 	@JsonProperty protected final String request_type;
+	@JsonProperty protected String destIP=null;
+	@JsonProperty protected String srcIP=null;
 	
+	
+
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
 	@JsonProperty protected NeighborMessage neighborMessage=null;
+	@JsonProperty protected DBMessage dBMessage=null;
 	
 	//only for JACKSON
 	private NWRequest(){
@@ -24,7 +30,7 @@ public class NWRequest {
 		this.request_id="NA";
 	}
 	
-	
+	//a startup message has no use for source or destiantion IP
 	public NWRequest(String req_id,StartupMessage msg){
 		this.request_id=req_id;
 		this.startupMessage=msg;
@@ -41,6 +47,14 @@ public class NWRequest {
 		this.request_id=req_id;
 		this.neighborMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.NEIGHBOR_MESSAGE);
+	}
+	
+	public NWRequest(String req_id,DBMessage msg,String SourceIP,String DestinationIP){
+		this.request_id=req_id;
+		this.dBMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.DB_OPERATION);
+		this.srcIP=SourceIP;
+		this.destIP=DestinationIP;
 	}
 	
 	@JsonProperty("request_type")
@@ -66,6 +80,16 @@ public class NWRequest {
 	@JsonProperty("neighborMessage")
 	public NeighborMessage getNeighborMessage() {
 		return this.neighborMessage;
+	}
+	
+	@JsonProperty("destIP")
+	public String getDestinationIP() {
+		return destIP;
+	}
+
+	@JsonProperty("srcIP")
+	public String getSourceIP() {
+		return srcIP;
 	}
 	
 	
