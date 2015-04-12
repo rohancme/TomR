@@ -1,12 +1,14 @@
 package edu.tomr.node.base;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NeighborConnection;
+import network.NetworkException;
+import network.NodeNetworkModule;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
+import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NodeMessage;
@@ -47,11 +49,6 @@ public class Node {
 	private MessageQueue<NodeMessage> nodeInbox;
 	
 	/**
-	 * List of neighbor connections that this node has
-	 */
-	private List<NeighborConnection> neighbors;
-	
-	/**
 	 * Processor thread to service client queue messages 
 	 */
 	private Thread clientProcThread;
@@ -62,28 +59,36 @@ public class Node {
 	private Thread nodeProcThread;
 	
 	/**
+	 * NodeNetworkModule handler
+	 */
+	private NodeNetworkModule networkModule;
+	
+	/**
+	 * Map to store the RequestID and IP Address
+	 */
+	private Map<String, String> requestMapper;
+	
+	
+	public Map<String, String> getRequestMapper() {
+		return requestMapper;
+	}
+
+	/**
 	 * Primary constructor used to initialize the node
 	 * @param selfIpAdd
 	 * @param neigbors
 	 */
-	public Node(String selfIpAdd, List<NeighborConnection> neigbors){
+	public Node(String selfIpAdd){
 		
 		this.selfIpAddress = selfIpAdd;
-		this.neighbors = neigbors;
+		initNetworkModule();
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		setOperation(new MapOperation(inMemMap));
 		clientInbox = new MessageQueue<ClientMessage>();
 		nodeInbox = new MessageQueue<NodeMessage>();
+		requestMapper = new HashMap<String, String>();
 	}
 		
-	public void setNeighborConnection(NeighborConnection neighbor) {
-		this.neighbors.add(neighbor);
-	}
-	
-	public List<NeighborConnection> getNeighbors() {
-		return neighbors;
-	}
-
 	public String getSelfAddress() {
 		return this.selfIpAddress;
 	}
@@ -94,6 +99,20 @@ public class Node {
 
 	public void setOperation(IMapOperation operation) {
 		this.operation = operation;
+	}
+	
+	public NodeNetworkModule getNetworkModule() {
+		return networkModule;
+	}
+
+	private void initNetworkModule(){
+		try {
+			this.networkModule = new NodeNetworkModule();
+		} catch (NetworkException e) {
+			System.out.println("Error while instantiating network module");
+			e.printStackTrace();
+		}
+		this.networkModule.initializeNetworkFunctionality();
 	}
 	
 	/**
@@ -111,21 +130,40 @@ public class Node {
 		nodeProcThread.start();
 	}
 	
+	/**
+	 * For client requests
+	 * @param message
+	 */
+	public void handleRequest(DBMessage message) {
+		
+		clientInbox.queueMessage(new ClientMessage(message));
+		if(!clientProcThread.isAlive())
+			startClientProcessor();
+	}
+	
+	/**
+	 * For node requests
+	 * @param message
+	 * @param originalServicerIP
+	 */
 	public void handleRequest(DBMessage message, String originalServicerIP) {
 				
-		//Node message with original node IP 
+		requestMapper.put(message.getRequestId(), originalServicerIP);
 		if(null != originalServicerIP) {
 			nodeInbox.queueMessage(new NodeMessage(message, originalServicerIP));
 			if(!nodeProcThread.isAlive())
 				startNodeProcessor();
 		} 
-		//Client message
-		else {
-			clientInbox.queueMessage(new ClientMessage(message));
-			if(!clientProcThread.isAlive())
-				startClientProcessor();
-		}
+	}
+	
+	/**
+	 * Only for node acknowledgments 
+	 * @param ackMessage
+	 */
+	public void handleAcknowledgements(AckMessage ackMessage) {
 		
+		String clientIp = requestMapper.remove(ackMessage.getRequestIdServiced());
+		networkModule.sendOutgoingClientResponse(ackMessage, clientIp);
 	}
 	
 }
