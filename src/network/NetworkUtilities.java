@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.UUID;
 
 import network.requests.NWRequest;
+import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.StartupMessage;
 
@@ -78,9 +79,9 @@ public class NetworkUtilities {
 		return request;
 	}
 	
-	/*public NetworkPacket<DBRequest> getNewDBRequest(Message msg){	
-		DBRequest request=new DBRequest(this.generate_req_id(),msg);
-		return new NetworkPacket<DBRequest>(request);
-	}*/
+	public NWRequest getNewDBRequest(DBMessage msg,String destIP){	
+		NWRequest request=new NWRequest(this.generate_req_id(),msg,this.getSelfIP(),destIP);
+		return request;
+	}
 
 }
