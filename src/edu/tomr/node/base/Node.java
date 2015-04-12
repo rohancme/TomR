@@ -132,7 +132,7 @@ public class Node {
 	
 	/**
 	 * For client requests
-	 * @param message
+	 * @param message DBMessage from client
 	 */
 	public void handleRequest(DBMessage message) {
 		
@@ -143,8 +143,8 @@ public class Node {
 	
 	/**
 	 * For node requests
-	 * @param message
-	 * @param originalServicerIP
+	 * @param message DBMessage from client
+	 * @param originalServicerIP : Original node IP Address servicing the request
 	 */
 	public void handleRequest(DBMessage message, String originalServicerIP) {
 				
