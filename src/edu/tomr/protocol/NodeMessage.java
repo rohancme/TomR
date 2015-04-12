@@ -5,7 +5,8 @@ public class NodeMessage extends DBMessage {
 	private final String originatorIpAddress;
 
 	public NodeMessage(DBMessage message, String originatorIpAddress){
-		super(message.getRequestType(), message.getPayload(), message.getRequestId());
+		super(message.getRequestType(), message.getPayload(), message.getClientInfo(), 
+				message.getRequestId());
 		this.originatorIpAddress = originatorIpAddress;
 	}
 	
