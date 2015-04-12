@@ -7,9 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import network.NeighborConnection;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
+import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.NodeMessage;
+import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
-import edu.tomr.queue.QueueProcessor;
+import edu.tomr.queue.NodeQueueProcessor;
 
 /*
  * Should contain a network module to handle the connections
@@ -36,7 +39,12 @@ public class Node {
 	/**
 	 * Messaging queue to store the messages to be serviced
 	 */
-	private MessageQueue inbox;
+	private MessageQueue<ClientMessage> clientInbox;
+	
+	/**
+	 * Messaging queue to store the messages to be serviced
+	 */
+	private MessageQueue<NodeMessage> nodeInbox;
 	
 	/**
 	 * List of neighbor connections that this node has
@@ -44,9 +52,14 @@ public class Node {
 	private List<NeighborConnection> neighbors;
 	
 	/**
-	 * Processor thread to service queue messages 
+	 * Processor thread to service client queue messages 
 	 */
-	private Thread procThread;
+	private Thread clientProcThread;
+	
+	/**
+	 * Processor thread to service node queue messages 
+	 */
+	private Thread nodeProcThread;
 	
 	/**
 	 * Primary constructor used to initialize the node
@@ -59,7 +72,8 @@ public class Node {
 		this.neighbors = neigbors;
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		setOperation(new MapOperation(inMemMap));
-		inbox = new MessageQueue();
+		clientInbox = new MessageQueue<ClientMessage>();
+		nodeInbox = new MessageQueue<NodeMessage>();
 	}
 		
 	public void setNeighborConnection(NeighborConnection neighbor) {
@@ -85,17 +99,33 @@ public class Node {
 	/**
 	 * Start the processor thread to service messages
 	 */
-	private void startProcessor() {
-		procThread = new Thread(new QueueProcessor(inbox, operation, getSelfAddress()));
-		procThread.start();
+	private void startClientProcessor() {
+		clientProcThread = new Thread(new ClientQueueProcessor(clientInbox, operation, 
+				this));
+		clientProcThread.start();
 	}
 	
-	public void handleRequest(DBMessage message) {
-		//Add to queue and return
-		inbox.queueMessage(message);
-		if(!procThread.isAlive())
-			startProcessor();
+	private void startNodeProcessor() {
+		nodeProcThread = new Thread(new NodeQueueProcessor(nodeInbox, operation, 
+				this));
+		nodeProcThread.start();
 	}
-
+	
+	public void handleRequest(DBMessage message, String originalServicerIP) {
+				
+		//Node message with original node IP 
+		if(null != originalServicerIP) {
+			nodeInbox.queueMessage(new NodeMessage(message, originalServicerIP));
+			if(!nodeProcThread.isAlive())
+				startNodeProcessor();
+		} 
+		//Client message
+		else {
+			clientInbox.queueMessage(new ClientMessage(message));
+			if(!clientProcThread.isAlive())
+				startClientProcessor();
+		}
+		
+	}
 	
 }
