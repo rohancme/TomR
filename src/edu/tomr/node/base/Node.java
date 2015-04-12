@@ -1,15 +1,20 @@
 package edu.tomr.node.base;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NeighborConnection;
+import network.NetworkException;
+import network.NodeNetworkModule;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
+import edu.tomr.protocol.AckMessage;
+import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.NodeMessage;
+import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
-import edu.tomr.queue.QueueProcessor;
+import edu.tomr.queue.NodeQueueProcessor;
 
 /*
  * Should contain a network module to handle the connections
@@ -36,40 +41,54 @@ public class Node {
 	/**
 	 * Messaging queue to store the messages to be serviced
 	 */
-	private MessageQueue inbox;
+	private MessageQueue<ClientMessage> clientInbox;
 	
 	/**
-	 * List of neighbor connections that this node has
+	 * Messaging queue to store the messages to be serviced
 	 */
-	private List<NeighborConnection> neighbors;
+	private MessageQueue<NodeMessage> nodeInbox;
 	
 	/**
-	 * Processor thread to service queue messages 
+	 * Processor thread to service client queue messages 
 	 */
-	private Thread procThread;
+	private Thread clientProcThread;
 	
+	/**
+	 * Processor thread to service node queue messages 
+	 */
+	private Thread nodeProcThread;
+	
+	/**
+	 * NodeNetworkModule handler
+	 */
+	private NodeNetworkModule networkModule;
+	
+	/**
+	 * Map to store the RequestID and IP Address
+	 */
+	private Map<String, String> requestMapper;
+	
+	
+	public Map<String, String> getRequestMapper() {
+		return requestMapper;
+	}
+
 	/**
 	 * Primary constructor used to initialize the node
 	 * @param selfIpAdd
 	 * @param neigbors
 	 */
-	public Node(String selfIpAdd, List<NeighborConnection> neigbors){
+	public Node(String selfIpAdd){
 		
 		this.selfIpAddress = selfIpAdd;
-		this.neighbors = neigbors;
+		initNetworkModule();
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		setOperation(new MapOperation(inMemMap));
-		inbox = new MessageQueue();
+		clientInbox = new MessageQueue<ClientMessage>();
+		nodeInbox = new MessageQueue<NodeMessage>();
+		requestMapper = new HashMap<String, String>();
 	}
 		
-	public void setNeighborConnection(NeighborConnection neighbor) {
-		this.neighbors.add(neighbor);
-	}
-	
-	public List<NeighborConnection> getNeighbors() {
-		return neighbors;
-	}
-
 	public String getSelfAddress() {
 		return this.selfIpAddress;
 	}
@@ -82,20 +101,69 @@ public class Node {
 		this.operation = operation;
 	}
 	
+	public NodeNetworkModule getNetworkModule() {
+		return networkModule;
+	}
+
+	private void initNetworkModule(){
+		try {
+			this.networkModule = new NodeNetworkModule();
+		} catch (NetworkException e) {
+			System.out.println("Error while instantiating network module");
+			e.printStackTrace();
+		}
+		this.networkModule.initializeNetworkFunctionality();
+	}
+	
 	/**
 	 * Start the processor thread to service messages
 	 */
-	private void startProcessor() {
-		procThread = new Thread(new QueueProcessor(inbox, operation, getSelfAddress()));
-		procThread.start();
+	private void startClientProcessor() {
+		clientProcThread = new Thread(new ClientQueueProcessor(clientInbox, operation, 
+				this));
+		clientProcThread.start();
 	}
 	
-	public void handleRequest(DBMessage message) {
-		//Add to queue and return
-		inbox.queueMessage(message);
-		if(!procThread.isAlive())
-			startProcessor();
+	private void startNodeProcessor() {
+		nodeProcThread = new Thread(new NodeQueueProcessor(nodeInbox, operation, 
+				this));
+		nodeProcThread.start();
 	}
-
+	
+	/**
+	 * For client requests
+	 * @param message
+	 */
+	public void handleRequest(DBMessage message) {
+		
+		clientInbox.queueMessage(new ClientMessage(message));
+		if(!clientProcThread.isAlive())
+			startClientProcessor();
+	}
+	
+	/**
+	 * For node requests
+	 * @param message
+	 * @param originalServicerIP
+	 */
+	public void handleRequest(DBMessage message, String originalServicerIP) {
+				
+		requestMapper.put(message.getRequestId(), originalServicerIP);
+		if(null != originalServicerIP) {
+			nodeInbox.queueMessage(new NodeMessage(message, originalServicerIP));
+			if(!nodeProcThread.isAlive())
+				startNodeProcessor();
+		} 
+	}
+	
+	/**
+	 * Only for node acknowledgments 
+	 * @param ackMessage
+	 */
+	public void handleAcknowledgements(AckMessage ackMessage) {
+		
+		String clientIp = requestMapper.remove(ackMessage.getRequestIdServiced());
+		networkModule.sendOutgoingClientResponse(ackMessage, clientIp);
+	}
 	
 }

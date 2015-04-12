@@ -1,6 +1,7 @@
 package network;
 
 import network.requests.NWRequest;
+import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.StartupMessage;
 
@@ -62,12 +63,12 @@ public class NodeNetworkModule {
 	}
 	
 	//DUMMY-Waiting for Network Response Class
-	public void sendOutgoingNWResponse(){
+	public void sendOutgoingNWResponse(AckMessage message, String nodeIpAddress){
 		
 	}
 	
 	//DUMMY-Waiting for ClientResponse Class
-	public void sendOutgoingClientResponse(){
+	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
 		
 	}
 	

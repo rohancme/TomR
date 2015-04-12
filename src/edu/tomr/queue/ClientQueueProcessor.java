@@ -1,22 +1,22 @@
 package edu.tomr.queue;
 
 import edu.tomr.hash.ConsistentHashing;
+import edu.tomr.node.base.Node;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.protocol.ClientMessage;
-import edu.tomr.protocol.ClientRequestPayload;
 import edu.tomr.protocol.DBMessage;
-import edu.tomr.protocol.NodeMessage;
 
-public class QueueProcessor implements Runnable {
+public class ClientQueueProcessor implements Runnable {
 
-	private MessageQueue queue;
+	private MessageQueue<ClientMessage> queue;
 	IMapOperation operation;
-	private final String nodeIpAddress;
-	
-	public QueueProcessor(MessageQueue queue, IMapOperation operation, String nodeIpAddress) {
+	private final Node parentNode;
+		
+	public ClientQueueProcessor(MessageQueue<ClientMessage> queue, IMapOperation operation, 
+			Node parentNode) {
 		this.queue = queue;
 		this.operation = operation;				
-		this.nodeIpAddress = nodeIpAddress;
+		this.parentNode = parentNode;
 	}
 	
 	@Override
@@ -41,19 +41,14 @@ public class QueueProcessor implements Runnable {
 	
 	public void handleMessage(DBMessage message) {
 			
-		if(message instanceof ClientMessage) {
-			String ipAddress = ConsistentHashing.getNode(message.getPayload().getKey());
+		String ipAddress = ConsistentHashing.getNode(message.getPayload().getKey());
 
-			if(ipAddress.equalsIgnoreCase(nodeIpAddress)) {
-				handleNodeRequest((NodeMessage)message);
-			} else {
-				//TODO: Have to call da network module if forwarding required
-			}
-		}
-		else if(message instanceof NodeMessage) {
+		if(ipAddress.equalsIgnoreCase(parentNode.getSelfAddress())) {
+			parentNode.handleRequest(message, parentNode.getSelfAddress());
+		} else {
 			
-			handleNodeRequest((NodeMessage)message);
 		}
+		
 	}
 	
 	/*
@@ -62,7 +57,7 @@ public class QueueProcessor implements Runnable {
 	 * @param message	message containing the KV pair from the load balancer	
 	 * @return
 	 */
-	private void handleNodeRequest(NodeMessage message) {
+	/*private void handleNodeRequest(NodeMessage message) {
 		
 		ClientRequestPayload tempPayload = message.getPayload();
 		
@@ -80,6 +75,6 @@ public class QueueProcessor implements Runnable {
 			
 		}
 		//Have to call da network module with request ack message
-	}
+	}*/
 		
 }
