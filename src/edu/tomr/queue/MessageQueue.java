@@ -3,21 +3,19 @@ package edu.tomr.queue;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import edu.tomr.protocol.Message;
+public class MessageQueue<T> {
 
-public class MessageQueue {
-
-	private Queue<Message> queue;
+	private Queue<T> queue;
 		
 	public MessageQueue() {
-		queue = new ConcurrentLinkedQueue<Message>();
+		queue = new ConcurrentLinkedQueue<T>();
 	}
 	
-	public boolean queueMessage(Message message) {
+	public boolean queueMessage(T message) {
 		return queue.add(message);
 	}
 	
-	public Message dequeueMessage() {
+	public T dequeueMessage() {
 		
 		return queue.poll();
 	}
@@ -25,4 +23,5 @@ public class MessageQueue {
 	public boolean isEmpty() {
 		return queue.isEmpty();
 	}
+
 }
