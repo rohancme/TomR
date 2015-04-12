@@ -89,6 +89,14 @@ public class Node {
 		requestMapper = new HashMap<String, String>();
 	}
 		
+	public void setNeighborConnection(NeighborConnection neighbor) {
+		this.neighbors.add(neighbor);
+	}
+	
+	public List<NeighborConnection> getNeighbors() {
+		return neighbors;
+	}
+
 	public String getSelfAddress() {
 		return this.selfIpAddress;
 	}
