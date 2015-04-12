@@ -1,20 +1,31 @@
 package edu.tomr.hash;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 
 public class ConsistentHashing {
-	static TreeMap<Double, String> unitCircle = new TreeMap(); 
+	static TreeMap<Double, String> unitCircle = new TreeMap<Double, String>(); 
 	
-	//Method to hash the Nodes onto the unit circle
+	// Method to calculate the topology as a unit circle on each node
 	public static void calculateCircle(ArrayList<String> nodes){
-		
+		// Evenly distributing the nodes on the unit circle using the concept of virtual replicas
+		try{
 		for(String node : nodes){
-			unitCircle.put(hashFunction1(node), node);
-			unitCircle.put((hashFunction1(node) + .3)%.99, node);
-			unitCircle.put((hashFunction1(node) + .6)%.99, node);
+			unitCircle.put(getHash(node), node);
+			unitCircle.put((getHash(node) + .3)%.99, node);
+			unitCircle.put((getHash(node) + .6)%.99, node);
+		}
+	}
+		catch(NullPointerException e){
+			System.out.println("The nodes have been hashed in a wrong manner");
+			e.printStackTrace();
+			
 		}
 		
 		
@@ -26,92 +37,82 @@ public class ConsistentHashing {
 		
 	}
 	
+	// Method to get the Node which the String has to be redirected to 
 	public static String getNode(String key){
-		Double hashOfKey = hashFunction2(key);
+		try{
+		// Find the position of the key on the unit circle representation.
+		Double hashOfKey = getKeyHash(key);
+		// Get the nearest node in the Anti Clock-wise direction on the unit circle
 		Double nodeNumber = getFirstNode(hashOfKey, unitCircle);
+		//Get the IP address of the node nearest to the key
 		String nodeName = unitCircle.get(nodeNumber);
 		return nodeName;
+		}
+		catch(NullPointerException e){
+			System.out.println("Error while trying to find the node to send the string to");
+			e.printStackTrace();
+			return null;
+			
+		}
+		
 		
 	}
 	
-	//Method to hash the keys onto the Nodes	
-	static Map<String, String> hashKeys(Map<String, String> keyMap, ArrayList<String> keys, TreeMap<Double, String> circle, Map<String, String> changeMap){
-		for(String key : keys){
-			Double hashOfKey = hashFunction2(key);
-			//System.out.println(key + "->" + hashOfKey);
-			Double nodeNumber = getFirstNode(hashOfKey, circle);
-			String nodeName = circle.get(nodeNumber);
-			String previousNode;
-			if(keyMap.containsKey(key)){
-				previousNode = keyMap.get(key);
-				if(!(previousNode.equals(nodeName))){
-					changeMap.put(key, nodeName);
+	// Method to get the nearest node to the key
+		static Double getFirstNode(Double key, TreeMap<Double, String> circle ){
+			Double firstKey = 0.0;
+			for(Entry<Double, String> nodeHash : circle.entrySet()) {
+				Double nodeValue = nodeHash.getKey();
+				if(nodeValue < key){
+					if(nodeValue > firstKey){
+						firstKey = nodeValue;
+					}
+					
 				}
 			}
-			keyMap.put(key, nodeName);
-		}
-		return keyMap;
-		
-	}
-	
-	//Method to get the nearest node to the key
-	static Double getFirstNode(Double key, TreeMap<Double, String> circle ){
-		Double firstKey = 0.0;
-		for(Entry<Double, String> entry : circle.entrySet()) {
-			Double value = entry.getKey();
-			if(value < key){
-				if(value > firstKey){
-					firstKey = value;
-				}
-				
+			// If there is no node before this key, then this key is assigned to the last node
+			if(firstKey == 0.0){
+				firstKey = circle.lastKey();
 			}
+			
+			return firstKey;
+			
 		}
-		
-		return firstKey;
-		
-	}
-	
-	static double hashFunction1(String newString){
-		Double hash=7.5;
-		for (int i=0; i < newString.length(); i++) {
-		    hash = hash*31+newString.charAt(i);
+		// Method that is used to hash the nodes onto the unit circle
+		static double getHash(String newString){
+			double hashofString = 0;
+			try{
+				// The murmur hash is an effective way to uniformly hash different string
+				HashFunction hf = Hashing.murmur3_128();
+				HashCode hc = hf.newHasher().putString(newString).hash();
+				byte[] byteArray = hc.asBytes();
+				ByteBuffer buffer = ByteBuffer.wrap(byteArray);
+				hashofString = buffer.getShort();
+						
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			return Math.abs(hashofString)%.99;
+			
 		}
-		//Double num = Math.pow(10, (Math.log10(hash)+1));
-		return hash%.99;
-		
-	}
-	
-	static double hashFunction2(String newString){
-		Double hash=7.5;
-		for (int i=0; i < newString.length(); i++) {
-		    hash = hash*31+newString.charAt(i);
-		}
-		//Double num = Math.pow(10, (Math.log10(hash)+1));
-		return hash%.99;
-		
-	}
-	
-	static Map<String, String> addNode(ArrayList<String> nodes, String node, TreeMap<Double, String> circle,  Map<String, String> keyMap, Map<String, String> changeMap, ArrayList<String> keys){
-		nodes.add(node);
-		circle = reComputeHash(nodes);
-		keyMap = hashKeys(keyMap, keys, circle, changeMap);
-		return keyMap;
-		
-	}
-	
-	static Map<String, String> deleteNode(ArrayList<String> nodes, int index, TreeMap<Double, String> circle,  Map<String, String> keyMap, Map<String, String> changeMap, ArrayList<String> keys){
-		nodes.remove(index);
-		circle = reComputeHash(nodes);
-		keyMap = hashKeys(keyMap, keys, circle, changeMap);
-		return keyMap;
-		
-	}
-	private static TreeMap<Double, String> reComputeHash(ArrayList<String> nodes) {
-		TreeMap<Double, String> unitCircle = new TreeMap<>();
-		calculateCircle(nodes);
-		return unitCircle;
-	}
-
-	
+		// Method that is used to hash the keys onto the unit circle
+		static double getKeyHash(String newString){
+			double hashofString = 0;
+			try{
+				// The murmur hash is an effective way to uniformly hash different string
+				HashFunction hf = Hashing.murmur3_128();
+				HashCode hc = hf.newHasher().putString(newString).hash();
+				byte[] byteArray = hc.asBytes();
+				ByteBuffer buffer = ByteBuffer.wrap(byteArray);
+				hashofString = buffer.getShort();
+						
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			return Math.abs(hashofString)%.99;
+			
+		}	
 
 }
