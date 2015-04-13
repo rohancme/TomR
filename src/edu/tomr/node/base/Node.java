@@ -81,7 +81,7 @@ public class Node {
 	public Node(String selfIpAdd){
 		
 		this.selfIpAddress = selfIpAdd;
-		initNetworkModule();
+		//initNetworkModule();
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		setOperation(new MapOperation(inMemMap));
 		clientInbox = new MessageQueue<ClientMessage>();
