@@ -46,9 +46,13 @@ public class ClientQueueProcessor implements Runnable {
 		if(ipAddress.equalsIgnoreCase(parentNode.getSelfAddress())) {
 			parentNode.getRequestMapper().put(message.getRequestId(), message.getClientInfo().getIpAddress());
 			parentNode.handleRequest(message, parentNode.getSelfAddress());
+			System.out.println("Self servicing request with payload: "+message.getPayload().toString());
+			
 		} else {
 			parentNode.getRequestMapper().put(message.getRequestId(), message.getClientInfo().getIpAddress());
 			parentNode.getNetworkModule().sendOutgoingRequest(message, ipAddress);
+			System.out.println("forwarding request to node with IP Add: "+ipAddress+
+					" and payload: "+message.getPayload().toString());
 		}
 	}
 	

@@ -23,6 +23,13 @@ public class AckMessage {
 	public byte[] getValue() {
 		return value;
 	}
+
+	@Override
+	public String toString() {
+		// 
+		return "AckMessage: {status: "+status+" value: "+value.toString()+"}";
+	}
+	
 	
 	
 }

@@ -72,14 +72,16 @@ public class NodeNetworkModule {
 	
 	//DUMMY-Waiting for Network Response Class
 	public void sendOutgoingNWResponse(AckMessage message, String destIP){
-		
 		NWResponse response=new NWResponse(this.utils.getSelfIP(),destIP,message);
 		this.responseModule.insertOutgoingNWResponse(response);
-		
+		System.out.println("Send response to node with ipAddress: "+destIP+
+				" and Ack message: "+message.toString());
 	}
 	
 	//DUMMY-Waiting for ClientResponse Class
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
+		System.out.println("Send response to client with ipAddress: "+clientIPAddress+
+				" and Ack message: "+message.toString());
 		
 	}
 	
