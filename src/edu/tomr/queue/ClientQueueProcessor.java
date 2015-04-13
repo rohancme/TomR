@@ -40,16 +40,19 @@ public class ClientQueueProcessor implements Runnable {
 	
 	
 	public void handleMessage(DBMessage message) {
-			
+		
 		String ipAddress = ConsistentHashing.getNode(message.getPayload().getKey());
 
 		if(ipAddress.equalsIgnoreCase(parentNode.getSelfAddress())) {
+			parentNode.getRequestMapper().put(message.getRequestId(), message.getClientInfo().getIpAddress());
 			parentNode.handleRequest(message, parentNode.getSelfAddress());
 		} else {
-			
+			parentNode.getRequestMapper().put(message.getRequestId(), message.getClientInfo().getIpAddress());
+			parentNode.getNetworkModule().sendOutgoingRequest(message, ipAddress);
 		}
 		
 	}
+	
 	
 	/*
 	 * This method handles the requests meant for this node
