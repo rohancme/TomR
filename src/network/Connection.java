@@ -58,5 +58,36 @@ public class Connection {
 		}
 		
 	}
+	
+	public void send_response(NWResponse response) {
+		// TODO Auto-generated method stub
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+		DataOutputStream output_stream=null;
+		try {
+			output_stream= new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			e.printStackTrace();
+			return;
+		}
+		
+		try {
+			//mapper.writeValue(System.out, request);
+			mapper.writeValue(output_stream, response);
+			//end of message marker.
+			output_stream.writeChar('\n');
+			output_stream.flush();
+		} catch (JsonGenerationException e) {
+			System.out.println("Problem Generating JSON");
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			System.out.println("Problem with JSON mapping");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			e.printStackTrace();
+		}
+	}
 
 }
