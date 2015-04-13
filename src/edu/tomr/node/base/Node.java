@@ -105,9 +105,9 @@ public class Node {
 		return networkModule;
 	}
 
-	private void initNetworkModule(){
+	public void initNetworkModule(){
 		try {
-			this.networkModule = new NodeNetworkModule();
+			this.networkModule = new NodeNetworkModule(this);
 		} catch (NetworkException e) {
 			System.out.println("Error while instantiating network module");
 			e.printStackTrace();
