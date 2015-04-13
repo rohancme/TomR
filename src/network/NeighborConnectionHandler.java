@@ -3,7 +3,7 @@ package network;
 import network.NetworkConstants.Requests;
 import network.requests.NWRequest;
 
-public class NeighborConnectionHandler extends ConnectionHandler implements Runnable{
+public class NeighborConnectionHandler extends RequestHandler implements Runnable{
 	
 	private NodeNetworkModule networkModule=null;
 
