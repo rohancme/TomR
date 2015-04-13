@@ -87,6 +87,7 @@ public class NodeNetworkModule {
 	
 	private void constructorCommon(){
 		//currently nothing
+		
 	}
 	
 	private NWRequest getStartUpRequest(int startUpMsgPort) {
