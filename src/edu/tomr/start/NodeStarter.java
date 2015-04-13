@@ -19,7 +19,7 @@ public class NodeStarter {
 	private static int selfBeatPost = 5010;
 	
 	static {
-		 ConfigParams.loadProperties();
+		 //ConfigParams.loadProperties();
 	}
 	
 	private Node dbNode;
@@ -56,7 +56,7 @@ public class NodeStarter {
 		}
 	}
 	
-	public static void main(String[] args) {
+public static void main(String[] args) {
 		
 		NodeStarter nodeStarter = new NodeStarter();
 		//nodeStarter.startBeatClient();
@@ -147,5 +147,92 @@ public class NodeStarter {
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-11"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 	}
+	
+	/*public static void main(String[] args) {
+		
+		NodeStarter nodeStarter = new NodeStarter();
+		//nodeStarter.startBeatClient();
+		
+		Map<String, byte[]> testMap = new HashMap<String, byte[]>();
+		//10.139.57.38
+		testMap.put("File-3.txt", "File-3".getBytes());
+		testMap.put("File-7.txt", "File-7".getBytes());
+		testMap.put("File-8.txt", "File-8".getBytes());
+		testMap.put("File-11.txt", "File-11".getBytes());
+		testMap.put("File-5.txt", "File-5".getBytes());
+		testMap.put("File-2.txt", "File-2".getBytes());
+		testMap.put("File-6.txt", "File-6".getBytes());
+		
+		//10.139.58.91
+		testMap.put("File-9.txt", "File-9".getBytes());
+		testMap.put("File-1.txt", "File-1".getBytes());
+		testMap.put("File-15.txt", "File-15".getBytes());
+		testMap.put("File-12.txt", "File-12".getBytes());
+		testMap.put("File-13.txt", "File-13".getBytes());
+		testMap.put("File-14.txt", "File-14".getBytes());
+		
+		//10.139.56.209
+		testMap.put("File-10.txt", "File-10".getBytes());
+		testMap.put("File-4.txt", "File-4".getBytes());
+		
+		nodeStarter.dbNode.setInMemMap(testMap);
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//ClientInfo new ClientInfo("1.2.3.40") = new Clientnew ClientInfo("1.2.3.40")("1.2.3.40");
+		
+		//10.139.57.38
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-3.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-8.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-2.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		
+		//10.139.58.91
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-9.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-1.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-12.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		
+		//10.139.56.209
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-10.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-4.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-7.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		
+		//10.139.57.38
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-9.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-1.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-10.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		
+		//10.139.58.91
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-7.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-8.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-10.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		
+		//10.139.56.209
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-7.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-15.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-11.txt"), new ClientInfo("1.2.3.40"), 
+				UUID.randomUUID().toString()));
+	}*/
+	
 
 }
