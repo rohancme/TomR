@@ -1,11 +1,13 @@
 package network;
 
+import edu.tomr.node.base.Node;
 import network.NetworkConstants.Requests;
 import network.requests.NWRequest;
 
 public class NeighborConnectionHandler extends RequestHandler implements Runnable{
 	
 	private NodeNetworkModule networkModule=null;
+	private final Node mainNodeObject;
 
 	@Override
 	public void run() { //This needs to listen to incoming neighbor connections and requests
@@ -30,7 +32,7 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 					String reqType=NetworkConstants.requestToString(Requests.DB_OPERATION);
 					
 					if(reqType.equals(request.getRequestType())){ //it's a DB Operation
-						
+						this.mainNodeObject.handleRequest(request.getdBMessage(), request.getSourceIP());
 					}
 				}
 				else{ //either not meant for this node or null
@@ -49,9 +51,10 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 	}
 	
 	
-	public NeighborConnectionHandler(int incoming_port,NodeNetworkModule module) throws NetworkException{
+	public NeighborConnectionHandler(int incoming_port,NodeNetworkModule module, Node mainNodeObject) throws NetworkException{
 		super(incoming_port);	
 		this.networkModule=module;
+		this.mainNodeObject=mainNodeObject;
 	}
 
 }
