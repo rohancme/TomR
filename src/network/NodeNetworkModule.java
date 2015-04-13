@@ -10,10 +10,11 @@ public class NodeNetworkModule {
 	private static int startupMsgPort=5000;
 	private static int neighborServerPort=5001;
 	private static int selfServerPort=5001;
+	private static int responsePort=5002;
 	
 	public NetworkUtilities utils=null;
 	private NodeNeighborModule neighborModule=null;
-	
+	private NodeResponseModule responseModule=null;
 	
 	/**
 	 * @throws NetworkException
@@ -43,6 +44,9 @@ public class NodeNetworkModule {
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
 		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage());
 		neighborModule.startServicingRequests();
+		
+		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(),responsePort);
+		responseModule.startServicingResponses();
 	}
 	
 	/**
@@ -63,7 +67,10 @@ public class NodeNetworkModule {
 	}
 	
 	//DUMMY-Waiting for Network Response Class
-	public void sendOutgoingNWResponse(AckMessage message, String nodeIpAddress){
+	public void sendOutgoingNWResponse(AckMessage message, String destIP){
+		
+		NWResponse response=new NWResponse(this.utils.getSelfIP(),destIP,message);
+		this.responseModule.insertOutgoingNWResponse(response);
 		
 	}
 	
