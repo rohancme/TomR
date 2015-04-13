@@ -50,34 +50,6 @@ public class ClientQueueProcessor implements Runnable {
 			parentNode.getRequestMapper().put(message.getRequestId(), message.getClientInfo().getIpAddress());
 			parentNode.getNetworkModule().sendOutgoingRequest(message, ipAddress);
 		}
-		
 	}
 	
-	
-	/*
-	 * This method handles the requests meant for this node
-	 * 
-	 * @param message	message containing the KV pair from the load balancer	
-	 * @return
-	 */
-	/*private void handleNodeRequest(NodeMessage message) {
-		
-		ClientRequestPayload tempPayload = message.getPayload();
-		
-		switch(message.getRequestType()) {
-			case ADD: 	operation.put(tempPayload.getKey(), tempPayload.getValue());
-						break;
-						
-			case GET:	tempPayload.setValue(operation.get(tempPayload.getKey()));
-						break;
-						
-			case DELETE: operation.delete(tempPayload.getKey());
-						 break;
-		
-			case UPDATE: break;
-			
-		}
-		//Have to call da network module with request ack message
-	}*/
-		
 }
