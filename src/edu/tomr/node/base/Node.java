@@ -105,6 +105,11 @@ public class Node {
 		return networkModule;
 	}
 
+	@Deprecated
+	public void setInMemMap(Map<String, byte[]> inMemMap) {
+		this.inMemMap = inMemMap;
+	}
+
 	public void initNetworkModule(){
 		try {
 			this.networkModule = new NodeNetworkModule(this);
