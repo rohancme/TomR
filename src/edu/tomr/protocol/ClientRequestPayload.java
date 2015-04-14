@@ -37,9 +37,16 @@ public final class ClientRequestPayload {
 	@Override
 	public String toString() {
 
-		String str = "{ClientRequestPayload:"
-				+ "key: "+key+" value size: "+value.length+"}";
-		return str;
+		StringBuilder builder = new StringBuilder();
+		builder.append("{ClientRequestPayload: key: ");
+		builder.append(key);
+		builder.append(" value size: ");
+		if(value != null)
+			builder.append(value.length);
+		else
+			builder.append(0);
+		
+		return builder.toString();
 	}
 
 

@@ -32,5 +32,21 @@ public class AckMessage {
 		return value;
 	}
 
+	@Override
+	public String toString() {
 
+		StringBuilder builder = new StringBuilder();
+		builder.append("{AckMessage: status: ");
+		builder.append(status);
+		builder.append(" value size: ");
+		if(value != null)
+			builder.append(value.length);
+		else
+			builder.append(0);
+		builder.append(" requestIdServiced: ");
+		builder.append(requestIdServiced);
+		
+		return builder.toString();
+	}
+	
 }
