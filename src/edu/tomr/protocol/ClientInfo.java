@@ -7,6 +7,10 @@ public class ClientInfo {
 	@JsonProperty private final String ipAddress;
 	@JsonProperty private int port;
 
+	public ClientInfo() {
+		this.ipAddress = null;
+	}
+
 	public ClientInfo(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}

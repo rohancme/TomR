@@ -8,6 +8,12 @@ public class AckMessage {
 	@JsonProperty private final byte[] value;
 	@JsonProperty private final String requestIdServiced;
 
+	public AckMessage() {
+		this.status = false;
+		this.value = null;
+		this.requestIdServiced = null;
+	}
+
 	public AckMessage(boolean status, byte[] value, String reqId) {
 		this.status = status;
 		this.value = value;

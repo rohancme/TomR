@@ -9,6 +9,12 @@ public class DBMessage extends Message {
 	@JsonProperty private final ClientRequestType requestType;
 	@JsonProperty private final ClientRequestPayload payload;
 
+	public DBMessage(){
+		this.requestType = null;
+		this.payload = null;
+		this.requestId = null;
+	}
+
 	public DBMessage(ClientRequestType type, ClientRequestPayload payload, ClientInfo info,
 			String requestId) {
 
