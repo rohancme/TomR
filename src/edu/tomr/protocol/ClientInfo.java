@@ -1,5 +1,7 @@
 package edu.tomr.protocol;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class ClientInfo {
 
 	@JsonProperty private final String ipAddress;
