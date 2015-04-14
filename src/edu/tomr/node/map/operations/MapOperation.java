@@ -6,6 +6,11 @@ public class MapOperation implements IMapOperation {
 	
 	private Map<String, byte[]> memoryMap;
 	
+	@Deprecated
+	public void setMemoryMap(Map<String, byte[]> memoryMap) {
+		this.memoryMap = memoryMap;
+	}
+
 	public MapOperation(Map<String, byte[]> map) {
 		this.memoryMap = map;
 	}

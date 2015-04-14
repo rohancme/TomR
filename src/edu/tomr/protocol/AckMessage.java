@@ -1,10 +1,18 @@
 package edu.tomr.protocol;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class AckMessage {
 
-	private final boolean status;
-	private final byte[] value;
-	private final String requestIdServiced;
+	@JsonProperty private final boolean status;
+	@JsonProperty private final byte[] value;
+	@JsonProperty private final String requestIdServiced;
+	
+	public AckMessage() {
+		this.status = false;
+		this.value = null;
+		this.requestIdServiced = null;
+	}
 	
 	public AckMessage(boolean status, byte[] value, String reqId) {
 		this.status = status;
@@ -27,7 +35,7 @@ public class AckMessage {
 	@Override
 	public String toString() {
 		// 
-		return "AckMessage: {status: "+status+" value: "+value.toString()+"}";
+		return "AckMessage: {status: "+status+" value: "+value/*.toString()*/+"}";
 	}
 	
 	

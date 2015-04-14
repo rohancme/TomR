@@ -2,10 +2,16 @@ package edu.tomr.protocol;
 
 public class DBMessage extends Message {
 
-	private final String requestId;
-	private ClientInfo clientInfo;
-	private final ClientRequestType requestType;
-	private final ClientRequestPayload payload;
+	public final String requestId;
+	public ClientInfo clientInfo;
+	public final ClientRequestType requestType;
+	public final ClientRequestPayload payload;
+	
+	public DBMessage(){
+		this.requestType = null;
+		this.payload = null;
+		this.requestId = null;
+	}
 	
 	public DBMessage(ClientRequestType type, ClientRequestPayload payload, ClientInfo info,
 			String requestId) {

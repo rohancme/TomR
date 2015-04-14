@@ -106,8 +106,8 @@ public class Node {
 	}
 
 	@Deprecated
-	public void setInMemMap(Map<String, byte[]> inMemMap) {
-		this.inMemMap = inMemMap;
+	public void setOperationMap(Map<String, byte[]> inMemMap){
+		operation.setMemoryMap(inMemMap);
 	}
 
 	public void initNetworkModule(){
@@ -142,8 +142,9 @@ public class Node {
 	public void handleRequest(DBMessage message) {
 		
 		clientInbox.queueMessage(new ClientMessage(message));
-		if(!clientProcThread.isAlive())
+		if(null == clientProcThread){
 			startClientProcessor();
+		} 
 	}
 	
 	/**
@@ -156,7 +157,7 @@ public class Node {
 		requestMapper.put(message.getRequestId(), originalServicerIP);
 		if(null != originalServicerIP) {
 			nodeInbox.queueMessage(new NodeMessage(message, originalServicerIP));
-			if(!nodeProcThread.isAlive())
+			if(null == nodeProcThread)//.isAlive())
 				startNodeProcessor();
 		} 
 	}

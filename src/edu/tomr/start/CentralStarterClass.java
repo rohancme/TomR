@@ -26,9 +26,13 @@ public class CentralStarterClass {
 		
 		ArrayList<String> IPAddresses=new ArrayList<String>();
 		
-		IPAddresses.add("10.139.60.15");
-		IPAddresses.add("");
-		IPAddresses.add("");
+		
+		
+		IPAddresses.add("192.168.1.131");
+		
+		IPAddresses.add("192.168.1.103");
+		
+		IPAddresses.add("192.168.1.138");
 		
 		//make the last one connectFirst
 		int i;
@@ -50,6 +54,7 @@ public class CentralStarterClass {
 		Connection temp_connection=new Connection(IPAddresses.get(i),startupMsgPort);
 		
 		temp_connection.send_request(startupRequest);
+		System.out.println("Connections sent");
 		
 	}
 
@@ -62,7 +67,7 @@ public class CentralStarterClass {
 			neighbors.add(iPAddresses.get(0));
 		}
 		else{
-			neighbors.add(iPAddresses.get(i));
+			neighbors.add(iPAddresses.get(i+1));
 		}
 			
 		

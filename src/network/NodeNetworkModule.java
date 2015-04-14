@@ -46,11 +46,25 @@ public class NodeNetworkModule {
 	 */
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
+		System.out.println("got start up request");
 		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
 		neighborModule.startServicingRequests();
 		
-		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(),responsePort);
+
+		//everyone needs to start listening on port 5002 first
+		NetworkResponseHandler incomingResponseHandler=null;
+		try {
+			incomingResponseHandler = new NetworkResponseHandler(responsePort,this);
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Thread t=new Thread(incomingResponseHandler);
+		t.start();
+		
+		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
 		responseModule.startServicingResponses();
+		System.out.println("Started servicing responses");
 	}
 	
 	/**
@@ -138,6 +152,12 @@ public class NodeNetworkModule {
 			Thread incomingConnectionsThread=new Thread(incomingNeighborConnectionHandler);
 			incomingConnectionsThread.start();
 			//then connect
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			neighborModule=new NodeNeighborModule(startupMessage.getNeighborList(),neighborServerPort);
 			
 		}

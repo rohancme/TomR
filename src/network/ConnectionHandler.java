@@ -17,6 +17,7 @@ public class ConnectionHandler {
 		
 		try {
 			serverSocket=new ServerSocket(incoming_port);
+			System.out.println("Listenikg for connections on port: "+incoming_port);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,6 +28,7 @@ public class ConnectionHandler {
 	protected void initializeClientSocket() throws NetworkException{
 		try {
 			clientSocket=serverSocket.accept();
+			System.out.println("Accpeted a neighbor connection");
 			inputStream=clientSocket.getInputStream();
 			inputScanner=new Scanner(inputStream);
 		} catch (IOException e) {

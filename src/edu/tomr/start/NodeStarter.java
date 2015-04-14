@@ -19,7 +19,7 @@ public class NodeStarter {
 	private static int selfBeatPost = 5010;
 	
 	static {
-		 //ConfigParams.loadProperties();
+		 ConfigParams.loadProperties();
 	}
 	
 	private Node dbNode;
@@ -72,19 +72,20 @@ public static void main(String[] args) {
 		testMap.put("File-15", "File-15".getBytes());
 		
 		//192.168.1.103
-		testMap.put("File-5", "File-5".getBytes());
+		/*testMap.put("File-5", "File-5".getBytes());
 		testMap.put("File-3", "File-3".getBytes());
 		testMap.put("File-11", "File-11".getBytes());
+		testMap.put("File-14", "File-14".getBytes());
 		
 		//192.168.1.138
 		testMap.put("File-1", "File-1".getBytes());
 		testMap.put("File-7", "File-7".getBytes());
 		testMap.put("File-8", "File-8".getBytes());
 		testMap.put("File-9", "File-9".getBytes());
-		testMap.put("File-14", "File-14".getBytes());
+		*/
 		
-		nodeStarter.dbNode.setInMemMap(testMap);
-		
+		nodeStarter.dbNode.setOperationMap(testMap);
+		//System.out.println(nodeStarter.dbNode.getOperation().get("File-6"));
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -105,7 +106,7 @@ public static void main(String[] args) {
 				UUID.randomUUID().toString()));
 		
 		//192.168.1.103
-		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-5"), new ClientInfo("1.2.3.40"), 
+		/*nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-5"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-3"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
@@ -118,7 +119,7 @@ public static void main(String[] args) {
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-1"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-7"), new ClientInfo("1.2.3.40"), 
-				UUID.randomUUID().toString()));
+				UUID.randomUUID().toString()));*/
 		
 		/*
 		 * Diff node reqs
@@ -126,13 +127,13 @@ public static void main(String[] args) {
 		//192.168.1.131
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-5"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
-		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-3"), new ClientInfo("1.2.3.40"), 
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-1"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
-		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-11"), new ClientInfo("1.2.3.40"), 
+		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-7"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 		
 		//192.168.1.103
-		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-6"), new ClientInfo("1.2.3.40"), 
+		/*nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-6"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-14"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
@@ -145,7 +146,7 @@ public static void main(String[] args) {
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-10"), new ClientInfo("1.2.3.40"), 
 				UUID.randomUUID().toString()));
 		nodeStarter.dbNode.handleRequest(new DBMessage(ClientRequestType.GET, new ClientRequestPayload("File-11"), new ClientInfo("1.2.3.40"), 
-				UUID.randomUUID().toString()));
+				UUID.randomUUID().toString()));*/
 	}
 	
 	/*public static void main(String[] args) {

@@ -51,7 +51,10 @@ public class NodeQueueProcessor implements Runnable {
 						success = true;
 						break;
 						
-			case GET:	val = operation.get(tempPayload.getKey());
+			case GET:	
+				System.out.println("Checking for key: "+tempPayload.getKey());
+				val = operation.get(tempPayload.getKey());
+				System.out.println("got value: "+val);
 						if(val != null)
 							success = true;
 						break;

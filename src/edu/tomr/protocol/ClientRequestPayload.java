@@ -1,9 +1,11 @@
 package edu.tomr.protocol;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public final class ClientRequestPayload {
 
-	private final String key;
-	private byte[] value;
+	@JsonProperty private final String key;
+	@JsonProperty private byte[] value;
 	
 	public ClientRequestPayload() {
 		this.key = null;
@@ -36,7 +38,7 @@ public final class ClientRequestPayload {
 	public String toString() {
 		
 		String str = "{ClientRequestPayload:"
-				+ "key: "+key+" value size: "+value.length+"}";
+				+ "key: "+key+" value size: "+value+"}";
 		return str;
 	}
 
