@@ -8,6 +8,8 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import edu.tomr.utils.ConfigParams;
+
 
 public class ConsistentHashing {
 	static TreeMap<Double, String> unitCircle = new TreeMap<Double, String>();
