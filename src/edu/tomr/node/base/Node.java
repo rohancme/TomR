@@ -105,9 +105,11 @@ public class Node implements INode {
 		return networkModule;
 	}
 
-	private void initNetworkModule(){
+	/*public*/private void initNetworkModule(){
 		try {
 			this.networkModule = new NodeNetworkModule();
+			//TODO: Uncomment after NodeNetworkModule changes checked in
+			//this.networkModule = new NodeNetworkModule(this);
 		} catch (NetworkException e) {
 			System.out.println("Error while instantiating network module");
 			e.printStackTrace();

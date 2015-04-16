@@ -22,6 +22,8 @@ public class NodeStarter {
 		try {
 			utils = new NetworkUtilities();
 			initDbNode(utils.getSelfIP());
+			//TODO: Uncomment after NodeNetworkModule changes checked in
+			//dbNode.initNetworkModule();
 		} catch (NetworkException e) {
 			
 			System.out.println("Exception in obaining IP address");
