@@ -115,4 +115,8 @@ public class ConsistentHashing {
 			
 		}	
 
+	public static String getNewPredecessor(String newNodeAddress){
+
+		return null;
+	}
 }
