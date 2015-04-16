@@ -45,7 +45,8 @@ public class ClientConnectionHandler implements Runnable {
 		
 		ClientServiceRequestPayload servicePayload = new ClientServiceRequestPayload(IPAddress);
 		ClientServiceMessage serviceMessage = new ClientServiceMessage(servicePayload);
-		NWRequest serviceRequest = new NWRequest(clientUID, serviceMessage);
+		NWRequest serviceRequest = new NWRequest(clientUID.toString(), serviceMessage);
+		
 		
 		
 		

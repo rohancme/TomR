@@ -2,8 +2,11 @@ package network.requests;
 
 import static network.NetworkConstants.Requests;
 
+import java.util.UUID;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
 import edu.tomr.protocol.StartupMessage;
@@ -17,6 +20,7 @@ public class NWRequest {
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
 	@JsonProperty protected NeighborMessage neighborMessage=null;
+	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	
 	//only for JACKSON
 	private NWRequest(){
@@ -43,6 +47,14 @@ public class NWRequest {
 		this.request_type=NetworkConstants.requestToString(Requests.NEIGHBOR_MESSAGE);
 	}
 	
+	public NWRequest(String req_id, ClientServiceMessage msg) {
+		this.request_id=req_id;
+		this.serviceMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.SERVICE_MESSAGE);
+		
+	}
+
+
 	@JsonProperty("request_type")
 	public String getRequestType(){
 		return this.request_type;
