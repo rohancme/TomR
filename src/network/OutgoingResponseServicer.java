@@ -27,6 +27,7 @@ public class OutgoingResponseServicer implements Runnable{
 	
 	public OutgoingResponseServicer(ConcurrentLinkedQueue<NWResponse> queue,List<NeighborConnection>outgoingNeighborConnections){
 		this.responseQueue=queue;
+		this.outgoingNeighborConnections=new ArrayList<NeighborConnection>();
 		this.outgoingNeighborConnections.addAll(outgoingNeighborConnections);
 	}
 

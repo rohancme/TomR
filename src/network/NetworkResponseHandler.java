@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import edu.tomr.node.base.Node;
+
 public class NetworkResponseHandler extends ConnectionHandler implements Runnable{
 
 	public NetworkResponseHandler(int incoming_port) {
@@ -12,6 +14,7 @@ public class NetworkResponseHandler extends ConnectionHandler implements Runnabl
 	}
 		
 	private NodeNetworkModule networkModule=null;
+	private Node currentNode;
 
 	@Override
 	public void run() { //This needs to listen to incoming neighbor connections and requests
@@ -31,17 +34,20 @@ public class NetworkResponseHandler extends ConnectionHandler implements Runnabl
 				System.out.println("Response recieved");
 				if(ownIP.equals(response.getDestIP())){
 					//call method to handle response
+					currentNode.handleAcknowledgements(response.getAckMsg());
 				}
 				else{
 					//add to response queue
+					networkModule.sendOutgoingNWResponse(response);
 				}
 			}
 		}
 	}
 		
-	public NetworkResponseHandler(int incoming_port,NodeNetworkModule module) throws NetworkException{
+	public NetworkResponseHandler(int incoming_port,NodeNetworkModule module, Node currentNode) throws NetworkException{
 		super(incoming_port);	
 		this.networkModule=module;
+		this.currentNode=currentNode;
 	}
 	
 	protected NWResponse getNextResponse(){
