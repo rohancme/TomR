@@ -1,6 +1,7 @@
 package network;
 
 import network.requests.NWRequest;
+import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.StartupMessage;
@@ -10,16 +11,19 @@ public class NodeNetworkModule {
 	private static int startupMsgPort=5000;
 	private static int neighborServerPort=5001;
 	private static int selfServerPort=5001;
+	private static int responsePort=5002;
 	
 	public NetworkUtilities utils=null;
 	private NodeNeighborModule neighborModule=null;
-	
+	private NodeResponseModule responseModule=null;
+	private final Node mainNodeObject;
 	
 	/**
 	 * @throws NetworkException
 	 */
-	public NodeNetworkModule() throws NetworkException{
+	public NodeNetworkModule(Node mainNodeObject) throws NetworkException{
 		this.utils=new NetworkUtilities();
+		this.mainNodeObject=mainNodeObject;
 		constructorCommon();
 	}
 	
@@ -27,8 +31,9 @@ public class NodeNetworkModule {
 	/**
 	 * @param selfIP-initialize NodeNetworkModule with a particular IP address
 	 */
-	public NodeNetworkModule(String selfIP){
+	public NodeNetworkModule(Node mainNodeObject,String selfIP){
 		this.utils=new NetworkUtilities(selfIP);
+		this.mainNodeObject=mainNodeObject;
 		constructorCommon();
 	}
 	
@@ -41,8 +46,23 @@ public class NodeNetworkModule {
 	 */
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
-		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage());
+		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
 		neighborModule.startServicingRequests();
+		
+		//everyone needs to start listening on port 5002 first
+		NetworkResponseHandler incomingResponseHandler=null;
+		try {
+			incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
+		} catch (NetworkException e) {
+					
+			e.printStackTrace();
+		}
+		Thread t=new Thread(incomingResponseHandler);
+		t.start();
+				
+		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
+		 		responseModule.startServicingResponses();		 		
+		 		responseModule.startServicingResponses();
 	}
 	
 	/**
@@ -62,9 +82,16 @@ public class NodeNetworkModule {
 		this.neighborModule.insertOutgoingRequest(request);
 	}
 	
-	//DUMMY-Waiting for Network Response Class
-	public void sendOutgoingNWResponse(AckMessage message, String nodeIpAddress){
+	
+	public void sendOutgoingNWResponse(AckMessage message, String destIP){
 		
+		NWResponse response=new NWResponse(this.utils.getSelfIP(),destIP,message);
+		this.responseModule.insertOutgoingNWResponse(response);
+		
+	}
+	
+	public void sendOutgoingNWResponse(NWResponse response){
+		this.responseModule.insertOutgoingNWResponse(response);
 	}
 	
 	//DUMMY-Waiting for ClientResponse Class
@@ -76,6 +103,7 @@ public class NodeNetworkModule {
 	
 	private void constructorCommon(){
 		//currently nothing
+		
 	}
 	
 	private NWRequest getStartUpRequest(int startUpMsgPort) {
@@ -93,7 +121,7 @@ public class NodeNetworkModule {
 	}
 
 	
-	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage) {
+	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage, Node mainNodeObject) {
 		
 		//Use following:
 		//NeighborConnection in order to establish a connection with neighbor
@@ -106,7 +134,7 @@ public class NodeNetworkModule {
 		NeighborConnectionHandler incomingNeighborConnectionHandler = null;
 		
 		try {
-			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this);
+			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this,mainNodeObject);
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}
