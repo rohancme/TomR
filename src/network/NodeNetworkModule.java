@@ -49,8 +49,20 @@ public class NodeNetworkModule {
 		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
 		neighborModule.startServicingRequests();
 		
-		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(),responsePort);
-		responseModule.startServicingResponses();
+		//everyone needs to start listening on port 5002 first
+				NetworkResponseHandler incomingResponseHandler=null;
+				try {
+					incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
+				} catch (NetworkException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Thread t=new Thread(incomingResponseHandler);
+				t.start();
+				
+		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
+		 		responseModule.startServicingResponses();		 		
+		 		responseModule.startServicingResponses();
 	}
 	
 	/**
@@ -70,12 +82,16 @@ public class NodeNetworkModule {
 		this.neighborModule.insertOutgoingRequest(request);
 	}
 	
-	//DUMMY-Waiting for Network Response Class
+	
 	public void sendOutgoingNWResponse(AckMessage message, String destIP){
 		
 		NWResponse response=new NWResponse(this.utils.getSelfIP(),destIP,message);
 		this.responseModule.insertOutgoingNWResponse(response);
 		
+	}
+	
+	public void sendOutgoingNWResponse(NWResponse response){
+		this.responseModule.insertOutgoingNWResponse(response);
 	}
 	
 	//DUMMY-Waiting for ClientResponse Class
