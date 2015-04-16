@@ -54,7 +54,7 @@ public class NodeNetworkModule {
 		//everyone needs to start listening on port 5002 first
 		NetworkResponseHandler incomingResponseHandler=null;
 		try {
-			incomingResponseHandler = new NetworkResponseHandler(responsePort,this);
+			incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
 		} catch (NetworkException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,6 +90,10 @@ public class NodeNetworkModule {
 		this.responseModule.insertOutgoingNWResponse(response);
 		System.out.println("Send response to node with ipAddress: "+destIP+
 				" and Ack message: "+message.toString());
+	}
+	
+	public void sendOutgoingNWResponse(NWResponse response){
+		this.responseModule.insertOutgoingNWResponse(response);
 	}
 	
 	//DUMMY-Waiting for ClientResponse Class
