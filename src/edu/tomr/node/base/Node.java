@@ -81,7 +81,7 @@ public class Node implements INode {
 	public Node(String selfIpAdd){
 
 		this.selfIpAddress = selfIpAdd;
-		initNetworkModule();
+		//initNetworkModule();
 		inMemMap = new ConcurrentHashMap<String, byte[]>();
 		setOperation(new MapOperation(inMemMap));
 		clientInbox = new MessageQueue<ClientMessage>();
@@ -105,11 +105,9 @@ public class Node implements INode {
 		return networkModule;
 	}
 
-	/*public*/private void initNetworkModule(){
+	public void initNetworkModule(){
 		try {
-			this.networkModule = new NodeNetworkModule();
-			//TODO: Uncomment after NodeNetworkModule changes checked in
-			//this.networkModule = new NodeNetworkModule(this);
+			this.networkModule = new NodeNetworkModule(this);
 		} catch (NetworkException e) {
 			System.out.println("Error while instantiating network module");
 			e.printStackTrace();
@@ -136,6 +134,7 @@ public class Node implements INode {
 	 * For client requests
 	 * @param message DBMessage from client
 	 */
+	@Override
 	public void handleRequest(DBMessage message) {
 
 		clientInbox.queueMessage(new ClientMessage(message));
@@ -149,6 +148,7 @@ public class Node implements INode {
 	 * @param message DBMessage from client
 	 * @param originalServicerIP : Original node IP Address servicing the request
 	 */
+	@Override
 	public void handleRequest(DBMessage message, String originalServicerIP) {
 
 		requestMapper.put(message.getRequestId(), originalServicerIP);
@@ -163,6 +163,7 @@ public class Node implements INode {
 	 * Only for node acknowledgments
 	 * @param ackMessage
 	 */
+	@Override
 	public void handleAcknowledgements(AckMessage ackMessage) {
 
 		String clientIp = requestMapper.remove(ackMessage.getRequestIdServiced());
