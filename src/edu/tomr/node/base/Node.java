@@ -20,7 +20,7 @@ import edu.tomr.queue.NodeQueueProcessor;
  * Should contain a network module to handle the connections
  * Can add appropriate constructors to initialize n/w module variables
  */
-public class Node {
+public class Node implements INode {
 
 
 	/**
