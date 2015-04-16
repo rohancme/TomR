@@ -50,15 +50,15 @@ public class NodeNetworkModule {
 		neighborModule.startServicingRequests();
 		
 		//everyone needs to start listening on port 5002 first
-				NetworkResponseHandler incomingResponseHandler=null;
-				try {
-					incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
-				} catch (NetworkException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Thread t=new Thread(incomingResponseHandler);
-				t.start();
+		NetworkResponseHandler incomingResponseHandler=null;
+		try {
+			incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
+		} catch (NetworkException e) {
+					
+			e.printStackTrace();
+		}
+		Thread t=new Thread(incomingResponseHandler);
+		t.start();
 				
 		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
 		 		responseModule.startServicingResponses();		 		

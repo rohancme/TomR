@@ -1,19 +1,25 @@
 package edu.tomr.protocol;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class ClientInfo {
 
-	private final String ipAddress;
-	private int port;
-	
+	@JsonProperty private final String ipAddress;
+	@JsonProperty private int port;
+
+	public ClientInfo() {
+		this.ipAddress = null;
+	}
+
 	public ClientInfo(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
-	
+
 	public ClientInfo(String ipAddress, int port) {
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
-	
+
 	public int getPort() {
 		return port;
 	}
@@ -23,6 +29,6 @@ public class ClientInfo {
 	public String getIpAddress() {
 		return ipAddress;
 	}
-	
-	
+
+
 }

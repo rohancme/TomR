@@ -22,7 +22,8 @@ public class NodeStarter {
 		try {
 			utils = new NetworkUtilities();
 			initDbNode(utils.getSelfIP());
-			dbNode.initNetworkModule();
+			//TODO: Uncomment after NodeNetworkModule changes checked in
+			//dbNode.initNetworkModule();
 		} catch (NetworkException e) {
 			
 			System.out.println("Exception in obaining IP address");
@@ -52,7 +53,6 @@ public class NodeStarter {
 		
 		NodeStarter nodeStarter = new NodeStarter();
 		//nodeStarter.startBeatClient();
-		
 		
 	}
 
