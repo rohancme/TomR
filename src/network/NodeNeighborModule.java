@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import network.requests.NWRequest;
-
+//handles all outgoing requests to neighbors for the node
 public class NodeNeighborModule {
 	
 	//this might need to be a copy-on-write later when the neighborConnections become dynamic

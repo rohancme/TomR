@@ -5,7 +5,7 @@ import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.StartupMessage;
-
+//Main network module. An object of this is created on every Node in the cluster
 public class NodeNetworkModule {
 	
 	private static int startupMsgPort=5000;

@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.JsonGenerator;
 
+//handles connections to a particular server on a port
 public class Connection {
 	
 	protected Socket socket;

@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.node.base.Node;
-
-public class NetworkResponseHandler extends ConnectionHandler implements Runnable{
+//handles incoming responses from neighbor nodes
+public class NetworkResponseHandler extends PersistentIncomingConnectionHandler implements Runnable{
 
 	public NetworkResponseHandler(int incoming_port) {
 		super(incoming_port);
