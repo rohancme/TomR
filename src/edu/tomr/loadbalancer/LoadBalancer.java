@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import network.Connection;
+import network.LBClientServer;
 import network.NetworkException;
 import network.NetworkUtilities;
 import network.requests.NWRequest;
@@ -23,7 +24,7 @@ public class LoadBalancer {
 	}
 	
 	static int startupMsgPort=5000;
-	static int clientPort=6000;
+	
 	static int sizeOfThreadPool=20;
 	private ServerBeatController beatController;
 	
@@ -84,22 +85,9 @@ public class LoadBalancer {
 		return neighbors;
 	}
 	
-	private void listenForClients(int clientPort) {
-		try {
-			ServerSocket clientSocket = new ServerSocket(clientPort);
-			ExecutorService threadPool = Executors.newFixedThreadPool(sizeOfThreadPool);
-			
-			//Listen for connections
-			while(true){
-				Socket clientConnection = clientSocket.accept();
-				threadPool.submit(new clientConnectionHandler(clientConnection));
+	private void listenForClients() {
+		LBClientServer IPServer = new LBClientServer();
 				
-			}
-		} catch (IOException e) {
-			System.out.println("Error while trying to connect with the client");
-			e.printStackTrace();
-		}
-		
 	}
 	
 	public static void main(String[] args) {
@@ -107,7 +95,7 @@ public class LoadBalancer {
 		LoadBalancer loadBalancer = new LoadBalancer();
 		//loadBalancer.startHeartBeatServer();
 		loadBalancer.startServer();
-		loadBalancer.listenForClients(clientPort);
+		loadBalancer.listenForClients();
 	}
 
 	

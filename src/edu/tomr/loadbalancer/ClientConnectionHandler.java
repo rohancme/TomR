@@ -3,6 +3,7 @@ package edu.tomr.loadbalancer;
 import java.net.Socket;
 import java.util.UUID;
 
+import network.Connection;
 import network.requests.NWRequest;
 
 import edu.tomr.protocol.ClientServiceMessage;
@@ -25,7 +26,7 @@ public class ClientConnectionHandler implements Runnable {
 
 	
 
-	private static synchronized UUID generateUID() {
+	private static UUID generateUID() {
 		return UUID.randomUUID();
 		
 	}
@@ -46,19 +47,17 @@ public class ClientConnectionHandler implements Runnable {
 		ClientServiceRequestPayload servicePayload = new ClientServiceRequestPayload(IPAddress);
 		ClientServiceMessage serviceMessage = new ClientServiceMessage(servicePayload);
 		NWRequest serviceRequest = new NWRequest(clientUID.toString(), serviceMessage);
-		
-		
-		
-		
-		
-		
-		
+		//Send this request to the client. 
+		Connection clientServiceConnection = new Connection(clientSocket);
+		clientServiceConnection.send_request(serviceRequest);
+		//close client socket
+		//Exit Thread
 		
 	}
 
 
 
-	private static synchronized String getIPAddress() {
+	private synchronized String getIPAddress() {
 		String IPAddress = null;
 		try{
 		if(turnOf == ConfigParams.getIpAddresses().size() - 1){
