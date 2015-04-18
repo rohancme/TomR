@@ -28,6 +28,15 @@ public class Connection {
 		}
 	}
 	
+	public Connection(Socket clientSocket){
+		try {
+			socket = clientSocket;
+		} catch (Exception e) {
+			System.out.println("Some kind of IO Exception: ");
+			e.printStackTrace();
+		}
+	}
+	
 	public void send_request(NWRequest request){
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
