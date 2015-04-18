@@ -22,6 +22,10 @@ public class NodeNeighborModule {
 		servicer.start();
 	}
 	
+	public ArrayList<NeighborConnection> getOutgoingNeighborConnections() {
+		return outgoingNeighborConnections;
+	}
+
 	private ArrayList<NeighborConnection> getConnectionList(List<String> neighborList,int neighborServerPort) {	
 		
 		ArrayList<NeighborConnection> neighborCons=new ArrayList<NeighborConnection>();

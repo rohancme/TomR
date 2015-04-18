@@ -24,6 +24,10 @@ public class NWRequest {
 	@JsonProperty protected NeighborMessage neighborMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
 	
+	public DBMessage getdBMessage() {
+		return dBMessage;
+	}
+
 	//only for JACKSON
 	private NWRequest(){
 		this.request_type="UNKNOWN";

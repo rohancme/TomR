@@ -6,11 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import network.requests.NWRequest;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
-
 public class ConnectionHandler {
 	
 	protected ServerSocket serverSocket;
@@ -38,23 +33,6 @@ public class ConnectionHandler {
 			e.printStackTrace();
 			throw new NetworkException("Error accepting incoming connections");
 		}
-	}
-	
-	protected NWRequest getNextRequest(){
-		
-		ObjectMapper mapper = new ObjectMapper();
-		NWRequest request=null;
-		//currently using scanner. Scanner waits for a newLine character which marks the end of an object
-		if(inputScanner.hasNextLine()){
-			try {
-				request=mapper.readValue(inputScanner.nextLine(), NWRequest.class);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		return request;
 	}
 
 

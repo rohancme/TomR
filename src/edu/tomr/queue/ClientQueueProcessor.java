@@ -39,8 +39,7 @@ public class ClientQueueProcessor implements Runnable {
 	}
 	
 	
-	public void handleMessage(DBMessage message) {
-		
+	public void handleMessage(DBMessage message) {		
 		String ipAddress = ConsistentHashing.getNode(message.getPayload().getKey());
 
 		if(ipAddress.equalsIgnoreCase(parentNode.getSelfAddress())) {
