@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import edu.tomr.hash.ConsistentHashing;
 import edu.tomr.protocol.AddNodeMessage;
 import edu.tomr.protocol.BreakFormationMessage;
+import edu.tomr.utils.ConfigParams;
 
 public class AddMessageHandler implements Runnable {
 
@@ -38,7 +39,8 @@ public class AddMessageHandler implements Runnable {
 				message = mapper.readValue(scanner.nextLine(), AddNodeMessage.class);
 			}
 			scanner.close();
-			String predec = ConsistentHashing.getNewPredecessor(message.getIpAddress());
+			String predec = ConfigParams.getRandomIpAddress();
+
 			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new BreakFormationMessage("Break_Form", message.getIpAddress()));
 			Connection temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 
