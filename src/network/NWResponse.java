@@ -3,7 +3,7 @@ package network;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.AckMessage;
-
+//a container for Network Responses
 public class NWResponse {
 	
 	@JsonProperty private String destIP=null;

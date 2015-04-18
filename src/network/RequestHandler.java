@@ -5,8 +5,8 @@ import java.io.IOException;
 import network.requests.NWRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
-
-public class RequestHandler extends ConnectionHandler {
+//retrieves the next incoming request
+public class RequestHandler extends PersistentIncomingConnectionHandler {
 	
 	protected RequestHandler(int incoming_port) {
 		super(incoming_port);

@@ -3,7 +3,7 @@ package network;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+//handles all outgoing response messages from this node
 public class NodeResponseModule {
 		
 		//this might need to be a copy-on-write later when the neighborConnections become dynamic

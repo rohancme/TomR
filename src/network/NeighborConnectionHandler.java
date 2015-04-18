@@ -3,7 +3,7 @@ package network;
 import edu.tomr.node.base.Node;
 import network.NetworkConstants.Requests;
 import network.requests.NWRequest;
-
+//handles incoming requests from neighbors
 public class NeighborConnectionHandler extends RequestHandler implements Runnable{
 	
 	private NodeNetworkModule networkModule=null;
