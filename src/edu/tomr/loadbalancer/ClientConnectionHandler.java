@@ -1,5 +1,6 @@
 package edu.tomr.loadbalancer;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.UUID;
 
@@ -51,6 +52,12 @@ public class ClientConnectionHandler implements Runnable {
 		Connection clientServiceConnection = new Connection(clientSocket);
 		clientServiceConnection.send_request(serviceRequest);
 		//close client socket
+		try {
+			clientSocket.close();
+		} catch (IOException e) {
+			System.out.println("Erro while trying to close the socket");
+			e.printStackTrace();
+		}
 		//Exit Thread
 		
 	}
