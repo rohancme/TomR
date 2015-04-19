@@ -10,37 +10,37 @@ import edu.tomr.protocol.DBMessage;
 import edu.tomr.utils.ConfigParams;
 
 public class InitializeClient {
-	
-	
-	
+
+
+
 	static{
 		//Get the load balancer IP address
 		ConfigParams.loadProperties();
 	}
-	
+
 	public static String serverIP;
 	private static int lbPort=6000;
 	private static int servicerNodePort=5003;
-	
+
 private static KeyValuePair getKeyValue() {
 		System.out.println("Enter the key :");
 		Scanner input = new Scanner(System.in);
 		String key = input.nextLine();
 		System.out.println("Enter the Value for this key :");
 		String value = input.nextLine();
-		return (new KeyValuePair(key, value));
-		
+		return (new KeyValuePair(key, value.getBytes()));
+
 	}
 
 	private static ClientServiceMessage getServiceMessage() {
 		//serverIP = ConfigParams.getProperty(LB_IP);
 		serverIP = "";
-		
+
 		//Connect to Load balancer and get servicerIP
 		Connection lbConnection=new Connection(serverIP,lbPort);
 		NWResponse response=lbConnection.getnextResponse();
-		
-		
+
+
 		return response.getClientServiceMsg();
 	}
 
@@ -58,11 +58,11 @@ private static KeyValuePair getKeyValue() {
 		nodeConnection.send_request(request);
 		//this is block wait method
 		NWResponse response=nodeConnection.getnextResponse();
-		
+
 		System.out.println(response.getAckMsg().toString());
 	}
 
 
 
-	
+
 }
