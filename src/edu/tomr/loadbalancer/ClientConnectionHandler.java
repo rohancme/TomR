@@ -67,8 +67,9 @@ public class ClientConnectionHandler implements Runnable {
 		String IPAddress = null;
 		try{
 		if(turnOf == ConfigParams.getIpAddresses().size() - 1){
-			turnOf = 0;
 			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+			turnOf = 0;
+			
 			}
 		else{
 			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
