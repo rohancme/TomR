@@ -22,13 +22,13 @@ public class InitializeClient {
 	private static int lbPort=6000;
 	private static int servicerNodePort=5003;
 	
-private static KeyValuePair getKeyValue() {
+	private static KeyValuePair getKeyValue() {
 		System.out.println("Enter the key :");
 		Scanner input = new Scanner(System.in);
 		String key = input.nextLine();
 		System.out.println("Enter the Value for this key :");
 		String value = input.nextLine();
-		return (new KeyValuePair(key, value));
+		return (new KeyValuePair(key, value.getBytes()));
 		
 	}
 
