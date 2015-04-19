@@ -5,8 +5,8 @@ import java.net.Socket;
 import java.util.UUID;
 
 import network.Connection;
-import network.NWResponse;
 import network.requests.NWRequest;
+import network.responses.NWResponse;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.ClientServiceRequestPayload;
 import edu.tomr.utils.ConfigParams;

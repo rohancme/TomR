@@ -1,4 +1,4 @@
-package network;
+package network.incoming.persistent;
 
 import java.io.IOException;
 

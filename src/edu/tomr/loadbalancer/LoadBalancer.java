@@ -9,11 +9,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import network.Connection;
-import network.LBClientServer;
 import network.NetworkConstants;
-import network.NetworkException;
 import network.NetworkUtilities;
+import network.exception.NetworkException;
 import network.requests.NWRequest;
+import network.requests.incoming.LBClientServer;
 import edu.tomr.handler.AddMessageHandler;
 import edu.tomr.handler.PortRequestHandler;
 import edu.tomr.network.heartbeat.server.ServerBeatController;

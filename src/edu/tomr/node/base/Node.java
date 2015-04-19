@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NetworkException;
 import network.NodeNetworkModule;
+import network.exception.NetworkException;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;

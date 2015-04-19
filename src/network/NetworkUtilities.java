@@ -7,6 +7,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.UUID;
 
+import network.exception.NetworkException;
 import network.requests.NWRequest;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;

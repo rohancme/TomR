@@ -1,16 +1,17 @@
-package network;
+package network.requests.incoming;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
+import network.requests.NWRequest;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.DBMessage;
-import network.requests.NWRequest;
-
+//thread that handles each incoming client connection and request
 public class NodeClientRequestServicer implements Runnable {
 	
 	Socket mySocket=null;
