@@ -1,5 +1,7 @@
 package edu.tomr.hash;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -132,9 +134,23 @@ public class ConsistentHashing {
 	 * @return
 	 */
 	public static Map<String, List<String>> redistributeKeys(List<String> keys) {
+		Map<String, List<String>> keyNodeMap = new HashMap();
+		/*for(Entry<Double, String> entry : unitCircle.entrySet()){
+			Double key = entry.getKey();
+		}*/
+		
+		for(String key : keys){
+			if(keyNodeMap.containsKey(getNode(key))){
+				keyNodeMap.get(getNode(key)).add(key);				
+			}
+			else{
+				List<String> keyList = new ArrayList<>();
+				keyList.add(key);
+				keyNodeMap.put(getNode(key), keyList);
+			}
+		}
 
-
-		return null;
+		return keyNodeMap;
 	}
 
 	/**
@@ -142,6 +158,7 @@ public class ConsistentHashing {
 	 * @param ipAddresses
 	 */
 	public static void updateCircle(List<String> ipAddresses) {
+		calculateCircle(ipAddresses);
 
 	}
 }
