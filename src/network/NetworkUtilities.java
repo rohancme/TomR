@@ -17,6 +17,7 @@ import edu.tomr.protocol.StartupMessage;
 public class NetworkUtilities {
 
 	private final String IP;
+	public RandomIDGenerator randomGen;
 
 	public NetworkUtilities() throws NetworkException{
 		//following code is from:http://stackoverflow.com/a/18945245
@@ -46,6 +47,8 @@ public class NetworkUtilities {
 	    else{
 	    	this.IP=ipAddress;
 	    }
+	    
+	    randomGen=new RandomIDGenerator(this.IP);
 	}
 
 	public NetworkUtilities(String IP){
@@ -57,7 +60,8 @@ public class NetworkUtilities {
 	}
 
 	public String generate_req_id(){
-		return (IP+UUID.randomUUID());
+		//return (IP+UUID.randomUUID());
+		return randomGen.getRandomID();
 	}
 
 

@@ -16,7 +16,8 @@ public final class NetworkConstants {
 	}
 
 	public static enum Requests{
-		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE,BREAK_FORM
+		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE
+		,BREAK_FORM,BREAK_INCOMING_CONNECTION
 	}
 
 	public static String requestToString(Requests req){
@@ -30,6 +31,7 @@ public final class NetworkConstants {
 			case STARTUP: return "STARTUP";
 			case SERVICE_MESSAGE: return "SERVICE_MESSAGE";
 			case BREAK_FORM: return "BREAK_FORM";
+			case BREAK_INCOMING_CONNECTION: return "BREAK_INCOMING_CONNECTION";
 		default:
 			break;
 		}

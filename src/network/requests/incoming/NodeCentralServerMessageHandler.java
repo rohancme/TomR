@@ -9,22 +9,26 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import network.NetworkConstants;
 import network.NetworkConstants.Requests;
+import network.NetworkUtilities;
 import network.NodeNetworkModule;
 import network.incoming.nonpersistent.NonPersistentIncomingConnectionHandler;
 import network.outgoing.NeighborConnection;
 import network.requests.NWRequest;
 import network.requests.outgoing.NodeNeighborModule;
 import edu.tomr.node.base.Node;
+import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 //handler for incoming central server requests
 public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnectionHandler implements Runnable{
 	
 	NodeNeighborModule neighborModule=null;
+	NetworkUtilities utils=null;
 	List<NeighborConnection> neighborConns=null;
 
-	public NodeCentralServerMessageHandler(int incoming_port,NodeNeighborModule neighborModule) {
+	public NodeCentralServerMessageHandler(int incoming_port,NodeNeighborModule neighborModule,NetworkUtilities utils) {
 		super(incoming_port);
 		this.neighborModule=neighborModule;
 		this.neighborConns=neighborModule.getOutgoingNeighborConnections();
+		this.utils=utils;
 	}
 	
 	@Override
@@ -36,13 +40,22 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	}
 	
 	private void handleConnection(Socket socket){
-		NWRequest request=getSingleRequest(socket);
+		NWRequest centralRequest=getSingleRequest(socket);
 		
-		if(request.getRequestType()==NetworkConstants.requestToString(Requests.BREAK_FORM)){ //it's a break message
+		if(centralRequest.getRequestType()==NetworkConstants.requestToString(Requests.BREAK_FORM)){ //it's a break message
 			//generate a message of type break incoming neighbor connection
+			BreakIncomingNeighborConnectionMessage msg=new BreakIncomingNeighborConnectionMessage("So long sucker");
 			//generate a request with this message
-			//send the request over the connection
-			//close the socket
+			NWRequest outgoingRequest=new NWRequest(utils.generate_req_id(),msg);
+			//send the request over the neighbor connection
+			//currently only one neighbor
+			NeighborConnection conn=null;
+			for(NeighborConnection nCon:neighborConns){
+				conn=nCon;
+			}
+			conn.send_request(outgoingRequest);
+
+			//close the socket to neighbor
 			//get new neighbor's IP address
 			//create a NeighborConnection with Neighbor
 			//remove current connection in list

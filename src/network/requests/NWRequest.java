@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.BreakFormationMessage;
+import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
@@ -29,6 +30,7 @@ public class NWRequest {
 	@JsonProperty protected BreakFormationMessage breakFromMessage=null;
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
+	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
 	
 	public DBMessage getdBMessage() {
 		return dBMessage;
@@ -39,6 +41,12 @@ public class NWRequest {
 	private NWRequest(){
 		this.request_type="UNKNOWN";
 		this.request_id="NA";
+	}
+	
+	public NWRequest(String req_id,BreakIncomingNeighborConnectionMessage msg){
+		this.request_id=req_id;
+		this.breakIncomingNeighborMsg=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION);
 	}
 
 
