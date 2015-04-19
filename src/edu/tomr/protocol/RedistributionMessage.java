@@ -20,4 +20,8 @@ public class RedistributionMessage extends Message {
 		this.keys = keys;
 	}
 
+	public List<KeyValuePair> getKeys() {
+		return keys;
+	}
+
 }
