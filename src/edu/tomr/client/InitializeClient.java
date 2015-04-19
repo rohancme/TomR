@@ -39,7 +39,7 @@ private static KeyValuePair getKeyValue() {
 
 	private static ClientServiceMessage getServiceMessage() {
 		//serverIP = ConfigParams.getProperty(LB_IP);
-		serverIP = "";
+		serverIP = "192.168.1.138";
 
 		//Connect to Load balancer and get servicerIP
 		Connection lbConnection=new Connection(serverIP,lbPort);
@@ -68,6 +68,7 @@ private static KeyValuePair getKeyValue() {
 		Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
 		//this is dummy code. will need to be updated once we figure out how we're accepting client queries
 		for(int i=1; i<=3; i++){
+			System.out.println("Sending request for File-"+ i);
 			DBMessage query=new DBMessage(ClientRequestType.ADD, new ClientRequestPayload("File-"+i, new String("File-"+i).getBytes()), new ClientInfo(utils.getSelfIP()), serviceMessage.getPayloadID());
 			NWRequest request=new NWRequest(serviceMessage.getPayloadID(),query);
 			nodeConnection.send_request(request);
