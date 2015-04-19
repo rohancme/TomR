@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -99,6 +98,7 @@ public class ConfigParams {
 		try {
 			output = new FileOutputStream(new File(builder.toString()));
 			prop.store(output, "Added new IP Address");
+			output.close();
 		} catch (FileNotFoundException e) {
 
 			System.out.println("property file '" + builder.toString() + "' not found ");
@@ -109,6 +109,8 @@ public class ConfigParams {
 			System.out.println("Could not add IP Address to config file");
 			e.printStackTrace();
 		}
+
+		loadProperties();
 	}
 
 	public static void removeIpAddress(String ipAddress) {
@@ -131,6 +133,7 @@ public class ConfigParams {
 		try {
 			output = new FileOutputStream(new File(builder.toString()));
 			prop.store(output, "Removed IP Address");
+			output.close();
 		} catch (FileNotFoundException e) {
 
 			System.out.println("property file '" + builder.toString() + "' not found ");
@@ -141,6 +144,7 @@ public class ConfigParams {
 			System.out.println("Could not remove IP Address from config file");
 			e.printStackTrace();
 		}
+		loadProperties();
 	}
 
 	public static String getRandomIpAddress(){
@@ -153,13 +157,65 @@ public class ConfigParams {
 		return ips.get(n);
 	}
 
+	public static String getPredecessorNode(String ipAddress) {
+
+		String prev = null, retIpAdd = null;
+		List<String> ips = getIpAddresses();
+
+		for(String s: ips) {
+			if(s.equalsIgnoreCase(ipAddress)){
+				if(prev == null)
+					retIpAdd = ips.get(ips.size()-1);
+				else
+					retIpAdd = prev;
+				break;
+			} else{
+				prev = s;
+			}
+		}
+		return retIpAdd;
+	}
+
+	public static String getSuccesorNode(String ipAddress) {
+
+		String retIpAdd = null;
+		List<String> ips = getIpAddresses();
+
+		for(int i =0; i<ips.size(); i++) {
+			if(ips.get(i).equalsIgnoreCase(ipAddress)){
+				if(i == ips.size()-1)
+					retIpAdd = ips.get(0);
+				else
+					retIpAdd = ips.get(i+1);
+				break;
+			}
+		}
+		return retIpAdd;
+	}
+
 	/*public static void main(String[] args) {
 
 		ConfigParams config = new ConfigParams();
 		config.loadProperties();
 
+		System.out.println(getPredecessorNode("192.168.1.103"));
+		System.out.println(getSuccesorNode("192.168.1.103"));
 
 		addIpAddress("1.2.3.4");
+		loadProperties();
+
+		System.out.println(getPredecessorNode("192.168.1.103"));
+		System.out.println(getSuccesorNode("192.168.1.103"));
+
+		removeIpAddress("1.2.3.4");
+		loadProperties();
+
+		System.out.println(getPredecessorNode("192.168.1.103"));
+		System.out.println(getSuccesorNode("192.168.1.103"));
+
+
+	}*/
+		/*addIpAddress("1.2.3.4");
 		loadProperties();
 
 		Enumeration<String> enumeration = (Enumeration<String>) config.prop.propertyNames();

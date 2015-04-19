@@ -15,14 +15,14 @@ import edu.tomr.protocol.DBMessage;
 import edu.tomr.utils.ConfigParams;
 
 public class InitializeClient {
-	
-	
-	
+
+
+
 	static{
 		//Get the load balancer IP address
 		ConfigParams.loadProperties();
 	}
-	
+
 	public static String serverIP;
 	private static int lbPort=6000;
 	private static int servicerNodePort=5003;
@@ -30,7 +30,6 @@ public class InitializeClient {
 	private static ClientServiceMessage getServiceMessage() {
 		serverIP = ConfigParams.getProperty("LB_IP");
 		//serverIP = "192.168.1.138";
-
 		//Connect to Load balancer and get servicerIP
 		Connection lbConnection=new Connection(serverIP,lbPort);
 		NWResponse response=lbConnection.getnextResponse();
@@ -61,8 +60,7 @@ public class InitializeClient {
 			System.out.println(response.getAckMsg().toString());
 
 		}
-
-	}
+	}	
 
 	private static String generateString(int requestLength) {
 		final char[] charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -80,6 +78,4 @@ public class InitializeClient {
 
 		generateRequests(ClientRequestType.ADD, 50, 5);
 	}
-
-
 }

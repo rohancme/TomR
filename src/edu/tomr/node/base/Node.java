@@ -1,20 +1,32 @@
 package edu.tomr.node.base;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NodeNetworkModule;
+import network.Connection;
+import network.NetworkConstants;
 import network.exception.NetworkException;
+import network.NetworkUtilities;
+import network.NodeNetworkModule;
+import network.requests.NWRequest;
+import edu.tomr.client.KeyValuePair;
+import edu.tomr.hash.ConsistentHashing;
+
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NodeMessage;
+import edu.tomr.protocol.RedistributionMessage;
+import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
 import edu.tomr.queue.NodeQueueProcessor;
+import edu.tomr.utils.ConfigParams;
 
 /*
  * Should contain a network module to handle the connections
@@ -130,9 +142,8 @@ public class Node implements INode {
 		nodeProcThread.start();
 	}
 
-	/**
-	 * For client requests
-	 * @param message DBMessage from client
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleRequest(edu.tomr.protocol.DBMessage)
 	 */
 	@Override
 	public void handleRequest(DBMessage message) {
@@ -143,10 +154,8 @@ public class Node implements INode {
 		}
 	}
 
-	/**
-	 * For node requests
-	 * @param message DBMessage from client
-	 * @param originalServicerIP : Original node IP Address servicing the request
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleRequest(edu.tomr.protocol.DBMessage, java.lang.String)
 	 */
 	@Override
 	public void handleRequest(DBMessage message, String originalServicerIP) {
@@ -159,9 +168,8 @@ public class Node implements INode {
 		}
 	}
 
-	/**
-	 * Only for node acknowledgments
-	 * @param ackMessage
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleAcknowledgements(edu.tomr.protocol.AckMessage)
 	 */
 	@Override
 	public void handleAcknowledgements(AckMessage ackMessage) {
@@ -170,4 +178,72 @@ public class Node implements INode {
 		networkModule.sendOutgoingClientResponse(ackMessage, clientIp);
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleUpdateRingRequest(edu.tomr.protocol.UpdateRingMessage)
+	 */
+	@Override
+	public void handleUpdateRingRequest(UpdateRingMessage message) {
+		List<String> originalNodes = ConfigParams.getIpAddresses();
+		originalNodes.add(message.getNewNode());
+
+		ConsistentHashing.updateCircle(originalNodes);
+
+		new Thread(new Runnable() {
+		    @Override
+			public void run() {
+		    	try {
+					redistributeKeys();
+				} catch (NetworkException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		}).start();
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#redistributionRequest(edu.tomr.protocol.RedistributionMessage)
+	 */
+	@Override
+	public void redistributionRequest(RedistributionMessage message) {
+
+		new Thread(new Runnable() {
+		    @Override
+			public void run() {
+
+		    	addKeys(message);
+			}
+		}).start();
+	}
+
+	private void addKeys(RedistributionMessage message) {
+
+		List<KeyValuePair> values = message.getKeys();
+
+		for(KeyValuePair pair: values)
+			operation.put(pair.getKey(), pair.getValue());
+	}
+
+	private void redistributeKeys() throws NetworkException {
+
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());//ConsistentHashing.redistributeKeys(null);
+		NetworkUtilities utils = null;
+
+		utils = new NetworkUtilities();
+		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+
+			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
+				List<KeyValuePair> pairs = new ArrayList<KeyValuePair>();
+				for(String key: entry.getValue()){
+					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
+					pairs.add(pair);
+				}
+				RedistributionMessage message = new RedistributionMessage(pairs);
+				NWRequest redisRequest = utils.getNewRedisRequest(message);
+
+				Connection temp_connection=new Connection(entry.getKey(), NetworkConstants.C_SERVER_LISTEN_PORT);
+				temp_connection.send_request(redisRequest);
+			}
+		}
+	}
 }
