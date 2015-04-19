@@ -11,6 +11,8 @@ public final class NetworkConstants {
 	 * Server or Load Balancer ports
 	 */
 	public static final int LB_ADD_LISTEN_PORT = 8002;
+	
+	public static final int INCOMING_NEIGHBOR_PORT=5001;
 
 	public NetworkConstants() {
 	}

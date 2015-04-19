@@ -24,4 +24,8 @@ public class BreakFormationMessage extends Message {
 		temp.add(newNeighbor);
 		this.newNeighborList = temp;
 	}
+
+	public ArrayList<String> getNewNeighborList() {
+		return newNeighborList;
+	}
 }

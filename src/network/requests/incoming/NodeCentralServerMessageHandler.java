@@ -2,6 +2,7 @@ package network.requests.incoming;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -54,9 +55,17 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 				conn=nCon;
 			}
 			conn.send_request(outgoingRequest);
-
 			//close the socket to neighbor
+			conn.closeSocket();
+			neighborConns.remove(conn);
+			//to be sure
+			neighborConns.clear();
 			//get new neighbor's IP address
+			ArrayList<String> newNeighbors=centralRequest.getBreakFormMessage().getNewNeighborList();
+			for(String IP:newNeighbors){
+				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_NEIGHBOR_PORT);
+				neighborConns.add(newNeighborConnection);
+			}
 			//create a NeighborConnection with Neighbor
 			//remove current connection in list
 			//add new connection to list

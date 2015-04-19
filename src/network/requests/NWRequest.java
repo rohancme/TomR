@@ -2,8 +2,6 @@ package network.requests;
 
 import static network.NetworkConstants.Requests;
 
-import java.util.UUID;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.BreakFormationMessage;
@@ -27,7 +25,7 @@ public class NWRequest {
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
 	@JsonProperty protected NeighborMessage neighborMessage=null;
-	@JsonProperty protected BreakFormationMessage breakFromMessage=null;
+	@JsonProperty protected BreakFormationMessage breakFormMessage=null;
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
 	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
@@ -35,6 +33,11 @@ public class NWRequest {
 	public DBMessage getdBMessage() {
 		return dBMessage;
 	}
+	
+	public BreakFormationMessage getBreakFormMessage() {
+		return breakFormMessage;
+	}
+
 
 	//only for JACKSON
 	@SuppressWarnings("unused")
@@ -92,7 +95,7 @@ public class NWRequest {
 
 	public NWRequest(String req_id, BreakFormationMessage msg, String SourceIP){
 		this.request_id=req_id;
-		this.breakFromMessage=msg;
+		this.breakFormMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM);
 		this.srcIP=SourceIP;
 	}
