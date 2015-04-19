@@ -1,26 +1,86 @@
 package network.requests.incoming;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
+import java.util.Scanner;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
+import network.NetworkConstants;
+import network.NetworkConstants.Requests;
+import network.NodeNetworkModule;
 import network.incoming.nonpersistent.NonPersistentIncomingConnectionHandler;
+import network.outgoing.NeighborConnection;
+import network.requests.NWRequest;
+import network.requests.outgoing.NodeNeighborModule;
 import edu.tomr.node.base.Node;
 //handler for incoming central server requests
 public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnectionHandler implements Runnable{
 	
-	Node currentNode=null;
+	NodeNeighborModule neighborModule=null;
+	List<NeighborConnection> neighborConns=null;
 
-	public NodeCentralServerMessageHandler(int incoming_port,Node node) {
+	public NodeCentralServerMessageHandler(int incoming_port,NodeNeighborModule neighborModule) {
 		super(incoming_port);
-		this.currentNode=node;
+		this.neighborModule=neighborModule;
+		this.neighborConns=neighborModule.getOutgoingNeighborConnections();
 	}
 	
 	@Override
 	public void run() {
 		while(true){
 			Socket clientSocket=super.getNextSocket();
-			Thread t=new Thread();
-			t.start();
+			
 		}
+	}
+	
+	private void handleConnection(Socket socket){
+		NWRequest request=getSingleRequest(socket);
+		
+		if(request.getRequestType()==NetworkConstants.requestToString(Requests.BREAK_FORM)){ //it's a break message
+			//generate a message of type break incoming neighbor connection
+			//generate a request with this message
+			//send the request over the connection
+			//close the socket
+			//get new neighbor's IP address
+			//create a NeighborConnection with Neighbor
+			//remove current connection in list
+			//add new connection to list
+		}
+		
+	}
+	
+	private NWRequest getSingleRequest(Socket socket){
+		
+		Scanner inputScanner=null;
+		try {
+			//not closing since if I close the scanner, it closes the inputStream, which closes the socket
+			inputScanner = new Scanner(socket.getInputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		NWRequest request=null;
+		//currently using scanner. Scanner waits for a newLine character which marks the end of an object
+		System.out.println("Waiting for a message from the server");
+		while(!inputScanner.hasNextLine());
+		System.out.println("Got message from server");
+		
+		try {
+			request=mapper.readValue(inputScanner.nextLine(), NWRequest.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//closing the socket
+		inputScanner.close();
+		
+		return request;
 	}
 
 }
