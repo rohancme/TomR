@@ -15,6 +15,11 @@ public class NWResponse {
 		this.destIP=destIP;
 		this.ackMsg=msg;
 	}
+	
+	//used for client responses
+	public NWResponse(AckMessage msg){
+		this.ackMsg=msg;
+	}
 
 	public String getDestIP() {
 		return destIP;
