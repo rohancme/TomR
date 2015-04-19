@@ -39,6 +39,7 @@ public class ClientConnectionHandler implements Runnable {
 		String IPAddress = null;
 		try{
 			IPAddress = getIPAddress();
+			System.out.println("The Servicing IP assigned here is " + IPAddress);
 		}
 		catch(NullPointerException e){
 			System.out.println("NULL value returned for the IPAddress which is servicing the Client");
@@ -68,12 +69,16 @@ public class ClientConnectionHandler implements Runnable {
 		String IPAddress = null;
 		try{
 		if(turnOf == ConfigParams.getIpAddresses().size() - 1){
-			turnOf = 0;
 			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+			turnOf = 0;
+			System.out.println("Reached the Last IPAddress - Resetting to " + turnOf);
+			
 			}
 		else{
 			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+			System.out.println("Assigning the turn of variable - " + turnOf);
 			turnOf++;
+			System.out.println("Incrementing turn of variable - " + turnOf);
 			}
 		}
 		catch(Exception e){
