@@ -142,9 +142,8 @@ public class Node implements INode {
 		nodeProcThread.start();
 	}
 
-	/**
-	 * For client requests
-	 * @param message DBMessage from client
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleRequest(edu.tomr.protocol.DBMessage)
 	 */
 	@Override
 	public void handleRequest(DBMessage message) {
@@ -155,10 +154,8 @@ public class Node implements INode {
 		}
 	}
 
-	/**
-	 * For node requests
-	 * @param message DBMessage from client
-	 * @param originalServicerIP : Original node IP Address servicing the request
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleRequest(edu.tomr.protocol.DBMessage, java.lang.String)
 	 */
 	@Override
 	public void handleRequest(DBMessage message, String originalServicerIP) {
@@ -171,9 +168,8 @@ public class Node implements INode {
 		}
 	}
 
-	/**
-	 * Only for node acknowledgments
-	 * @param ackMessage
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleAcknowledgements(edu.tomr.protocol.AckMessage)
 	 */
 	@Override
 	public void handleAcknowledgements(AckMessage ackMessage) {
@@ -182,6 +178,9 @@ public class Node implements INode {
 		networkModule.sendOutgoingClientResponse(ackMessage, clientIp);
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#handleUpdateRingRequest(edu.tomr.protocol.UpdateRingMessage)
+	 */
 	@Override
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
 		List<String> originalNodes = ConfigParams.getIpAddresses();
@@ -202,10 +201,32 @@ public class Node implements INode {
 		}).start();
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.tomr.node.base.INode#redistributionRequest(edu.tomr.protocol.RedistributionMessage)
+	 */
+	@Override
+	public void redistributionRequest(RedistributionMessage message) {
+
+		new Thread(new Runnable() {
+		    @Override
+			public void run() {
+
+		    	addKeys(message);
+			}
+		}).start();
+	}
+
+	private void addKeys(RedistributionMessage message) {
+
+		List<KeyValuePair> values = message.getKeys();
+
+		for(KeyValuePair pair: values)
+			operation.put(pair.getKey(), pair.getValue());
+	}
+
 	private void redistributeKeys() throws NetworkException {
 
-		//ConsistentHashing.redistributeKeys(inMemMap.keySet());
-		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(null);
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());//ConsistentHashing.redistributeKeys(null);
 		NetworkUtilities utils = null;
 
 		utils = new NetworkUtilities();
@@ -224,13 +245,5 @@ public class Node implements INode {
 				temp_connection.send_request(redisRequest);
 			}
 		}
-
 	}
-
-	@Override
-	public void redistributionRequest(RedistributionMessage message) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
