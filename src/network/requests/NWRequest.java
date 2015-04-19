@@ -2,11 +2,10 @@ package network.requests;
 
 import static network.NetworkConstants.Requests;
 
-import java.util.UUID;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.BreakFormationMessage;
+import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
@@ -26,19 +25,31 @@ public class NWRequest {
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
 	@JsonProperty protected NeighborMessage neighborMessage=null;
-	@JsonProperty protected BreakFormationMessage breakFromMessage=null;
+	@JsonProperty protected BreakFormationMessage breakFormMessage=null;
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
+	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
 	
 	public DBMessage getdBMessage() {
 		return dBMessage;
 	}
+	
+	public BreakFormationMessage getBreakFormMessage() {
+		return breakFormMessage;
+	}
+
 
 	//only for JACKSON
 	@SuppressWarnings("unused")
 	private NWRequest(){
 		this.request_type="UNKNOWN";
 		this.request_id="NA";
+	}
+	
+	public NWRequest(String req_id,BreakIncomingNeighborConnectionMessage msg){
+		this.request_id=req_id;
+		this.breakIncomingNeighborMsg=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION);
 	}
 
 
@@ -84,7 +95,7 @@ public class NWRequest {
 
 	public NWRequest(String req_id, BreakFormationMessage msg, String SourceIP){
 		this.request_id=req_id;
-		this.breakFromMessage=msg;
+		this.breakFormMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM);
 		this.srcIP=SourceIP;
 	}

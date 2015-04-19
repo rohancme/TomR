@@ -6,13 +6,13 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 
 import network.exception.NetworkException;
-import network.incoming.persistent.NeighborConnectionHandler;
-import network.incoming.persistent.NetworkResponseHandler;
 import network.requests.NWRequest;
+import network.requests.incoming.NeighborConnectionHandler;
 import network.requests.incoming.NodeClientRequestHandler;
 import network.requests.incoming.StartupMessageHandler;
 import network.requests.outgoing.NodeNeighborModule;
 import network.responses.NWResponse;
+import network.responses.incoming.NetworkResponseHandler;
 import network.responses.outgoing.NodeResponseModule;
 
 import org.codehaus.jackson.JsonGenerationException;

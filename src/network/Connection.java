@@ -40,6 +40,16 @@ public class Connection {
 		}
 	}
 	
+	public void closeSocket(){
+		
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void send_request(NWRequest request){
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);

@@ -11,12 +11,15 @@ public final class NetworkConstants {
 	 * Server or Load Balancer ports
 	 */
 	public static final int LB_ADD_LISTEN_PORT = 8002;
+	
+	public static final int INCOMING_NEIGHBOR_PORT=5001;
 
 	public NetworkConstants() {
 	}
 
 	public static enum Requests{
-		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE,BREAK_FORM
+		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE
+		,BREAK_FORM,BREAK_INCOMING_CONNECTION
 	}
 
 	public static String requestToString(Requests req){
@@ -30,6 +33,7 @@ public final class NetworkConstants {
 			case STARTUP: return "STARTUP";
 			case SERVICE_MESSAGE: return "SERVICE_MESSAGE";
 			case BREAK_FORM: return "BREAK_FORM";
+			case BREAK_INCOMING_CONNECTION: return "BREAK_INCOMING_CONNECTION";
 		default:
 			break;
 		}
