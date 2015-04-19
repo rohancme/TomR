@@ -27,7 +27,7 @@ public class LoadBalancer {
 	}
 
 	static int startupMsgPort=5000;
-	
+
 	static int sizeOfThreadPool=20;
 	private ServerBeatController beatController;
 
@@ -82,7 +82,7 @@ public class LoadBalancer {
 			neighbors.add(iPAddresses.get(0));
 		}
 		else{
-			neighbors.add(iPAddresses.get(i));
+			neighbors.add(iPAddresses.get(i+1));
 		}
 
 		return neighbors;
@@ -90,7 +90,7 @@ public class LoadBalancer {
 
 	private void listenForClients() {
 		LBClientServer IPServer = new LBClientServer();
-				
+
 	}
 
 	private void startServicingPorts() {
@@ -103,7 +103,7 @@ public class LoadBalancer {
 	}
 
 	public static void main(String[] args) {
-	
+
 		LoadBalancer loadBalancer = new LoadBalancer();
 		//loadBalancer.startHeartBeatServer();
 		loadBalancer.startServer();
