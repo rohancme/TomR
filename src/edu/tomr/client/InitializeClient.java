@@ -2,6 +2,11 @@ package edu.tomr.client;
 
 import java.util.Scanner;
 
+import network.Connection;
+import network.NWResponse;
+import network.requests.NWRequest;
+import edu.tomr.protocol.ClientServiceMessage;
+import edu.tomr.protocol.DBMessage;
 import edu.tomr.utils.ConfigParams;
 
 public class InitializeClient {
@@ -14,6 +19,8 @@ public class InitializeClient {
 	}
 	
 	public static String serverIP;
+	private static int lbPort=6000;
+	private static int servicerNodePort=5003;
 	
 private static KeyValuePair getKeyValue() {
 		System.out.println("Enter the key :");
@@ -25,25 +32,34 @@ private static KeyValuePair getKeyValue() {
 		
 	}
 
-private static String getServiceIAddress() {
-	//serverIP = ConfigParams.getProperty(LB_IP);
-	serverIP = "";
-	//Connect to Load balancer and get servicerIP
-	
-	return null;
-}
-
-
-
-
-	
-	public static void main(String[] args) {
-		KeyValuePair inputTuple;
-		inputTuple = getKeyValue();
-		String serviceIPAddress = getServiceIAddress();
-		//Send the request to the particular node.
+	private static ClientServiceMessage getServiceMessage() {
+		//serverIP = ConfigParams.getProperty(LB_IP);
+		serverIP = "";
 		
+		//Connect to Load balancer and get servicerIP
+		Connection lbConnection=new Connection(serverIP,lbPort);
+		NWResponse response=lbConnection.getnextResponse();
+		
+		
+		return response.getClientServiceMsg();
+	}
 
+
+
+	public static void main(String[] args) {
+		KeyValuePair inputTuple=null;
+		inputTuple = getKeyValue();
+		ClientServiceMessage serviceMessage = getServiceMessage();
+		//Send the request to the particular node.
+		Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
+		//this is dummy code. will need to be updated once we figure out how we're accepting client queries
+		DBMessage query=new DBMessage();
+		NWRequest request=new NWRequest(serviceMessage.getPayloadID(),query);
+		nodeConnection.send_request(request);
+		//this is block wait method
+		NWResponse response=nodeConnection.getnextResponse();
+		
+		System.out.println(response.getAckMsg().toString());
 	}
 
 

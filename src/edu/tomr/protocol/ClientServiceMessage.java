@@ -4,22 +4,23 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class ClientServiceMessage extends Message{
 
-	@JsonProperty private ClientServiceRequestPayload servicePayload;
-	
+	@JsonProperty private String serviceIPAddress=null;
+	@JsonProperty private String payloadID=null;
 	
 	public ClientServiceMessage(){
 		//Default Constructor for Jackson
 	}
 	
-	public ClientServiceMessage(ClientServiceRequestPayload servicePayload){
-		this.servicePayload = servicePayload;		
+	public ClientServiceMessage(String IPAddress,String ID){
+		this.serviceIPAddress = IPAddress;		
+		this.payloadID=ID;
 	}
-	
-	public ClientServiceRequestPayload getServicePayload(){
-		return this.servicePayload;
+
+	public String getPayloadID() {
+		return payloadID;
 	}
-	
-	public void ServicePayload(ClientServiceRequestPayload servicePayload){
-		this.servicePayload = servicePayload;
+
+	public String getServiceIPAddress() {
+		return serviceIPAddress;
 	}
 }
