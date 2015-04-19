@@ -57,18 +57,22 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			conn.send_request(outgoingRequest);
 			//close the socket to neighbor
 			conn.closeSocket();
-			neighborConns.remove(conn);
-			//to be sure
-			neighborConns.clear();
-			//get new neighbor's IP address
-			ArrayList<String> newNeighbors=centralRequest.getBreakFormMessage().getNewNeighborList();
-			for(String IP:newNeighbors){
-				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_NEIGHBOR_PORT);
-				neighborConns.add(newNeighborConnection);
+			
+			synchronized(neighborConns){
+				//remove current connection in list
+				neighborConns.remove(conn);
+				//to be sure
+				neighborConns.clear();
+				//get new neighbor's IP address
+				//create a NeighborConnection with Neighbor
+				//add new connection to list
+				ArrayList<String> newNeighbors=centralRequest.getBreakFormMessage().getNewNeighborList();
+				for(String IP:newNeighbors){
+					NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_NEIGHBOR_PORT);
+					neighborConns.add(newNeighborConnection);
+				}
 			}
-			//create a NeighborConnection with Neighbor
-			//remove current connection in list
-			//add new connection to list
+			
 		}
 		
 	}
