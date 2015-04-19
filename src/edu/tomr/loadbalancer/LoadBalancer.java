@@ -82,7 +82,7 @@ public class LoadBalancer {
 			neighbors.add(iPAddresses.get(0));
 		}
 		else{
-			neighbors.add(iPAddresses.get(i));
+			neighbors.add(iPAddresses.get(i+1));
 		}
 
 		return neighbors;
