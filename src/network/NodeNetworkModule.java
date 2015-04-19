@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import network.exception.NetworkException;
 import network.requests.NWRequest;
 import network.requests.incoming.NeighborConnectionHandler;
+import network.requests.incoming.NodeCentralServerMessageHandler;
 import network.requests.incoming.NodeClientRequestHandler;
 import network.requests.incoming.StartupMessageHandler;
 import network.requests.outgoing.NodeNeighborModule;
@@ -89,6 +90,11 @@ public class NodeNetworkModule {
 		NodeClientRequestHandler clientHandler=new NodeClientRequestHandler(clientPort,mainNodeObject,clientConnectionList);
 		Thread incomingClientThread=new Thread(clientHandler);
 		incomingClientThread.start();
+		
+		//Start listening for Server Messages
+		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.utils);
+		Thread serverHandlerThread=new Thread(serverHandler);
+		serverHandlerThread.start();
 	}
 	
 	/**
