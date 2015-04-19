@@ -1,20 +1,32 @@
 package edu.tomr.node.base;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NodeNetworkModule;
+import network.Connection;
+import network.NetworkConstants;
 import network.exception.NetworkException;
+import network.NetworkUtilities;
+import network.NodeNetworkModule;
+import network.requests.NWRequest;
+import edu.tomr.client.KeyValuePair;
+import edu.tomr.hash.ConsistentHashing;
+
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NodeMessage;
+import edu.tomr.protocol.RedistributionMessage;
+import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
 import edu.tomr.queue.NodeQueueProcessor;
+import edu.tomr.utils.ConfigParams;
 
 /*
  * Should contain a network module to handle the connections
@@ -168,6 +180,57 @@ public class Node implements INode {
 
 		String clientIp = requestMapper.remove(ackMessage.getRequestIdServiced());
 		networkModule.sendOutgoingClientResponse(ackMessage, clientIp);
+	}
+
+	@Override
+	public void handleUpdateRingRequest(UpdateRingMessage message) {
+		List<String> originalNodes = ConfigParams.getIpAddresses();
+		originalNodes.add(message.getNewNode());
+
+		ConsistentHashing.updateCircle(originalNodes);
+
+		new Thread(new Runnable() {
+		    @Override
+			public void run() {
+		    	try {
+					redistributeKeys();
+				} catch (NetworkException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		}).start();
+	}
+
+	private void redistributeKeys() throws NetworkException {
+
+		//ConsistentHashing.redistributeKeys(inMemMap.keySet());
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(null);
+		NetworkUtilities utils = null;
+
+		utils = new NetworkUtilities();
+		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+
+			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
+				List<KeyValuePair> pairs = new ArrayList<KeyValuePair>();
+				for(String key: entry.getValue()){
+					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
+					pairs.add(pair);
+				}
+				RedistributionMessage message = new RedistributionMessage(pairs);
+				NWRequest redisRequest = utils.getNewRedisRequest(message);
+
+				Connection temp_connection=new Connection(entry.getKey(), NetworkConstants.C_SERVER_LISTEN_PORT);
+				temp_connection.send_request(redisRequest);
+			}
+		}
+
+	}
+
+	@Override
+	public void redistributionRequest(RedistributionMessage message) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

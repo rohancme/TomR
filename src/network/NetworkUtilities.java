@@ -12,7 +12,9 @@ import network.requests.NWRequest;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NeighborMessage;
+import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateRingMessage;
 
 public class NetworkUtilities {
 
@@ -84,8 +86,8 @@ public class NetworkUtilities {
 		NWRequest request=new NWRequest(this.generate_req_id(),msg);
 		return request;
 	}
-	
-	public NWRequest getNewDBRequest(DBMessage msg,String destIP){	
+
+	public NWRequest getNewDBRequest(DBMessage msg,String destIP){
 		NWRequest request=new NWRequest(this.generate_req_id(),msg,this.getSelfIP(),destIP);
 		return request;
 	}
@@ -95,4 +97,13 @@ public class NetworkUtilities {
 		return request;
 	}
 
+	public NWRequest getNewUpdateRingRequest(UpdateRingMessage msg) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+		return request;
+	}
+
+	public NWRequest getNewRedisRequest(RedistributionMessage msg) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+		return request;
+	}
 }

@@ -5,7 +5,7 @@ public final class NetworkConstants {
 	/*
 	 * Client ports
 	 */
-	public static final int C_SERVER_LISTEN_PORT = 8001;
+	public static final int C_SERVER_LISTEN_PORT = 5000;
 
 	/*
 	 * Server or Load Balancer ports
@@ -18,8 +18,9 @@ public final class NetworkConstants {
 	}
 
 	public static enum Requests{
+
 		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE
-		,BREAK_FORM,BREAK_INCOMING_CONNECTION
+		,BREAK_FORM,BREAK_INCOMING_CONNECTION,UPDATE_RING,REDISTRIBUTION
 	}
 
 	public static String requestToString(Requests req){
@@ -34,6 +35,8 @@ public final class NetworkConstants {
 			case SERVICE_MESSAGE: return "SERVICE_MESSAGE";
 			case BREAK_FORM: return "BREAK_FORM";
 			case BREAK_INCOMING_CONNECTION: return "BREAK_INCOMING_CONNECTION";
+			case UPDATE_RING: return "UPDATE_RING";
+			case REDISTRIBUTION: return "REDISTRIBUTION";
 		default:
 			break;
 		}
