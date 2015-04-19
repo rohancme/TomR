@@ -5,8 +5,8 @@ import java.net.Socket;
 import java.util.UUID;
 
 import network.Connection;
+import network.NWResponse;
 import network.requests.NWRequest;
-
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.ClientServiceRequestPayload;
 import edu.tomr.utils.ConfigParams;
@@ -45,12 +45,11 @@ public class ClientConnectionHandler implements Runnable {
 			e.printStackTrace();
 		}
 		
-		ClientServiceRequestPayload servicePayload = new ClientServiceRequestPayload(IPAddress);
-		ClientServiceMessage serviceMessage = new ClientServiceMessage(servicePayload);
-		NWRequest serviceRequest = new NWRequest(clientUID.toString(), serviceMessage);
+		ClientServiceMessage serviceMessage = new ClientServiceMessage(IPAddress,UUID.randomUUID().toString());
+		NWResponse clientResponse=new NWResponse(serviceMessage);
 		//Send this request to the client. 
 		Connection clientServiceConnection = new Connection(clientSocket);
-		clientServiceConnection.send_request(serviceRequest);
+		clientServiceConnection.send_response(clientResponse);
 		//close client socket
 		try {
 			clientSocket.close();

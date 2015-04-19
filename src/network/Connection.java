@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import network.requests.NWRequest;
 
@@ -98,6 +99,28 @@ public class Connection {
 			System.out.println("Problem with IO with host:"+socket.getInetAddress());
 			e.printStackTrace();
 		}
+	}
+	
+	public NWResponse getnextResponse(){
+		ObjectMapper mapper = new ObjectMapper();
+		NWResponse response=null;
+		Scanner inputScanner=null;
+		try {
+			inputScanner = new Scanner(socket.getInputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//currently using scanner. Scanner waits for a newLine character which marks the end of an object
+		while(!inputScanner.hasNextLine());
+		try {
+			response=mapper.readValue(inputScanner.nextLine(), NWResponse.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return response;
 	}
 
 }

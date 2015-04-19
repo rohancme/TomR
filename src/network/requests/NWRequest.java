@@ -67,6 +67,13 @@ public class NWRequest {
 		this.srcIP=SourceIP;
 		this.destIP=DestinationIP;
 	}
+	
+	//for client to Node requests
+	public NWRequest(String req_id,DBMessage msg){
+		this.request_id=req_id;
+		this.dBMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.DB_OPERATION);
+	}
 
 	public NWRequest(String req_id, ClientServiceMessage msg) {
 		this.request_id=req_id;
