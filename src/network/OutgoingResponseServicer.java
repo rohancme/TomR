@@ -3,7 +3,7 @@ package network;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+//a thread of this class is created by the NodeResponseModule in order to send outgoing responses in the background
 public class OutgoingResponseServicer implements Runnable{
 	
 	private ConcurrentLinkedQueue<NWResponse> responseQueue=null;

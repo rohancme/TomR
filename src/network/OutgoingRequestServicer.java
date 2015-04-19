@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import network.requests.NWRequest;
-
+//a thread for this is spawned by the NodeNeighborModule in order to send outgoing requests in the background
 public class OutgoingRequestServicer implements Runnable {
 
 	private ConcurrentLinkedQueue<NWRequest> requestQueue=null;
