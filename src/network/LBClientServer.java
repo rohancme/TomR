@@ -13,22 +13,11 @@ public class LBClientServer {
 	public LBClientServer(){
 		try {
 			LBSocket = new ServerSocket(serverPort);
-			this.startListening();
+			new Thread(new ServerThread(LBSocket)).start();
 		} catch (IOException e) {
 			System.out.println("Error while trying to connect with the client ");
 			e.printStackTrace();
 		}
 	}
 	
-	private void startListening(){
-		while(true){
-			try {
-				(new Thread(new ClientConnectionHandler(LBSocket.accept()))).start();
-			} catch (IOException e) {
-				System.out.println("Error in the accept block ");
-				e.printStackTrace();
-			}
-		}
-	}
-
 }
