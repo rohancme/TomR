@@ -1,18 +1,18 @@
 package network.requests;
 
-import static network.NetworkConstants.Requests;
-
-import java.util.UUID;
+import network.NetworkConstants;
+import network.NetworkConstants.Requests;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.ClientServiceMessage;
+import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
+import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
-import edu.tomr.protocol.DBMessage;
-import network.NetworkConstants;
+import edu.tomr.protocol.UpdateRingMessage;
 
 public class NWRequest {
 
@@ -20,8 +20,8 @@ public class NWRequest {
 	@JsonProperty protected final String request_type;
 	@JsonProperty protected String destIP=null;
 	@JsonProperty protected String srcIP=null;
-	
-	
+
+
 
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
@@ -29,7 +29,9 @@ public class NWRequest {
 	@JsonProperty protected BreakFormationMessage breakFromMessage=null;
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
-	
+	@JsonProperty protected RedistributionMessage redistributionMessage=null;
+	@JsonProperty protected UpdateRingMessage updateRingMessage=null;
+
 	public DBMessage getdBMessage() {
 		return dBMessage;
 	}
@@ -79,7 +81,7 @@ public class NWRequest {
 		this.request_id=req_id;
 		this.serviceMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.SERVICE_MESSAGE);
-		
+
 	}
 
 	public NWRequest(String req_id, BreakFormationMessage msg, String SourceIP){
@@ -87,6 +89,18 @@ public class NWRequest {
 		this.breakFromMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM);
 		this.srcIP=SourceIP;
+	}
+
+	public NWRequest(String req_id, UpdateRingMessage msg){
+		this.request_id=req_id;
+		this.updateRingMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM);
+	}
+
+	public NWRequest(String req_id, RedistributionMessage msg){
+		this.request_id=req_id;
+		this.redistributionMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.REDISTRIBUTION);
 	}
 
 	@JsonProperty("request_type")

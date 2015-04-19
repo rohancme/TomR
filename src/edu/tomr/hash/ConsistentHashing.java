@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import edu.tomr.client.KeyValuePair;
 import edu.tomr.utils.ConfigParams;
-
 
 public class ConsistentHashing {
 	static TreeMap<Double, String> unitCircle = new TreeMap<Double, String>();
@@ -133,15 +132,15 @@ public class ConsistentHashing {
 	 * @param keys
 	 * @return
 	 */
-	public static Map<String, List<String>> redistributeKeys(List<String> keys) {
-		Map<String, List<String>> keyNodeMap = new HashMap();
+	public static Map<String, List<String>> redistributeKeys(Set<String> keys) {
+		Map<String, List<String>> keyNodeMap = new HashMap<String, List<String>>();
 		/*for(Entry<Double, String> entry : unitCircle.entrySet()){
 			Double key = entry.getKey();
 		}*/
-		
+
 		for(String key : keys){
 			if(keyNodeMap.containsKey(getNode(key))){
-				keyNodeMap.get(getNode(key)).add(key);				
+				keyNodeMap.get(getNode(key)).add(key);
 			}
 			else{
 				List<String> keyList = new ArrayList<>();
