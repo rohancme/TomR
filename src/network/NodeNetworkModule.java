@@ -1,5 +1,15 @@
 package network;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import network.requests.NWRequest;
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
@@ -12,11 +22,14 @@ public class NodeNetworkModule {
 	private static int neighborServerPort=5001;
 	private static int selfServerPort=5001;
 	private static int responsePort=5002;
+	private static int clientPort=5003;
 	
 	public NetworkUtilities utils=null;
 	private NodeNeighborModule neighborModule=null;
 	private NodeResponseModule responseModule=null;
 	private final Node mainNodeObject;
+	
+	private ConcurrentHashMap<String,Socket> clientConnectionList=new ConcurrentHashMap<String,Socket>();
 	
 	/**
 	 * @throws NetworkException
@@ -57,12 +70,16 @@ public class NodeNetworkModule {
 					
 			e.printStackTrace();
 		}
-		Thread t=new Thread(incomingResponseHandler);
-		t.start();
+		Thread incomingResponseThread=new Thread(incomingResponseHandler);
+		incomingResponseThread.start();
 				
 		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
-		 		responseModule.startServicingResponses();		 		
-		 		responseModule.startServicingResponses();
+		responseModule.startServicingResponses();
+		
+		//Now for the incoming client Connections
+		NodeClientRequestHandler clientHandler=new NodeClientRequestHandler(clientPort,mainNodeObject,clientConnectionList);
+		Thread incomingClientThread=new Thread(clientHandler);
+		incomingClientThread.start();
 	}
 	
 	/**
@@ -96,6 +113,17 @@ public class NodeNetworkModule {
 	
 	//DUMMY-Waiting for ClientResponse Class
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
+		NWResponse response=new NWResponse(message);
+		Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		sendResponse(clientSocket,response);
+		try {
+			clientSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Couldn't close the Client Socket");
+		}
+		
 		
 	}
 	
@@ -104,6 +132,37 @@ public class NodeNetworkModule {
 	private void constructorCommon(){
 		//currently nothing
 		
+	}
+	
+	public void sendResponse(Socket socket,NWResponse response) {
+		// TODO Auto-generated method stub
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+		DataOutputStream output_stream=null;
+		try {
+			output_stream= new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			e.printStackTrace();
+			return;
+		}
+		
+		try {
+			//mapper.writeValue(System.out, request);
+			mapper.writeValue(output_stream, response);
+			//end of message marker.
+			output_stream.writeChar('\n');
+			output_stream.flush();
+		} catch (JsonGenerationException e) {
+			System.out.println("Problem Generating JSON");
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			System.out.println("Problem with JSON mapping");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			e.printStackTrace();
+		}
 	}
 	
 	private NWRequest getStartUpRequest(int startUpMsgPort) {
