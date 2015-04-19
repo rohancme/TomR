@@ -43,7 +43,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	private void handleConnection(Socket socket){
 		NWRequest centralRequest=getSingleRequest(socket);
 		
-		if(centralRequest.getRequestType()==NetworkConstants.requestToString(Requests.BREAK_FORM)){ //it's a break message
+		if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.BREAK_FORM))){ //it's a break message
 			//generate a message of type break incoming neighbor connection
 			BreakIncomingNeighborConnectionMessage msg=new BreakIncomingNeighborConnectionMessage("So long sucker");
 			//generate a request with this message

@@ -1,10 +1,11 @@
-package network.incoming.persistent;
+package network.requests.incoming;
 
 import edu.tomr.node.base.Node;
 import network.NetworkConstants;
 import network.NodeNetworkModule;
 import network.NetworkConstants.Requests;
 import network.exception.NetworkException;
+import network.incoming.persistent.RequestHandler;
 import network.requests.NWRequest;
 //handles incoming requests from neighbors
 public class NeighborConnectionHandler extends RequestHandler implements Runnable{
@@ -45,7 +46,9 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 						networkModule.sendOutgoingRequest(request);
 					}
 					else{ //some other kind of request that may be used in the future
-						
+						if(NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION).equals(request.getRequestType())){
+							changeIncomingNeighborConnection();
+						}
 					}
 				}
 			}
@@ -58,6 +61,21 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 		super(incoming_port);	
 		this.networkModule=module;
 		this.mainNodeObject=mainNodeObject;
+	}
+	
+	public void changeIncomingNeighborConnection(){
+		try {
+			closeClientSocket();
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			initializeClientSocket();
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
