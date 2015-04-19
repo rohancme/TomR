@@ -1,4 +1,4 @@
-package network;
+package network.requests.incoming;
 
 import java.io.IOException;
 import java.net.ServerSocket;

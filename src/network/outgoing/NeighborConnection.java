@@ -1,4 +1,7 @@
-package network;
+package network.outgoing;
+
+import network.Connection;
+
 //class to establish a connection with a neighbor that is listening for connections
 public class NeighborConnection extends Connection{
 	

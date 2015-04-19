@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import network.requests.NWRequest;
+import network.responses.NWResponse;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;

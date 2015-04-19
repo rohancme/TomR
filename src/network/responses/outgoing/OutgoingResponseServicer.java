@@ -1,8 +1,11 @@
-package network;
+package network.responses.outgoing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import network.outgoing.NeighborConnection;
+import network.responses.NWResponse;
 //a thread of this class is created by the NodeResponseModule in order to send outgoing responses in the background
 public class OutgoingResponseServicer implements Runnable{
 	

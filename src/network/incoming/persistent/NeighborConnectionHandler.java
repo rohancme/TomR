@@ -1,7 +1,10 @@
-package network;
+package network.incoming.persistent;
 
 import edu.tomr.node.base.Node;
+import network.NetworkConstants;
+import network.NodeNetworkModule;
 import network.NetworkConstants.Requests;
+import network.exception.NetworkException;
 import network.requests.NWRequest;
 //handles incoming requests from neighbors
 public class NeighborConnectionHandler extends RequestHandler implements Runnable{

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import network.Connection;
-import network.NetworkException;
 import network.NetworkUtilities;
+import network.exception.NetworkException;
 import network.requests.NWRequest;
 import edu.tomr.network.heartbeat.server.ServerBeatController;
 import edu.tomr.protocol.StartupMessage;

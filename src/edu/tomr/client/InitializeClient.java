@@ -3,8 +3,8 @@ package edu.tomr.client;
 import java.util.Scanner;
 
 import network.Connection;
-import network.NWResponse;
 import network.requests.NWRequest;
+import network.responses.NWResponse;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.utils.ConfigParams;

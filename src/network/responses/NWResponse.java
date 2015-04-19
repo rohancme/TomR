@@ -1,4 +1,4 @@
-package network;
+package network.responses;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

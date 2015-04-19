@@ -1,8 +1,11 @@
-package network;
+package network.responses.outgoing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import network.outgoing.NeighborConnection;
+import network.responses.NWResponse;
 //handles all outgoing response messages from this node
 public class NodeResponseModule {
 		

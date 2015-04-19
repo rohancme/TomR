@@ -1,8 +1,10 @@
-package network;
+package network.requests.outgoing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import network.outgoing.NeighborConnection;
 import network.requests.NWRequest;
 //handles all outgoing requests to neighbors for the node
 public class NodeNeighborModule {

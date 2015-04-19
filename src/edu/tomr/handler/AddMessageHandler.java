@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 import network.Connection;
 import network.NetworkConstants;
-import network.NetworkException;
 import network.NetworkUtilities;
+import network.exception.NetworkException;
 import network.requests.NWRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;

@@ -1,6 +1,10 @@
-package network;
+package network.incoming.persistent;
 
 import java.io.IOException;
+
+import network.NodeNetworkModule;
+import network.exception.NetworkException;
+import network.responses.NWResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 

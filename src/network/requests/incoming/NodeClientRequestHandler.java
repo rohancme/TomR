@@ -1,4 +1,4 @@
-package network;
+package network.requests.incoming;
 
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
@@ -6,14 +6,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 
-import edu.tomr.node.base.Node;
 
+
+
+
+import network.incoming.nonpersistent.NonPersistentIncomingConnectionHandler;
+import edu.tomr.node.base.Node;
+//handler for incoming client requests
 public class NodeClientRequestHandler extends NonPersistentIncomingConnectionHandler implements Runnable{
 	
 	Node currentNode=null;
 	ConcurrentHashMap<String,Socket> clientConnectionList=null;
 
-	protected NodeClientRequestHandler(int incoming_port,Node node,ConcurrentHashMap<String,Socket> clientConnectionList) {
+	public NodeClientRequestHandler(int incoming_port,Node node,ConcurrentHashMap<String,Socket> clientConnectionList) {
 		super(incoming_port);
 		this.currentNode=node;
 		this.clientConnectionList=clientConnectionList;

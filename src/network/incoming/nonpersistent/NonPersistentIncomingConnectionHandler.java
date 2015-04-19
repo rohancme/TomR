@@ -1,7 +1,9 @@
-package network;
+package network.incoming.nonpersistent;
 
 import java.io.IOException;
 import java.net.Socket;
+
+import network.incoming.IncomingConnectionHandler;
 
 public class NonPersistentIncomingConnectionHandler extends IncomingConnectionHandler{
 

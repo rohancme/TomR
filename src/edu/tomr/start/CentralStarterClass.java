@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import edu.tomr.protocol.StartupMessage;
 import network.Connection;
-import network.NetworkException;
 import network.NetworkUtilities;
+import network.exception.NetworkException;
 import network.requests.NWRequest;
 
 public class CentralStarterClass {

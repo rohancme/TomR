@@ -1,10 +1,13 @@
-package network;
+package network.incoming.persistent;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+
+import network.exception.NetworkException;
+import network.incoming.IncomingConnectionHandler;
 
 //starts listening on a particular port for incoming msgs. Use for persistent connections.
 public class PersistentIncomingConnectionHandler extends IncomingConnectionHandler{
