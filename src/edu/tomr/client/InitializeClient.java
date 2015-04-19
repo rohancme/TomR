@@ -1,7 +1,6 @@
 package edu.tomr.client;
 
 import java.util.Random;
-import java.util.Scanner;
 
 import network.Connection;
 import network.NWResponse;
@@ -28,19 +27,9 @@ public class InitializeClient {
 	private static int lbPort=6000;
 	private static int servicerNodePort=5003;
 
-private static KeyValuePair getKeyValue() {
-		System.out.println("Enter the key :");
-		Scanner input = new Scanner(System.in);
-		String key = input.nextLine();
-		System.out.println("Enter the Value for this key :");
-		String value = input.nextLine();
-		return (new KeyValuePair(key, value));
-
-	}
-
 	private static ClientServiceMessage getServiceMessage() {
-		//serverIP = ConfigParams.getProperty(LB_IP);
-		serverIP = "192.168.1.138";
+		serverIP = ConfigParams.getProperty("LB_IP");
+		//serverIP = "192.168.1.138";
 
 		//Connect to Load balancer and get servicerIP
 		Connection lbConnection=new Connection(serverIP,lbPort);
@@ -49,7 +38,7 @@ private static KeyValuePair getKeyValue() {
 
 		return response.getClientServiceMsg();
 	}
-	
+
 	private static void generateRequests(ClientRequestType requestType, int requestLength, int numOfRequests ){
 		NetworkUtilities utils = null;
 		try {
@@ -58,7 +47,7 @@ private static KeyValuePair getKeyValue() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		for(int i=1; i<=numOfRequests; i++){
 			ClientServiceMessage serviceMessage = getServiceMessage();
 			Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
@@ -70,9 +59,9 @@ private static KeyValuePair getKeyValue() {
 			NWResponse response=nodeConnection.getnextResponse();
 
 			System.out.println(response.getAckMsg().toString());
-			
+
 		}
-		
+
 	}
 
 	private static String generateString(int requestLength) {
@@ -89,10 +78,7 @@ private static KeyValuePair getKeyValue() {
 
 	public static void main(String[] args) {
 		generateRequests(ClientRequestType.ADD, 50, 5);
-		
+
 	}
-
-
-
 
 }
