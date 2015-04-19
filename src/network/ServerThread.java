@@ -17,6 +17,7 @@ public class ServerThread implements Runnable {
 		while(true){
 			try {
 				(new Thread(new ClientConnectionHandler(LBSocket.accept()))).start();
+				System.out.println("LB received a new client conn. Handling it.");
 			} catch (IOException e) {
 				System.out.println("Error in the accept block ");
 				e.printStackTrace();

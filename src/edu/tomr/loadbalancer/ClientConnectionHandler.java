@@ -50,6 +50,7 @@ public class ClientConnectionHandler implements Runnable {
 		//Send this request to the client. 
 		Connection clientServiceConnection = new Connection(clientSocket);
 		clientServiceConnection.send_response(clientResponse);
+		System.out.println("Asked client to connect to:"+clientResponse.getClientServiceMsg().getServiceIPAddress());
 		//close client socket
 		try {
 			clientSocket.close();

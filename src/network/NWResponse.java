@@ -16,6 +16,11 @@ public class NWResponse {
 	@JsonProperty private AckMessage ackMsg=null;
 	@JsonProperty private ClientServiceMessage clientServiceMsg=null;
 	
+	//only for Jackson
+	private NWResponse(){
+		
+	}
+	
 	public NWResponse(String srcIP,String destIP,AckMessage msg){
 		this.srcIP=srcIP;
 		this.destIP=destIP;

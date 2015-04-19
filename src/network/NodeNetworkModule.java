@@ -59,9 +59,10 @@ public class NodeNetworkModule {
 	 */
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
+		System.out.println("Received startup message");
 		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
 		neighborModule.startServicingRequests();
-		
+		System.out.println("Neighbor Connections established");
 		//everyone needs to start listening on port 5002 first
 		NetworkResponseHandler incomingResponseHandler=null;
 		try {
@@ -72,14 +73,15 @@ public class NodeNetworkModule {
 		}
 		Thread incomingResponseThread=new Thread(incomingResponseHandler);
 		incomingResponseThread.start();
-				
+		System.out.println("Listening for incoming responses");		
 		this.responseModule=new NodeResponseModule(startupRequest.getStartupMessage().getNeighborList(), responsePort);
 		responseModule.startServicingResponses();
-		
+		System.out.println("Outgoing response thread started");
 		//Now for the incoming client Connections
 		NodeClientRequestHandler clientHandler=new NodeClientRequestHandler(clientPort,mainNodeObject,clientConnectionList);
 		Thread incomingClientThread=new Thread(clientHandler);
 		incomingClientThread.start();
+		System.out.println("Accepting client requests");
 	}
 	
 	/**
@@ -108,6 +110,7 @@ public class NodeNetworkModule {
 	}
 	
 	public void sendOutgoingNWResponse(NWResponse response){
+		System.out.println("Handled a request. Now sending an ACK message:"+response.getAckMsg().toString());
 		this.responseModule.insertOutgoingNWResponse(response);
 	}
 	
@@ -115,6 +118,7 @@ public class NodeNetworkModule {
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
 		NWResponse response=new NWResponse(message);
 		Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		System.out.println("Sending an outgoing response "+message.toString()+" to"+clientIPAddress+"after handling request:");
 		sendResponse(clientSocket,response);
 		try {
 			clientSocket.close();
