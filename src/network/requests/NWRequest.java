@@ -149,6 +149,11 @@ public class NWRequest {
 		return this.neighborMessage;
 	}
 
+	@JsonProperty("addNodeMsg")
+	public AddNodeMessage getAddNodeMsg() {
+		return addNodeMsg;
+	}
+
 	@JsonProperty("destIP")
 	public String getDestinationIP() {
 		return destIP;

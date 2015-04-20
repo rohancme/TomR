@@ -1,5 +1,6 @@
 package edu.tomr.start;
 
+import network.NetworkConstants;
 import network.NetworkUtilities;
 import network.exception.NetworkException;
 import edu.tomr.network.heartbeat.client.ClientBeatController;
@@ -8,7 +9,7 @@ import edu.tomr.utils.ConfigParams;
 
 public class NodeStarter {
 
-	private static int selfBeatPost = 5010;
+	//private static int selfBeatPost = 5010;
 
 	static {
 		 //ConfigParams.loadProperties();
@@ -29,7 +30,7 @@ public class NodeStarter {
 			e.printStackTrace();
 		}
 		//beatController = new ClientBeatController(ConfigParams.getProperty("SERVER_IP"),
-			//	ConfigParams.getIntProperty("SERVER_PORT_NO"), utils.getSelfIP(), selfBeatPost);
+				//	ConfigParams.getIntProperty("SERVER_PORT_NO"), utils.getSelfIP(), NetworkConstants.C_BEAT_PORT);
 
 	}
 
