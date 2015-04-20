@@ -22,9 +22,6 @@ public class NWRequest {
 	@JsonProperty protected final String request_type;
 	@JsonProperty protected String destIP=null;
 	@JsonProperty protected String srcIP=null;
-
-
-
 	@JsonProperty protected StartupMessage startupMessage=null;
 	@JsonProperty protected NewNeighborConnectionMessage newNeighborConnectionMessage=null;
 	@JsonProperty protected NeighborMessage neighborMessage=null;
@@ -43,6 +40,10 @@ public class NWRequest {
 	
 	public BreakFormationMessage getBreakFormMessage() {
 		return breakFormMessage;
+	}
+	
+	public UpdateRingMessage getUpdateRingMessage() {
+		return updateRingMessage;
 	}
 
 

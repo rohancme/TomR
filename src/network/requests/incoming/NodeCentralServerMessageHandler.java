@@ -16,6 +16,7 @@ import network.incoming.nonpersistent.NonPersistentIncomingConnectionHandler;
 import network.outgoing.NeighborConnection;
 import network.requests.NWRequest;
 import network.requests.outgoing.NodeNeighborModule;
+import edu.tomr.node.base.INode;
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 //handler for incoming central server requests
@@ -24,12 +25,14 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	NodeNeighborModule neighborModule=null;
 	NetworkUtilities utils=null;
 	List<NeighborConnection> neighborConns=null;
+	INode mainNode=null;
 
-	public NodeCentralServerMessageHandler(int incoming_port,NodeNeighborModule neighborModule,NetworkUtilities utils) {
+	public NodeCentralServerMessageHandler(int incoming_port,NodeNeighborModule neighborModule,NetworkUtilities utils,INode mainNode) {
 		super(incoming_port);
 		this.neighborModule=neighborModule;
 		this.neighborConns=neighborModule.getOutgoingNeighborConnections();
 		this.utils=utils;
+		this.mainNode=mainNode;
 	}
 	
 	@Override
@@ -74,6 +77,9 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			}
 			System.out.println("Connected to a new outgoing neighbor connection");
 			
+		}
+		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.UPDATE_RING))){
+			this.mainNode.handleUpdateRingRequest(centralRequest.getUpdateRingMessage());
 		}
 		
 	}
