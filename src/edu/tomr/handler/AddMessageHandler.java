@@ -51,7 +51,8 @@ public class AddMessageHandler implements Runnable {
 
 			updateConsistentHash(message.getIpAddress());
 			String predec = ConfigParams.getPredecessorNode(message.getIpAddress());
-			originalNodes.remove(predec);
+			//Need to send update ring request to all existing nodes
+			//originalNodes.remove(predec);
 
 			List<String> temp = new ArrayList<String>();
 			temp.add(ConfigParams.getSuccesorNode(message.getIpAddress()));
@@ -59,10 +60,12 @@ public class AddMessageHandler implements Runnable {
 			NWRequest newStartUpRequest = utils.getNewStartupRequest(new StartupMessage("New_node", temp, ConfigParams.getIpAddresses()));
 			Connection temp_connection=new Connection(message.getIpAddress() ,NetworkConstants.C_SERVER_LISTEN_PORT);
 			temp_connection.send_request(newStartUpRequest);
+			System.out.println("AddMessageHandler: Sending startup request to node: "+message.getIpAddress());
 
 			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new BreakFormationMessage("Break_Form", message.getIpAddress()));
 			temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 			temp_connection.send_request(breakFormRequest);
+			System.out.println("AddMessageHandler: Break from request to node: "+predec);
 
 			sendUpdateRingMessage(originalNodes, message.getIpAddress());
 
@@ -99,14 +102,13 @@ public class AddMessageHandler implements Runnable {
 				NWRequest updateRingRequest = utils.getNewUpdateRingRequest(msg);
 
 				Connection temp_connection=new Connection(ipAddress, NetworkConstants.C_SERVER_LISTEN_PORT);
-
 				temp_connection.send_request(updateRingRequest);
-
+				System.out.println("AddMessageHandler: Sending update ring request to node: "+ipAddress);
 			}
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Sent update ring requests to nodes");
+		System.out.println("AddMessageHandler: Sent update ring requests to nodes");
 
 	}
 

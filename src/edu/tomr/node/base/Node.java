@@ -183,6 +183,8 @@ public class Node implements INode {
 	 */
 	@Override
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
+		
+		System.out.println("handling update ring requests in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
 		originalNodes.add(message.getNewNode());
 
@@ -194,7 +196,7 @@ public class Node implements INode {
 		    	try {
 					redistributeKeys();
 				} catch (NetworkException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 		    }
@@ -237,6 +239,7 @@ public class Node implements INode {
 				for(String key: entry.getValue()){
 					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
 					pairs.add(pair);
+					System.out.println("Move key: "+key+" to node: "+entry.getKey());
 				}
 				RedistributionMessage message = new RedistributionMessage(pairs);
 				NWRequest redisRequest = utils.getNewRedisRequest(message);
