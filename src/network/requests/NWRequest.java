@@ -5,6 +5,7 @@ import static network.NetworkConstants.Requests;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import edu.tomr.protocol.AddNodeMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 import edu.tomr.protocol.ClientServiceMessage;
@@ -31,6 +32,7 @@ public class NWRequest {
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
 	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
+	@JsonProperty protected AddNodeMessage addNodeMsg=null;
 	
 	@JsonProperty protected RedistributionMessage redistributionMessage=null;
 	@JsonProperty protected UpdateRingMessage updateRingMessage=null;
@@ -56,7 +58,12 @@ public class NWRequest {
 		this.breakIncomingNeighborMsg=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION);
 	}
-
+	
+	public NWRequest(String req_id, AddNodeMessage msg){
+		this.request_id=req_id;
+		this.addNodeMsg=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.ADD_NODE);
+	}
 
 	public NWRequest(String req_id,StartupMessage msg){
 		this.request_id=req_id;
