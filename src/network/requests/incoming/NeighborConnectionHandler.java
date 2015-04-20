@@ -38,6 +38,7 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 					}
 					
 					else if(NetworkConstants.requestToString(Requests.REDISTRIBUTION).equals(request.getRequestType())){
+						System.out.println("Received a Redistribution request-NW level");
 						this.mainNodeObject.redistributionRequest(request.getRedistributionMessage());
 					}
 				}
