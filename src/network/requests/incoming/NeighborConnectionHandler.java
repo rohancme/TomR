@@ -32,11 +32,13 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 				System.out.println("Received new request of type:"+request.getRequestType());
 				
 				if(ownIP.equals(request.getDestinationIP())){ //this request is meant for this node
-				
-					String reqType=NetworkConstants.requestToString(Requests.DB_OPERATION);
 					
-					if(reqType.equals(request.getRequestType())){ //it's a DB Operation
+					if(NetworkConstants.requestToString(Requests.DB_OPERATION).equals(request.getRequestType())){ //it's a DB Operation
 						this.mainNodeObject.handleRequest(request.getdBMessage(), request.getSourceIP());
+					}
+					
+					else if(NetworkConstants.requestToString(Requests.REDISTRIBUTION).equals(request.getRequestType())){
+						this.mainNodeObject.redistributionRequest(request.getRedistributionMessage());
 					}
 				}
 				else{ //either not meant for this node or null

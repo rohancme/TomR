@@ -45,6 +45,10 @@ public class NWRequest {
 	public UpdateRingMessage getUpdateRingMessage() {
 		return updateRingMessage;
 	}
+	
+	public RedistributionMessage getRedistributionMessage(){
+		return redistributionMessage;
+	}
 
 
 	//only for JACKSON
@@ -88,6 +92,14 @@ public class NWRequest {
 		this.request_id=req_id;
 		this.dBMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.DB_OPERATION);
+		this.srcIP=SourceIP;
+		this.destIP=DestinationIP;
+	}
+	
+	public NWRequest(String req_id,RedistributionMessage msg,String SourceIP,String DestinationIP){
+		this.request_id=req_id;
+		this.redistributionMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.REDISTRIBUTION);
 		this.srcIP=SourceIP;
 		this.destIP=DestinationIP;
 	}

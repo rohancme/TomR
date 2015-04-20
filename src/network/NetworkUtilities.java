@@ -103,8 +103,8 @@ public class NetworkUtilities {
 		return request;
 	}
 
-	public NWRequest getNewRedisRequest(RedistributionMessage msg) {
-		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+	public NWRequest getNewRedisRequest(RedistributionMessage msg,String destIP) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg,this.getSelfIP(),destIP);
 		return request;
 	}
 	

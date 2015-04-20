@@ -24,6 +24,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
 //Main network module. An object of this is created on every Node in the cluster
 public class NodeNetworkModule {
@@ -104,6 +105,11 @@ public class NodeNetworkModule {
 	 */
 	public void sendOutgoingRequest(DBMessage msg,String destIP){
 		NWRequest request=utils.getNewDBRequest(msg, destIP);
+		this.neighborModule.insertOutgoingRequest(request);
+	}
+	
+	public void sendOutgoingRequest(RedistributionMessage msg,String destIP){
+		NWRequest request=utils.getNewRedisRequest(msg, destIP);
 		this.neighborModule.insertOutgoingRequest(request);
 	}
 	
