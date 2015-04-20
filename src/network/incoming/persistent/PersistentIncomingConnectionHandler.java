@@ -37,7 +37,16 @@ public class PersistentIncomingConnectionHandler extends IncomingConnectionHandl
 			clientSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new NetworkException("There was an error closing the socket\n");
+			throw new NetworkException("There was an error closing the client socket\n");
+		}
+	}
+	
+	protected void shutdownServer() throws NetworkException{
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new NetworkException("There was an error closing the server socket\n");
 		}
 	}
 

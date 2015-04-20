@@ -190,7 +190,11 @@ public class NodeNetworkModule {
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}
-		
+		try {
+			myStartupHandler.shutdown();
+		} catch (NetworkException e) {
+			e.printStackTrace();
+		}
 		return startupRequest;
 	}
 
