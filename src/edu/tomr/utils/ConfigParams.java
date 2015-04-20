@@ -20,8 +20,35 @@ public class ConfigParams {
 	private static final String propertyFileName = "tomr.config";
 	private static final String tomrEnvVar = "TOMR_PROPS";
 
-	public static void loadProperties() {
+	public static void loadProperties(List<String> ipAddresses) {
 
+		reloadProperties();
+		
+		prop.setProperty("Node_IP_Addresses", getCSIpAdds(ipAddresses));
+		
+		String propFilePath = System.getenv(tomrEnvVar);
+		StringBuilder builder = new StringBuilder();
+		builder.append(propFilePath).append(propertyFileName);
+
+		OutputStream output = null;
+		try {
+			output = new FileOutputStream(new File(builder.toString()));
+			prop.store(output, "Added new IP Address");
+			output.close();
+		} catch (FileNotFoundException e) {
+
+			System.out.println("property file '" + builder.toString() + "' not found ");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+
+			System.out.println("Could not add IP Address to config file");
+			e.printStackTrace();
+		}
+	}
+
+	public static void loadProperties() {
+		
 		String propFilePath = System.getenv(tomrEnvVar);
 
 
@@ -45,9 +72,69 @@ public class ConfigParams {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-
 	}
+	
+	private static String getCSIpAdds(List<String> ips) {
+		
+		int i=0;
+		StringBuilder builder = new StringBuilder();
+		for(; i<ips.size()-1; i++) {
+			builder.append(ips.get(i)).append(',');
+		}
+		builder.append(ips.get(i));
+		
+		return builder.toString();
+	}
+	
+	private static void reloadProperties() {
+		
+		String propFilePath = System.getenv(tomrEnvVar);
 
+		StringBuilder builder = new StringBuilder();
+		builder.append(propFilePath).append(propertyFileName);
+
+		InputStream input = null;
+		try {
+			input = new FileInputStream(builder.toString());
+		} catch (FileNotFoundException e) {
+
+			System.out.println("property file '" + builder.toString() + "' not found ");
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		try {
+			prop.load(input);
+		} catch (IOException e) {
+			System.out.println("Problem loading property file '" + builder.toString());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+	
+	private static void addPropertyToFile() {
+		
+		String propFilePath = System.getenv(tomrEnvVar);
+		StringBuilder builder = new StringBuilder();
+		builder.append(propFilePath).append(propertyFileName);
+
+		OutputStream output = null;
+		try {
+			output = new FileOutputStream(new File(builder.toString()));
+			prop.store(output, "Added new IP Address");
+			output.close();
+		} catch (FileNotFoundException e) {
+
+			System.out.println("property file '" + builder.toString() + "' not found ");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+
+			System.out.println("Could not add IP Address to config file");
+			e.printStackTrace();
+		}
+	}
+	
 	public static String getProperty(String key) {
 
 		String val = prop.getProperty(key);
@@ -110,7 +197,7 @@ public class ConfigParams {
 			e.printStackTrace();
 		}
 
-		loadProperties();
+		reloadProperties();
 	}
 
 	public static void removeIpAddress(String ipAddress) {
@@ -144,7 +231,7 @@ public class ConfigParams {
 			System.out.println("Could not remove IP Address from config file");
 			e.printStackTrace();
 		}
-		loadProperties();
+		reloadProperties();
 	}
 
 	public static String getRandomIpAddress(){
