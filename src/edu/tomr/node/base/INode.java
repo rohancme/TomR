@@ -1,5 +1,7 @@
 package edu.tomr.node.base;
 
+import java.util.List;
+
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.RedistributionMessage;
@@ -37,5 +39,10 @@ public interface INode {
 	 * @param message
 	 */
 	public void redistributionRequest(RedistributionMessage message);
+	
+	/**
+	 * @param nodeList
+	 */
+	public void handleStartupRequest(List<String> nodeList);
 
 }

@@ -246,4 +246,9 @@ public class Node implements INode {
 			}
 		}
 	}
+	
+	public void handleStartupRequest(List<String> nodeList) {
+		
+		ConfigParams.loadProperties(nodeList);
+	}
 }

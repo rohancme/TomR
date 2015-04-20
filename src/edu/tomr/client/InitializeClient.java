@@ -20,7 +20,7 @@ public class InitializeClient {
 
 	static{
 		//Get the load balancer IP address
-		ConfigParams.loadProperties();
+		//ConfigParams.loadProperties();
 	}
 
 	public static String serverIP;
