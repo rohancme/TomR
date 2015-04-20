@@ -22,6 +22,10 @@ public class NWResponse {
 		this.ackMsg=msg;
 	}
 	
+	public NWResponse(){
+		
+	}
+	
 	//used for client responses
 	public NWResponse(AckMessage msg){
 		this.ackMsg=msg;

@@ -205,7 +205,7 @@ public class Node implements INode {
 	 * @see edu.tomr.node.base.INode#redistributionRequest(edu.tomr.protocol.RedistributionMessage)
 	 */
 	@Override
-	public void redistributionRequest(RedistributionMessage message) {
+	public void redistributionRequest(final RedistributionMessage message) {
 
 		new Thread(new Runnable() {
 		    @Override
@@ -245,5 +245,10 @@ public class Node implements INode {
 				temp_connection.send_request(redisRequest);
 			}
 		}
+	}
+	
+	public void handleStartupRequest(List<String> nodeList) {
+		
+		ConfigParams.loadProperties(nodeList);
 	}
 }

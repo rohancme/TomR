@@ -17,7 +17,7 @@ public class ClientConnectionHandler implements Runnable {
 	private static int turnOf = 0;
 	
 	static{
-		ConfigParams.loadProperties();
+		//ConfigParams.loadProperties();
 	}
 
 	public ClientConnectionHandler(Socket clientConnection) {
