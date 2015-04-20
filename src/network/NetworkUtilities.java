@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import network.exception.NetworkException;
 import network.requests.NWRequest;
+import edu.tomr.protocol.AddNodeMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NeighborMessage;
@@ -103,6 +104,11 @@ public class NetworkUtilities {
 	}
 
 	public NWRequest getNewRedisRequest(RedistributionMessage msg) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+		return request;
+	}
+	
+	public NWRequest getNewAddNodeRequest(AddNodeMessage msg) {
 		NWRequest request = new NWRequest(this.generate_req_id(), msg);
 		return request;
 	}
