@@ -34,16 +34,18 @@ public class AddMessageHandler implements Runnable {
 
 		NetworkUtilities utils = null;
 		ObjectMapper mapper = new ObjectMapper();
+		NWRequest request = null;
 		AddNodeMessage message = null;
 		Scanner scanner;
 		try {
 			utils = new NetworkUtilities();
 			scanner = new Scanner(socket.getInputStream());
 			if(scanner.hasNextLine()){
-				message = mapper.readValue(scanner.nextLine(), AddNodeMessage.class);
+				request = mapper.readValue(scanner.nextLine(), NWRequest.class);
 			}
 			scanner.close();
-
+			message = request.getAddNodeMsg();
+			
 			//List of addresses before adding the new node
 			List<String> originalNodes = ConfigParams.getIpAddresses();
 
