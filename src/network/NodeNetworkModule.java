@@ -69,6 +69,7 @@ public class NodeNetworkModule {
 	 */
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
+		this.mainNodeObject.handleStartupRequest(startupRequest.getStartupMessage().getNodeList());
 		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
 		neighborModule.startServicingRequests();
 		
