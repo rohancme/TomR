@@ -36,7 +36,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	public void run() {
 		while(true){
 			Socket clientSocket=super.getNextSocket();
-			
+			handleConnection(clientSocket);
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			conn.send_request(outgoingRequest);
 			//close the socket to neighbor
 			conn.closeSocket();
-			
+			System.out.println("Closed outgoing neighbor connection");
 			synchronized(neighborConns){
 				//remove current connection in list
 				neighborConns.remove(conn);
@@ -72,6 +72,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 					neighborConns.add(newNeighborConnection);
 				}
 			}
+			System.out.println("Connected to a new outgoing neighbor connection");
 			
 		}
 		

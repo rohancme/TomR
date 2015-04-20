@@ -10,7 +10,7 @@ import network.responses.NWResponse;
 public class OutgoingResponseServicer implements Runnable{
 	
 	private ConcurrentLinkedQueue<NWResponse> responseQueue=null;
-	private ArrayList<NeighborConnection> outgoingNeighborConnections=null;
+	private List<NeighborConnection> outgoingNeighborConnections=null;
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -31,7 +31,7 @@ public class OutgoingResponseServicer implements Runnable{
 	public OutgoingResponseServicer(ConcurrentLinkedQueue<NWResponse> queue,List<NeighborConnection>outgoingNeighborConnections){
 		this.responseQueue=queue;
 		this.outgoingNeighborConnections=new ArrayList<NeighborConnection>();
-		this.outgoingNeighborConnections.addAll(outgoingNeighborConnections);
+		this.outgoingNeighborConnections=outgoingNeighborConnections;
 	}
 
 }

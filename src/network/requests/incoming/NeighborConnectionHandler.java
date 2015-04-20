@@ -70,12 +70,14 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Closed incoming neighbor connection");
 		try {
 			initializeClientSocket();
 		} catch (NetworkException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Accepted new incoming neighbor connection");
 	}
 
 }
