@@ -15,5 +15,9 @@ public class StartupMessageHandler extends RequestHandler{
 		initializeClientSocket();
 		return getNextRequest();
 	}
+	
+	public void shutdown() throws NetworkException{
+		super.shutdownServer();
+	}
 
 }
