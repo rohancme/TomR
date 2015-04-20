@@ -47,11 +47,13 @@ public class NodeQueueProcessor implements Runnable {
 		boolean success = false;
 		
 		switch(message.getRequestType()) {
-			case ADD: 	operation.put(tempPayload.getKey(), tempPayload.getValue());
+			case ADD: 	System.out.println("Hanlding put request for key: "+tempPayload.getKey()+" at node: "+parentNode.getSelfAddress());
+						operation.put(tempPayload.getKey(), tempPayload.getValue());
 						success = true;
 						break;
 						
-			case GET:	val = operation.get(tempPayload.getKey());
+			case GET:	System.out.println("Hanlding get request for key: "+tempPayload.getKey()+" at node: "+parentNode.getSelfAddress());
+						val = operation.get(tempPayload.getKey());
 						if(val != null)
 							success = true;
 						break;

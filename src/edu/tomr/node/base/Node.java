@@ -242,10 +242,7 @@ public class Node implements INode {
 					System.out.println("Move key: "+key+" to node: "+entry.getKey());
 				}
 				RedistributionMessage message = new RedistributionMessage(pairs);
-				NWRequest redisRequest = utils.getNewRedisRequest(message);
-
-				Connection temp_connection=new Connection(entry.getKey(), NetworkConstants.C_SERVER_LISTEN_PORT);
-				temp_connection.send_request(redisRequest);
+				this.networkModule.sendOutgoingRequest(message, entry.getKey());
 			}
 		}
 	}
