@@ -121,7 +121,7 @@ public class NWRequest {
 	public NWRequest(String req_id, BreakFormationMessage msg, String SourceIP){
 		this.request_id=req_id;
 		this.breakFormMessage=msg;
-		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM);
+		this.request_type=NetworkConstants.requestToString(Requests.BREAK_FORM_ADD);
 		this.srcIP=SourceIP;
 	}
 
