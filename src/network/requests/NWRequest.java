@@ -58,7 +58,7 @@ public class NWRequest {
 		this.request_id="NA";
 	}
 	
-	public NWRequest(String req_id,BreakIncomingNeighborConnectionMessage msg){
+	public NWRequest(String req_id,BreakIncomingNeighborConnectionMessage msg,String destIP){
 		this.request_id=req_id;
 		this.breakIncomingNeighborMsg=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION);

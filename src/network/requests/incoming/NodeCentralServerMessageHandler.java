@@ -69,8 +69,8 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	}
 
 	private void handleBreakResponseFormation(NWRequest centralRequest) {
-		//generate a dummy response with this message
-		NWResponse outgoingResponse=new NWResponse();
+		//generate a response with this message
+		NWResponse outgoingResponse=new NWResponse(this.utils.getSelfIP(),centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//ensure the next node understands its a break and reset formation msg
 		outgoingResponse.setResetIncomingResponseMsg();
 		//send the response over the neighbor connection
@@ -104,7 +104,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		//generate a message of type break incoming neighbor connection
 		BreakIncomingNeighborConnectionMessage msg=new BreakIncomingNeighborConnectionMessage("So long sucker");
 		//generate a request with this message
-		NWRequest outgoingRequest=new NWRequest(utils.generate_req_id(),msg);
+		NWRequest outgoingRequest=new NWRequest(utils.generate_req_id(),msg,centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//send the request over the neighbor connection
 		//currently only one neighbor
 		NeighborConnection conn=null;

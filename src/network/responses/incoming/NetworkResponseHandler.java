@@ -38,12 +38,14 @@ public class NetworkResponseHandler extends PersistentIncomingConnectionHandler 
 			if(response!=null){
 				System.out.println("Response recieved");
 				
-				if(response.isResetIncomingResponseMsg()){
-					changeIncomingNeighborConnection();
-				}
 				if(ownIP.equals(response.getDestIP())){
+					if(response.isResetIncomingResponseMsg()){
+						changeIncomingNeighborConnection();
+					}
 					//call method to handle response
-					currentNode.handleAcknowledgements(response.getAckMsg());
+					else{
+						currentNode.handleAcknowledgements(response.getAckMsg());
+					}
 				}
 				else{
 					//add to response queue

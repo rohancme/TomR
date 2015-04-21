@@ -41,6 +41,9 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 						System.out.println("Received a Redistribution request-NW level");
 						this.mainNodeObject.redistributionRequest(request.getRedistributionMessage());
 					}
+					else if(NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION).equals(request.getRequestType())){
+						changeIncomingNeighborConnection();
+					}
 				}
 				else{ //either not meant for this node or null
 					if(request.getDestinationIP()!=null){
@@ -49,9 +52,7 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 						networkModule.sendOutgoingRequest(request);
 					}
 					else{ //some other kind of request that may be used in the future
-						if(NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION).equals(request.getRequestType())){
-							changeIncomingNeighborConnection();
-						}
+						
 					}
 				}
 			}
