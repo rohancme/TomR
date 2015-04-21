@@ -46,7 +46,7 @@ public class AddMessageHandler implements Runnable {
 			scanner.close();
 			message = request.getupdateConnMessage();
 			
-				if(message.isAdd()) {
+			if(message.isAdd()) {
 				//List of addresses before adding the new node
 				List<String> originalNodes = ConfigParams.getIpAddresses();
 	
@@ -70,16 +70,34 @@ public class AddMessageHandler implements Runnable {
 				temp_connection.send_request(breakFormRequest);
 				System.out.println("AddMessageHandler: Break from request to node: "+predec);
 	
-				//TODO: Remove this after ack message is fixed
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					
-					e.printStackTrace();
-				}
-				sendUpdateRingMessage(originalNodes, message.getNewNodeIpAddress());
+			} else {
+				
+				List<String> originalNodes = ConfigParams.getIpAddresses();
+				
+				String nodeToRemove = message.getNewNodeIpAddress();
+				String predec = ConfigParams.getPredecessorNode(nodeToRemove);
+				originalNodes.remove(nodeToRemove);
+				
+				String newNodeSucessor = ConfigParams.getSuccesorNode(message.getNewNodeIpAddress());
+				NWRequest breakFormRequest = utils.getNewBreakFormRequest(new 
+						BreakFormationMessage("Break_Form", newNodeSucessor, newNodeSucessor));
+				Connection temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
+				temp_connection.send_request(breakFormRequest);
+				System.out.println("AddMessageHandler: Break from request to node: "+predec);
+				
+				ConsistentHashing.updateCircle(originalNodes);
+				ConfigParams.removeIpAddress(nodeToRemove);
 			}
 
+			//TODO: Remove this after ack message is fixed
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			sendUpdateRingMessage(ConfigParams.getIpAddresses(), message.getNewNodeIpAddress(), message.isAdd());
+			
 		} catch (IOException e) {
 
 			System.out.println("IOException while adding new node");
@@ -100,7 +118,7 @@ public class AddMessageHandler implements Runnable {
 		ConfigParams.addIpAddress(newAddress);
 	}
 
-	private void sendUpdateRingMessage(List<String> originalNodes, String newNode){
+	private void sendUpdateRingMessage(List<String> originalNodes, String newNode, boolean add){
 
 		NetworkUtilities utils=null;
 
@@ -109,7 +127,7 @@ public class AddMessageHandler implements Runnable {
 
 			for(String ipAddress: originalNodes){
 
-				UpdateRingMessage msg = new UpdateRingMessage(newNode);
+				UpdateRingMessage msg = new UpdateRingMessage(newNode, add);
 				NWRequest updateRingRequest = utils.getNewUpdateRingRequest(msg);
 
 				Connection temp_connection=new Connection(ipAddress, NetworkConstants.C_SERVER_LISTEN_PORT);

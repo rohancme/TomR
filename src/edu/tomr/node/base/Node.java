@@ -182,7 +182,10 @@ public class Node implements INode {
 		
 		System.out.println("handling update ring requests in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
-		originalNodes.add(message.getNewNode());
+		if(message.isAdd())
+			originalNodes.add(message.getNewNode());
+		else
+			originalNodes.remove(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
 

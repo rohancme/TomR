@@ -21,7 +21,7 @@ public class Admin {
 			e.printStackTrace();
 		}
 		NWRequest request = utils.getNewAddNodeRequest(new UpdateConnMessage("ADD_NODE", utils.getSelfIP(), true));
-		
+		//NWRequest request = utils.getNewAddNodeRequest(new UpdateConnMessage("REMOVE_NODE", utils.getSelfIP(), false));
 		conn.send_request(request);
 	}
 
