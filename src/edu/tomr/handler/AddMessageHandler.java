@@ -62,7 +62,7 @@ public class AddMessageHandler implements Runnable {
 			temp_connection.send_request(newStartUpRequest);
 			System.out.println("AddMessageHandler: Sending startup request to node: "+message.getIpAddress());
 
-			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new BreakFormationMessage("BREAK_FORM_ADD", message.getIpAddress()));
+			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new BreakFormationMessage("Break_Form", message.getIpAddress()));
 			temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 			temp_connection.send_request(breakFormRequest);
 			System.out.println("AddMessageHandler: Break from request to node: "+predec);

@@ -50,7 +50,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	private void handleConnection(Socket socket){
 		NWRequest centralRequest=getSingleRequest(socket);
 
-		if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.BREAK_FORM_ADD))){ //it's a break message
+		if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.BREAK_FORM))){ //it's a break message
 			System.out.println("Received a BREAK FORMATION MESSAGE");
 
 			handleBreakRequestFormation(centralRequest);
