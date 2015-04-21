@@ -71,6 +71,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	private void handleBreakResponseFormation(NWRequest centralRequest) {
 		//generate a response with this message
 		NWResponse outgoingResponse=new NWResponse(this.utils.getSelfIP(),centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
+		System.out.println("Response Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//ensure the next node understands its a break and reset formation msg
 		outgoingResponse.setResetIncomingResponseMsg();
 		//send the response over the neighbor connection
@@ -95,6 +96,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			for(String IP:newNeighbors){
 				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_RESPONSE_PORT);
 				neighborResponseConns.add(newNeighborConnection);
+				System.out.println("Response- Connected to new neighbor:"+IP);
 			}
 		}
 
@@ -105,6 +107,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		BreakIncomingNeighborConnectionMessage msg=new BreakIncomingNeighborConnectionMessage("So long sucker");
 		//generate a request with this message
 		NWRequest outgoingRequest=new NWRequest(utils.generate_req_id(),msg,centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
+		System.out.println("Request Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//send the request over the neighbor connection
 		//currently only one neighbor
 		NeighborConnection conn=null;
@@ -127,6 +130,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			for(String IP:newNeighbors){
 				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_NEIGHBOR_PORT);
 				neighborRequestConns.add(newNeighborConnection);
+				System.out.println("Request- Connected to new neighbor:"+IP);
 			}
 		}
 	}
