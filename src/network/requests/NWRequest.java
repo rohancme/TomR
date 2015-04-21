@@ -5,7 +5,6 @@ import static network.NetworkConstants.Requests;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import edu.tomr.protocol.AddNodeMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 import edu.tomr.protocol.ClientServiceMessage;
@@ -14,6 +13,7 @@ import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 
 public class NWRequest {
@@ -29,7 +29,7 @@ public class NWRequest {
 	@JsonProperty protected ClientServiceMessage serviceMessage=null;
 	@JsonProperty protected DBMessage dBMessage=null;
 	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
-	@JsonProperty protected AddNodeMessage addNodeMsg=null;
+	@JsonProperty protected UpdateConnMessage updateConnMessage=null;
 	
 	@JsonProperty protected RedistributionMessage redistributionMessage=null;
 	@JsonProperty protected UpdateRingMessage updateRingMessage=null;
@@ -64,9 +64,9 @@ public class NWRequest {
 		this.request_type=NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION);
 	}
 	
-	public NWRequest(String req_id, AddNodeMessage msg){
+	public NWRequest(String req_id, UpdateConnMessage msg){
 		this.request_id=req_id;
-		this.addNodeMsg=msg;
+		this.updateConnMessage=msg;
 		this.request_type=NetworkConstants.requestToString(Requests.ADD_NODE);
 	}
 
@@ -162,9 +162,9 @@ public class NWRequest {
 		return this.neighborMessage;
 	}
 
-	@JsonProperty("addNodeMsg")
-	public AddNodeMessage getAddNodeMsg() {
-		return addNodeMsg;
+	@JsonProperty("updateConnMessage")
+	public UpdateConnMessage getAddNodeMsg() {
+		return updateConnMessage;
 	}
 
 	@JsonProperty("destIP")
