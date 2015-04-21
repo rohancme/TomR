@@ -188,18 +188,21 @@ public class Node implements INode {
 			originalNodes.remove(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
-
-		new Thread(new Runnable() {
-		    @Override
-			public void run() {
-		    	try {
-					redistributeKeys();
-				} catch (NetworkException e) {
-					
-					e.printStackTrace();
-				}
-		    }
-		}).start();
+		
+		//Only to call when node is added
+		if(message.isAdd()){
+			new Thread(new Runnable() {
+			    @Override
+				public void run() {
+			    	try {
+						redistributeKeys();
+					} catch (NetworkException e) {
+						
+						e.printStackTrace();
+					}
+			    }
+			}).start();
+		}
 	}
 
 	/* (non-Javadoc)

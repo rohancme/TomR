@@ -78,6 +78,8 @@ public class AddMessageHandler implements Runnable {
 				String predec = ConfigParams.getPredecessorNode(nodeToRemove);
 				originalNodes.remove(nodeToRemove);
 				
+				//Send init redistribution to node to be removed
+				
 				String newNodeSucessor = ConfigParams.getSuccesorNode(message.getNewNodeIpAddress());
 				NWRequest breakFormRequest = utils.getNewBreakFormRequest(new 
 						BreakFormationMessage("Break_Form", newNodeSucessor, newNodeSucessor));
