@@ -10,6 +10,7 @@ import network.responses.NWResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.node.base.Node;
+import edu.tomr.utils.Constants;
 //handles incoming responses from neighbor nodes
 public class NetworkResponseHandler extends PersistentIncomingConnectionHandler implements Runnable{
 
@@ -36,13 +37,13 @@ public class NetworkResponseHandler extends PersistentIncomingConnectionHandler 
 			NWResponse response=getNextResponse();
 			
 			if(response!=null){
-				System.out.println("Response recieved");
+				Constants.globalLog.debug("Response recieved");
 				
 				if(ownIP.equals(response.getDestIP())){
 					if(response.isResetIncomingResponseMsg()){
-						System.out.println("Response Conn-Received a request to break incoming neighbor Conn");
+						Constants.globalLog.debug("Response Conn-Received a request to break incoming neighbor Conn");
 						changeIncomingNeighborConnection();
-						System.out.println("Response Conn-A new neighbor has connected to me");
+						Constants.globalLog.debug("Response Conn-A new neighbor has connected to me");
 					}
 					//call method to handle response
 					else{

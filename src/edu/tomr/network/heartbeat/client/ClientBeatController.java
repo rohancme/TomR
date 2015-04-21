@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import edu.tomr.network.heartbeat.base.ConnectionAddress;
+import edu.tomr.utils.Constants;
 
 public class ClientBeatController extends Thread {
 
@@ -34,10 +35,10 @@ public class ClientBeatController extends Thread {
 		try {
 			clientBeater.initiateConnection();
 		} catch (UnknownHostException e) {
-			System.out.println("initializeClientBeater: host exception in cleint");
+			Constants.globalLog.debug("initializeClientBeater: host exception in cleint");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("initializeClientBeater: IO exception in cleint");
+			Constants.globalLog.debug("initializeClientBeater: IO exception in cleint");
 			e.printStackTrace();
 		}
 	}
@@ -53,7 +54,7 @@ public class ClientBeatController extends Thread {
 		try {
 			this.initSendClose();
 		} catch (IOException e) {
-			System.out.println("run: IO exception while sending heartbeat");
+			Constants.globalLog.debug("run: IO exception while sending heartbeat");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			
@@ -71,13 +72,13 @@ public class ClientBeatController extends Thread {
 		try {
 			clientController.startHeartBeats();
 		} catch (InterruptedException e) {
-			System.out.println("client main: Interrupted exception");
+			Constants.globalLog.debug("client main: Interrupted exception");
 			e.printStackTrace();
 		} finally{
 			try {
 				clientController.clientBeater.destory();
 			} catch (IOException e) {
-				System.out.println("client main: finally: IO exception");
+				Constants.globalLog.debug("client main: finally: IO exception");
 				e.printStackTrace();
 			}
 		}*/

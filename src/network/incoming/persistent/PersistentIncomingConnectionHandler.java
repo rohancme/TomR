@@ -2,12 +2,12 @@ package network.incoming.persistent;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 import network.exception.NetworkException;
 import network.incoming.IncomingConnectionHandler;
+import edu.tomr.utils.Constants;
 
 //starts listening on a particular port for incoming msgs. Use for persistent connections.
 public class PersistentIncomingConnectionHandler extends IncomingConnectionHandler{
@@ -57,14 +57,14 @@ public class PersistentIncomingConnectionHandler extends IncomingConnectionHandl
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Closed incoming neighbor connection");
+		Constants.globalLog.debug("Closed incoming neighbor connection");
 		try {
 			initializeClientSocket();
 		} catch (NetworkException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Accepted new incoming neighbor connection");
+		Constants.globalLog.debug("Accepted new incoming neighbor connection");
 	}
 
 

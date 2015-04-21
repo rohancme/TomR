@@ -3,7 +3,7 @@ package network.requests.incoming;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import edu.tomr.loadbalancer.ClientConnectionHandler;
+import edu.tomr.utils.Constants;
 
 public class LBClientServer {
 
@@ -15,7 +15,7 @@ public class LBClientServer {
 			LBSocket = new ServerSocket(serverPort);
 			new Thread(new ServerThread(LBSocket)).start();
 		} catch (IOException e) {
-			System.out.println("Error while trying to connect with the client ");
+			Constants.globalLog.debug("Error while trying to connect with the client ");
 			e.printStackTrace();
 		}
 	}

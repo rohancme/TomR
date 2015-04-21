@@ -5,11 +5,10 @@ import java.net.Socket;
 import java.util.UUID;
 
 import network.Connection;
-import network.requests.NWRequest;
 import network.responses.NWResponse;
 import edu.tomr.protocol.ClientServiceMessage;
-import edu.tomr.protocol.ClientServiceRequestPayload;
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 public class ClientConnectionHandler implements Runnable {
 	private Socket clientSocket;
@@ -41,7 +40,7 @@ public class ClientConnectionHandler implements Runnable {
 			IPAddress = getIPAddress();
 		}
 		catch(NullPointerException e){
-			System.out.println("NULL value returned for the IPAddress which is servicing the Client");
+			Constants.globalLog.debug("NULL value returned for the IPAddress which is servicing the Client");
 			e.printStackTrace();
 		}
 		
@@ -54,7 +53,7 @@ public class ClientConnectionHandler implements Runnable {
 		try {
 			clientSocket.close();
 		} catch (IOException e) {
-			System.out.println("Erro while trying to close the socket");
+			Constants.globalLog.debug("Erro while trying to close the socket");
 			e.printStackTrace();
 		}
 		//Exit Thread
@@ -77,7 +76,7 @@ public class ClientConnectionHandler implements Runnable {
 			}
 		}
 		catch(Exception e){
-			System.out.println("Error while trying to access the IP Addresses for scheduling");
+			Constants.globalLog.debug("Error while trying to access the IP Addresses for scheduling");
 			e.printStackTrace();
 			
 		}

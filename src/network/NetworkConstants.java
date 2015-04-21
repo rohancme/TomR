@@ -1,5 +1,6 @@
 package network;
 
+
 public final class NetworkConstants {
 
 	/*

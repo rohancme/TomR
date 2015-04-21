@@ -13,6 +13,7 @@ import edu.tomr.protocol.ClientRequestType;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 public class InitializeClient {
 
@@ -57,7 +58,7 @@ public class InitializeClient {
 			//this is block wait method
 			NWResponse response=nodeConnection.getnextResponse();
 
-			System.out.println(response.getAckMsg().toString());
+			Constants.globalLog.debug(response.getAckMsg().toString());
 
 		}
 	}	

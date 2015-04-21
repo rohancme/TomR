@@ -1,11 +1,10 @@
 package edu.tomr.start;
 
-import network.NetworkConstants;
 import network.NetworkUtilities;
 import network.exception.NetworkException;
 import edu.tomr.network.heartbeat.client.ClientBeatController;
 import edu.tomr.node.base.Node;
-import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 public class NodeStarter {
 
@@ -26,7 +25,7 @@ public class NodeStarter {
 			dbNode.initNetworkModule();
 		} catch (NetworkException e) {
 
-			System.out.println("Exception in obaining IP address");
+			Constants.globalLog.debug("Exception in obaining IP address");
 			e.printStackTrace();
 		}
 		//beatController = new ClientBeatController(ConfigParams.getProperty("SERVER_IP"),
@@ -44,7 +43,7 @@ public class NodeStarter {
 			beatController.startHeartBeats();
 		} catch (InterruptedException e) {
 
-			System.out.println("Exception in client heart beat module");
+			Constants.globalLog.debug("Exception in client heart beat module");
 			e.printStackTrace();
 		}
 	}
