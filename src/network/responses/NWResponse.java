@@ -33,9 +33,11 @@ public class NWResponse {
 	}
 	
 	
-	//use this only when need to tell next node to break its incoming Response Connection
-	public NWResponse(){
-		
+	//use this only when need to tell a node to break its incoming Response Connection
+	public NWResponse(String srcIP,String destIP){
+		this.srcIP=srcIP;
+		this.destIP=destIP;
+		this.ackMsg=null;
 	}
 	
 	//used for client responses

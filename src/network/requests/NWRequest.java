@@ -163,7 +163,7 @@ public class NWRequest {
 	}
 
 	@JsonProperty("updateConnMessage")
-	public UpdateConnMessage getAddNodeMsg() {
+	public UpdateConnMessage getupdateConnMessage() {
 		return updateConnMessage;
 	}
 
