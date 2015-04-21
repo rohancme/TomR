@@ -6,8 +6,16 @@ public class UpdateConnMessage extends Message {
 
 	@JsonProperty private String msg;
 	@JsonProperty private String newNodeIpAddress;
+	@JsonProperty private boolean isAdd;
 		
 	public UpdateConnMessage() {}
+	
+	public UpdateConnMessage(String msg, String newNodeIpAddress, boolean isAdd) {
+		super();
+		this.msg = msg;
+		this.newNodeIpAddress = newNodeIpAddress;
+		this.isAdd = isAdd;
+	}
 	
 	public UpdateConnMessage(String msg, String newNodeIpAddress) {
 		super();
@@ -27,6 +35,10 @@ public class UpdateConnMessage extends Message {
 
 	public void setNewNodeIpAddress(String newNodeIpAddress) {
 		this.newNodeIpAddress = newNodeIpAddress;
+	}
+
+	public boolean isAdd() {
+		return isAdd;
 	}
 	
 }
