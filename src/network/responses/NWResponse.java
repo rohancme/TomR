@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientServiceMessage;
+import edu.tomr.protocol.UpdateNodeAckMessage;
 //a container for Network Responses
 public class NWResponse {
 	
@@ -16,6 +17,7 @@ public class NWResponse {
 	@JsonProperty private AckMessage ackMsg=null;
 	@JsonProperty private ClientServiceMessage clientServiceMsg=null;
 	@JsonProperty private boolean resetIncomingResponseMsg=false;
+	@JsonProperty private UpdateNodeAckMessage updateNodeAckMsg = null;
 	
 	public boolean isResetIncomingResponseMsg() {
 		return resetIncomingResponseMsg;
@@ -48,6 +50,14 @@ public class NWResponse {
 	//used for client responses
 	public NWResponse(AckMessage msg){
 		this.ackMsg=msg;
+	}
+	
+	/**
+	 * Used for sending acknowledgements to server
+	 * @param msg
+	 */
+	public NWResponse(UpdateNodeAckMessage msg){
+		this.updateNodeAckMsg=msg;
 	}
 
 	public NWResponse(ClientServiceMessage serviceMessage) {

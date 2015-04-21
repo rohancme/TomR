@@ -10,6 +10,7 @@ import network.exception.NetworkException;
 import network.requests.NWRequest;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
@@ -108,6 +109,11 @@ public class NetworkUtilities {
 	}
 	
 	public NWRequest getNewAddNodeRequest(UpdateConnMessage msg) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+		return request;
+	}
+	
+	public NWRequest getNewInitRedisRequest(InitRedistributionMessage msg) {
 		NWRequest request = new NWRequest(this.generate_req_id(), msg);
 		return request;
 	}

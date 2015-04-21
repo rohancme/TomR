@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.hash.ConsistentHashing;
 import edu.tomr.protocol.BreakFormationMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
 import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.UpdateRingMessage;
@@ -70,10 +71,23 @@ public class AddMessageHandler implements Runnable {
 				temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(breakFormRequest);
 				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
+				
+				/*try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					
+					e.printStackTrace();
+				}
+				sendUpdateRingMessage(ConfigParams.getIpAddresses(), message.getNewNodeIpAddress(), message.isAdd());*/
 	
 			} else {
 				
-				List<String> originalNodes = ConfigParams.getIpAddresses();
+				String nodeToRemove = message.getNewNodeIpAddress();
+				
+				Connection temp_connection=new Connection(nodeToRemove ,NetworkConstants.C_SERVER_LISTEN_PORT);
+				NWRequest newInitRedisRequest = utils.getNewInitRedisRequest(new InitRedistributionMessage(nodeToRemove));
+				temp_connection.send_request(newInitRedisRequest);
+				/*List<String> originalNodes = ConfigParams.getIpAddresses();
 				
 				String nodeToRemove = message.getNewNodeIpAddress();
 				String predec = ConfigParams.getPredecessorNode(nodeToRemove);
@@ -89,18 +103,18 @@ public class AddMessageHandler implements Runnable {
 				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
 				
 				ConsistentHashing.updateCircle(originalNodes);
-				ConfigParams.removeIpAddress(nodeToRemove);
+				ConfigParams.removeIpAddress(nodeToRemove);*/
 			}
 
-			//TODO: Remove this after ack message is fixed
-			try {
+			//TODO: Remove the whole try catch for add and remove msgs
+			/*try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				
 				e.printStackTrace();
 			}
 			sendUpdateRingMessage(ConfigParams.getIpAddresses(), message.getNewNodeIpAddress(), message.isAdd());
-			
+			*/
 		} catch (IOException e) {
 
 			Constants.globalLog.debug("IOException while adding new node");

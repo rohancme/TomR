@@ -65,7 +65,10 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.UPDATE_RING))){
 			this.mainNode.handleUpdateRingRequest(centralRequest.getUpdateRingMessage());
 		}
-
+		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.INIT_REDISTRIBUTION))){
+			Constants.globalLog.debug("Received init redistribution request for node to be removed");
+			this.mainNode.handleInitRedistribtion(centralRequest.getInitRedisMessage());
+		}
 	}
 
 	private void handleBreakResponseFormation(NWRequest centralRequest) {

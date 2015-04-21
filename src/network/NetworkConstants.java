@@ -16,6 +16,8 @@ public final class NetworkConstants {
 	 */
 	public static final int LB_ADD_LISTEN_PORT = 8002;
 	
+	public static final int LB_NODE_LISTEN_PORT = 8003;
+	
 	public static final int INCOMING_NEIGHBOR_PORT=5001;
 	
 	public static final int INCOMING_RESPONSE_PORT=5002;
@@ -26,7 +28,7 @@ public final class NetworkConstants {
 	public static enum Requests{
 
 		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE
-		,BREAK_FORM,BREAK_INCOMING_CONNECTION,UPDATE_RING,REDISTRIBUTION,ADD_NODE
+		,BREAK_FORM,BREAK_INCOMING_CONNECTION,UPDATE_RING,REDISTRIBUTION,ADD_NODE, INIT_REDISTRIBUTION
 	}
 
 	public static String requestToString(Requests req){
@@ -44,6 +46,7 @@ public final class NetworkConstants {
 			case UPDATE_RING: return "UPDATE_RING";
 			case REDISTRIBUTION: return "REDISTRIBUTION";
 			case ADD_NODE: return "ADD_NODE";
+			case INIT_REDISTRIBUTION: return "INIT_REDISTRIBUTION";
 		default:
 			break;
 		}

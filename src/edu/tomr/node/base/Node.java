@@ -16,8 +16,10 @@ import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NodeMessage;
 import edu.tomr.protocol.RedistributionMessage;
+import edu.tomr.protocol.UpdateNodeAckMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
@@ -231,7 +233,7 @@ public class Node implements INode {
 
 	private void redistributeKeys() throws NetworkException {
 
-		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());//ConsistentHashing.redistributeKeys(null);
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());
 		NetworkUtilities utils = null;
 
 		utils = new NetworkUtilities();
@@ -254,5 +256,28 @@ public class Node implements INode {
 	public void handleStartupRequest(List<String> nodeList) {
 		
 		ConfigParams.loadProperties(nodeList);
+	}
+	
+	public void handleInitRedistribtion(InitRedistributionMessage message) {
+		
+		Constants.globalLog.debug("handling init redistribution in node: "+this.getSelfAddress());
+		List<String> originalNodes = ConfigParams.getIpAddresses();
+		originalNodes.remove(getSelfAddress());
+
+		ConsistentHashing.updateCircle(originalNodes);
+		
+		new Thread(new Runnable() {
+		    @Override
+			public void run() {
+		    	try {
+					redistributeKeys();
+					//Send ack to LB at some static port
+					networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
+				} catch (NetworkException e) {
+					
+					e.printStackTrace();
+				}
+		    }
+		}).start();
 	}
 }

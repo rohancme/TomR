@@ -3,6 +3,7 @@ package network;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import network.exception.NetworkException;
@@ -21,11 +22,14 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import edu.tomr.loadbalancer.LoadBalancer;
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateNodeAckMessage;
+import edu.tomr.utils.ConfigParams;
 import edu.tomr.utils.Constants;
 //Main network module. An object of this is created on every Node in the cluster
 public class NodeNetworkModule {
@@ -144,11 +148,41 @@ public class NodeNetworkModule {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Constants.globalLog.debug("Couldn't close the Client Socket");
+			Constants.globalLog.error("Couldn't close the Client Socket");
+		}
+		
+	}
+	
+	//TODO: To be implemented, send message to LB on a static port
+	public void sendOutgoingLBResponse(UpdateNodeAckMessage message, String loadBalancerIp){
+		NWResponse response=new NWResponse(message);
+		Socket clientSocket = null;
+		try {
+			clientSocket = new Socket(loadBalancerIp, NetworkConstants.LB_NODE_LISTEN_PORT);
+			sendResponse(clientSocket,response);
+			Constants.globalLog.debug("Sent updatenode ackmsg to load balancer");
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			
+			try {
+				clientSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Constants.globalLog.error("Couldn't close the Client Socket");
+			}
 		}
 		
 		
+		
 	}
+	
+	
 	
 	/********************************Private Methods********************************************************/
 	
