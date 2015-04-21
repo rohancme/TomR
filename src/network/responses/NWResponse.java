@@ -24,6 +24,11 @@ public class NWResponse {
 	public void setResetIncomingResponseMsg() {
 		this.resetIncomingResponseMsg = true;
 	}
+	
+	//only for jackson
+	private NWResponse(){
+		
+	}
 
 
 	public NWResponse(String srcIP,String destIP,AckMessage msg){
