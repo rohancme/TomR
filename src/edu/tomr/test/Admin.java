@@ -11,7 +11,7 @@ public class Admin {
 
 	public static void main(String[] args) {
 		
-		Connection conn=new Connection("192.168.1.103", NetworkConstants.LB_ADD_LISTEN_PORT);
+		Connection conn=new Connection("10.139.61.182", NetworkConstants.LB_ADD_LISTEN_PORT);
 		
 		NetworkUtilities utils = null;
 		try {

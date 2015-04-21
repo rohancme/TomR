@@ -6,7 +6,7 @@ public class UpdateConnMessage extends Message {
 
 	@JsonProperty private String msg;
 	@JsonProperty private String newNodeIpAddress;
-	@JsonProperty private boolean isAdd;
+	@JsonProperty private boolean add;
 		
 	public UpdateConnMessage() {}
 	
@@ -14,7 +14,7 @@ public class UpdateConnMessage extends Message {
 		super();
 		this.msg = msg;
 		this.newNodeIpAddress = newNodeIpAddress;
-		this.isAdd = isAdd;
+		this.add = isAdd;
 	}
 	
 	public UpdateConnMessage(String msg, String newNodeIpAddress) {
@@ -38,7 +38,7 @@ public class UpdateConnMessage extends Message {
 	}
 
 	public boolean isAdd() {
-		return isAdd;
+		return add;
 	}
 	
 }

@@ -236,6 +236,7 @@ public class Node implements INode {
 					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
 					pairs.add(pair);
 					System.out.println("Move key: "+key+" to node: "+entry.getKey());
+					operation.delete(key);
 				}
 				RedistributionMessage message = new RedistributionMessage(pairs);
 				this.networkModule.sendOutgoingRequest(message, entry.getKey());
