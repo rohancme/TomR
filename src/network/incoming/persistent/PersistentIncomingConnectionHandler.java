@@ -49,6 +49,23 @@ public class PersistentIncomingConnectionHandler extends IncomingConnectionHandl
 			throw new NetworkException("There was an error closing the server socket\n");
 		}
 	}
+	
+	protected void changeIncomingNeighborConnection(){
+		try {
+			closeClientSocket();
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Closed incoming neighbor connection");
+		try {
+			initializeClientSocket();
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Accepted new incoming neighbor connection");
+	}
 
 
 }

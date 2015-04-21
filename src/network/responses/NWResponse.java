@@ -15,13 +15,25 @@ public class NWResponse {
 	@JsonProperty private String srcIP=null;	
 	@JsonProperty private AckMessage ackMsg=null;
 	@JsonProperty private ClientServiceMessage clientServiceMsg=null;
+	@JsonProperty private boolean resetIncomingResponseMsg=false;
 	
+	public boolean isResetIncomingResponseMsg() {
+		return resetIncomingResponseMsg;
+	}
+
+	public void setResetIncomingResponseMsg() {
+		this.resetIncomingResponseMsg = true;
+	}
+
+
 	public NWResponse(String srcIP,String destIP,AckMessage msg){
 		this.srcIP=srcIP;
 		this.destIP=destIP;
 		this.ackMsg=msg;
 	}
 	
+	
+	//use this only when need to tell next node to break its incoming Response Connection
 	public NWResponse(){
 		
 	}

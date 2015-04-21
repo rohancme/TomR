@@ -94,7 +94,7 @@ public class NodeNetworkModule {
 		incomingClientThread.start();
 		
 		//Start listening for Server Messages
-		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.utils,this.mainNodeObject);
+		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.responseModule,this.utils,this.mainNodeObject);
 		Thread serverHandlerThread=new Thread(serverHandler);
 		serverHandlerThread.start();
 	}
