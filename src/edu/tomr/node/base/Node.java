@@ -79,10 +79,22 @@ public class Node implements INode {
 	 * Map to store the RequestID and IP Address
 	 */
 	private Map<String, String> requestMapper;
+	
+	/**
+	 * Holds the list of all the primary nodes in the network 
+	 */
+	private List<String> nodesList;
 
 
 	public Map<String, String> getRequestMapper() {
 		return requestMapper;
+	}
+
+	public List<String> getNodesList() {
+		List<String> tempList = new ArrayList<String>();
+		tempList.addAll(nodesList);
+		
+		return tempList;
 	}
 
 	/**
@@ -99,6 +111,7 @@ public class Node implements INode {
 		clientInbox = new MessageQueue<ClientMessage>();
 		nodeInbox = new MessageQueue<NodeMessage>();
 		requestMapper = new HashMap<String, String>();
+		nodesList = new ArrayList<String>();
 	}
 
 	public String getSelfAddress() {
@@ -185,7 +198,7 @@ public class Node implements INode {
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
 		
 		System.out.println("handling update ring requests in node: "+this.getSelfAddress());
-		List<String> originalNodes = ConfigParams.getIpAddresses();
+		List<String> originalNodes = this.getNodesList();//ConfigParams.getIpAddresses();
 		originalNodes.add(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
@@ -249,6 +262,12 @@ public class Node implements INode {
 	
 	public void handleStartupRequest(List<String> nodeList) {
 		
-		ConfigParams.loadProperties(nodeList);
+		//ConfigParams.loadProperties(nodeList);
+		this.nodesList.addAll(nodeList);
+	}
+	
+	public void handleRemoveNodeRequest() {
+		
+		//Redistribution of keys to other nodes
 	}
 }
