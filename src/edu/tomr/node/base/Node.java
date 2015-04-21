@@ -6,15 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.Connection;
-import network.NetworkConstants;
-import network.exception.NetworkException;
 import network.NetworkUtilities;
 import network.NodeNetworkModule;
-import network.requests.NWRequest;
+import network.exception.NetworkException;
 import edu.tomr.client.KeyValuePair;
 import edu.tomr.hash.ConsistentHashing;
-
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;

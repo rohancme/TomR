@@ -15,7 +15,7 @@ import network.requests.NWRequest;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.hash.ConsistentHashing;
-import edu.tomr.protocol.AddNodeMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.StartupMessage;
 import edu.tomr.protocol.UpdateRingMessage;
@@ -35,7 +35,7 @@ public class AddMessageHandler implements Runnable {
 		NetworkUtilities utils = null;
 		ObjectMapper mapper = new ObjectMapper();
 		NWRequest request = null;
-		AddNodeMessage message = null;
+		UpdateConnMessage message = null;
 		Scanner scanner;
 		try {
 			utils = new NetworkUtilities();
@@ -44,30 +44,39 @@ public class AddMessageHandler implements Runnable {
 				request = mapper.readValue(scanner.nextLine(), NWRequest.class);
 			}
 			scanner.close();
-			message = request.getAddNodeMsg();
+			message = request.getupdateConnMessage();
 			
 			//List of addresses before adding the new node
 			List<String> originalNodes = ConfigParams.getIpAddresses();
 
-			updateConsistentHash(message.getIpAddress());
-			String predec = ConfigParams.getPredecessorNode(message.getIpAddress());
+			updateConsistentHash(message.getNewNodeIpAddress());
+			String predec = ConfigParams.getPredecessorNode(message.getNewNodeIpAddress());
 			//Need to send update ring request to all existing nodes
 			//originalNodes.remove(predec);
 
 			List<String> temp = new ArrayList<String>();
-			temp.add(ConfigParams.getSuccesorNode(message.getIpAddress()));
+			temp.add(ConfigParams.getSuccesorNode(message.getNewNodeIpAddress()));
 
 			NWRequest newStartUpRequest = utils.getNewStartupRequest(new StartupMessage("New_node", temp, ConfigParams.getIpAddresses()));
-			Connection temp_connection=new Connection(message.getIpAddress() ,NetworkConstants.C_SERVER_LISTEN_PORT);
+			Connection temp_connection=new Connection(message.getNewNodeIpAddress() ,NetworkConstants.C_SERVER_LISTEN_PORT);
 			temp_connection.send_request(newStartUpRequest);
-			System.out.println("AddMessageHandler: Sending startup request to node: "+message.getIpAddress());
+			System.out.println("AddMessageHandler: Sending startup request to node: "+message.getNewNodeIpAddress());
 
-			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new BreakFormationMessage("Break_Form", message.getIpAddress()));
+			String newNodeSucessor = ConfigParams.getSuccesorNode(message.getNewNodeIpAddress());
+			NWRequest breakFormRequest = utils.getNewBreakFormRequest(new 
+					BreakFormationMessage("Break_Form", message.getNewNodeIpAddress(), newNodeSucessor));
 			temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 			temp_connection.send_request(breakFormRequest);
 			System.out.println("AddMessageHandler: Break from request to node: "+predec);
 
-			sendUpdateRingMessage(originalNodes, message.getIpAddress());
+			//TODO: Remove this after ack message is fixed
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			sendUpdateRingMessage(originalNodes, message.getNewNodeIpAddress());
 
 		} catch (IOException e) {
 

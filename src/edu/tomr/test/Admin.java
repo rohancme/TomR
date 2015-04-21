@@ -5,7 +5,7 @@ import network.NetworkConstants;
 import network.NetworkUtilities;
 import network.exception.NetworkException;
 import network.requests.NWRequest;
-import edu.tomr.protocol.AddNodeMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 
 public class Admin {
 
@@ -20,7 +20,7 @@ public class Admin {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		NWRequest request = utils.getNewAddNodeRequest(new AddNodeMessage("ADD_NODE", utils.getSelfIP()));
+		NWRequest request = utils.getNewAddNodeRequest(new UpdateConnMessage("ADD_NODE", utils.getSelfIP()));
 		
 		conn.send_request(request);
 	}

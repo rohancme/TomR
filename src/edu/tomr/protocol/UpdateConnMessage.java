@@ -6,15 +6,13 @@ public class UpdateConnMessage extends Message {
 
 	@JsonProperty private String msg;
 	@JsonProperty private String newNodeIpAddress;
-	@JsonProperty private String waitForConnIpAddress;
-	
+		
 	public UpdateConnMessage() {}
 	
-	public UpdateConnMessage(String msg, String ipAddress, String waitForConnIpAddress) {
+	public UpdateConnMessage(String msg, String newNodeIpAddress) {
 		super();
 		this.msg = msg;
-		this.newNodeIpAddress = ipAddress;
-		this.waitForConnIpAddress = waitForConnIpAddress; 
+		this.newNodeIpAddress = newNodeIpAddress;
 	}
 	
 	public String getMsg() {
@@ -30,14 +28,5 @@ public class UpdateConnMessage extends Message {
 	public void setNewNodeIpAddress(String newNodeIpAddress) {
 		this.newNodeIpAddress = newNodeIpAddress;
 	}
-
-	public String getWaitForConnIpAddress() {
-		return waitForConnIpAddress;
-	}
-
-	public void setWaitForConnIpAddress(String waitForConnIpAddress) {
-		this.waitForConnIpAddress = waitForConnIpAddress;
-	}
-	
 	
 }
