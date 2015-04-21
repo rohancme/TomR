@@ -14,7 +14,6 @@ import network.NodeNetworkModule;
 import network.requests.NWRequest;
 import edu.tomr.client.KeyValuePair;
 import edu.tomr.hash.ConsistentHashing;
-
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
@@ -189,7 +188,12 @@ public class Node implements INode {
 		originalNodes.add(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
-
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		new Thread(new Runnable() {
 		    @Override
 			public void run() {

@@ -111,6 +111,18 @@ public class NodeNetworkModule {
 	public void sendOutgoingRequest(RedistributionMessage msg,String destIP){
 		NWRequest request=utils.getNewRedisRequest(msg, destIP);
 		this.neighborModule.insertOutgoingRequest(request);
+		try {
+			System.out.println("Sending new redist request:"+msg.toJSON(msg));
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

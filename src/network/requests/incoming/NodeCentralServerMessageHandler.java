@@ -60,7 +60,6 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			handleBreakResponseFormation(centralRequest);
 			
 			System.out.println("Connected to a new outgoing neighbor response connection");
-
 		}
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.UPDATE_RING))){
 			this.mainNode.handleUpdateRingRequest(centralRequest.getUpdateRingMessage());
