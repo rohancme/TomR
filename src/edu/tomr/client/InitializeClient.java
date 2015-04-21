@@ -76,6 +76,6 @@ public class InitializeClient {
 
 	public static void main(String[] args) {
 
-		generateRequests(ClientRequestType.GET, 50, 50);
+		generateRequests(ClientRequestType.ADD, 50, 5);
 	}
 }
