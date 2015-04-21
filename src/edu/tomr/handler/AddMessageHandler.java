@@ -15,11 +15,12 @@ import network.requests.NWRequest;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.hash.ConsistentHashing;
-import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 public class AddMessageHandler implements Runnable {
 
@@ -61,14 +62,14 @@ public class AddMessageHandler implements Runnable {
 				NWRequest newStartUpRequest = utils.getNewStartupRequest(new StartupMessage("New_node", temp, ConfigParams.getIpAddresses()));
 				Connection temp_connection=new Connection(message.getNewNodeIpAddress() ,NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(newStartUpRequest);
-				System.out.println("AddMessageHandler: Sending startup request to node: "+message.getNewNodeIpAddress());
+				Constants.globalLog.debug("AddMessageHandler: Sending startup request to node: "+message.getNewNodeIpAddress());
 	
 				String newNodeSucessor = ConfigParams.getSuccesorNode(message.getNewNodeIpAddress());
 				NWRequest breakFormRequest = utils.getNewBreakFormRequest(new 
 						BreakFormationMessage("Break_Form", message.getNewNodeIpAddress(), newNodeSucessor));
 				temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(breakFormRequest);
-				System.out.println("AddMessageHandler: Break from request to node: "+predec);
+				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
 	
 			} else {
 				
@@ -83,7 +84,7 @@ public class AddMessageHandler implements Runnable {
 						BreakFormationMessage("Break_Form", newNodeSucessor, newNodeSucessor));
 				Connection temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(breakFormRequest);
-				System.out.println("AddMessageHandler: Break from request to node: "+predec);
+				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
 				
 				ConsistentHashing.updateCircle(originalNodes);
 				ConfigParams.removeIpAddress(nodeToRemove);
@@ -100,11 +101,11 @@ public class AddMessageHandler implements Runnable {
 			
 		} catch (IOException e) {
 
-			System.out.println("IOException while adding new node");
+			Constants.globalLog.debug("IOException while adding new node");
 			e.printStackTrace();
 		} catch (NetworkException e) {
 
-			System.out.println("NwException while adding new node");
+			Constants.globalLog.debug("NwException while adding new node");
 			e.printStackTrace();
 		}
 	}
@@ -132,12 +133,12 @@ public class AddMessageHandler implements Runnable {
 
 				Connection temp_connection=new Connection(ipAddress, NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(updateRingRequest);
-				System.out.println("AddMessageHandler: Sending update ring request to node: "+ipAddress);
+				Constants.globalLog.debug("AddMessageHandler: Sending update ring request to node: "+ipAddress);
 			}
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}
-		System.out.println("AddMessageHandler: Sent update ring requests to nodes");
+		Constants.globalLog.debug("AddMessageHandler: Sent update ring requests to nodes");
 
 	}
 

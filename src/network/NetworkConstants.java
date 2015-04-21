@@ -1,7 +1,5 @@
 package network;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class NetworkConstants {
 
@@ -30,8 +28,6 @@ public final class NetworkConstants {
 		STARTUP,CLOSE,NEW_CLIENT_CONNECTION,DB_OPERATION,NEW_NEIGHBOR_CONNECTION,NEIGHBOR_MESSAGE,SERVICE_MESSAGE
 		,BREAK_FORM,BREAK_INCOMING_CONNECTION,UPDATE_RING,REDISTRIBUTION,ADD_NODE
 	}
-	
-	static final Logger globalLog = LoggerFactory.getLogger(NetworkConstants.class);
 
 	public static String requestToString(Requests req){
 

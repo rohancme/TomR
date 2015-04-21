@@ -13,6 +13,7 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 public class ConsistentHashing {
 	static TreeMap<Double, String> unitCircle = new TreeMap<Double, String>();
@@ -28,7 +29,7 @@ public class ConsistentHashing {
 			}
 		}
 		catch(NullPointerException e){
-			System.out.println("The nodes have been hashed in a wrong manner");
+			Constants.globalLog.debug("The nodes have been hashed in a wrong manner");
 			e.printStackTrace();
 
 		}
@@ -61,7 +62,7 @@ public class ConsistentHashing {
 			return nodeName;
 		}
 		catch(NullPointerException e){
-			System.out.println("Error while trying to find the node to send the string to");
+			Constants.globalLog.debug("Error while trying to find the node to send the string to");
 			e.printStackTrace();
 			return null;
 

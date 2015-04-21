@@ -6,21 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import network.NetworkConstants;
 import network.NetworkConstants.Requests;
 import network.NetworkUtilities;
-import network.NodeNetworkModule;
 import network.incoming.nonpersistent.NonPersistentIncomingConnectionHandler;
 import network.outgoing.NeighborConnection;
 import network.requests.NWRequest;
 import network.requests.outgoing.NodeNeighborModule;
 import network.responses.NWResponse;
 import network.responses.outgoing.NodeResponseModule;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
 import edu.tomr.node.base.INode;
-import edu.tomr.node.base.Node;
 import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
+import edu.tomr.utils.Constants;
 //handler for incoming central server requests
 public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnectionHandler implements Runnable{
 
@@ -51,15 +51,15 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		NWRequest centralRequest=getSingleRequest(socket);
 
 		if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.BREAK_FORM))){ //it's a break message
-			System.out.println("Received a BREAK FORMATION MESSAGE");
+			Constants.globalLog.debug("Received a BREAK FORMATION MESSAGE");
 
 			handleBreakRequestFormation(centralRequest);
 
-			System.out.println("Connected to a new outgoing neighbor request connection");
+			Constants.globalLog.debug("Connected to a new outgoing neighbor request connection");
 
 			handleBreakResponseFormation(centralRequest);
 			
-			System.out.println("Connected to a new outgoing neighbor response connection");
+			Constants.globalLog.debug("Connected to a new outgoing neighbor response connection");
 
 		}
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.UPDATE_RING))){
@@ -71,7 +71,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 	private void handleBreakResponseFormation(NWRequest centralRequest) {
 		//generate a response with this message
 		NWResponse outgoingResponse=new NWResponse(this.utils.getSelfIP(),centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
-		System.out.println("Response Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
+		Constants.globalLog.debug("Response Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//ensure the next node understands its a break and reset formation msg
 		outgoingResponse.setResetIncomingResponseMsg();
 		//send the response over the neighbor connection
@@ -83,7 +83,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		conn.send_response(outgoingResponse);
 		//close the socket to neighbor
 		conn.closeSocket();
-		System.out.println("Closed outgoing neighbor response connection");
+		Constants.globalLog.debug("Closed outgoing neighbor response connection");
 		synchronized(neighborResponseConns){
 			//remove current connection in list
 			neighborResponseConns.remove(conn);
@@ -96,7 +96,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			for(String IP:newNeighbors){
 				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_RESPONSE_PORT);
 				neighborResponseConns.add(newNeighborConnection);
-				System.out.println("Response- Connected to new neighbor:"+IP);
+				Constants.globalLog.debug("Response- Connected to new neighbor:"+IP);
 			}
 		}
 
@@ -107,7 +107,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		BreakIncomingNeighborConnectionMessage msg=new BreakIncomingNeighborConnectionMessage("So long sucker");
 		//generate a request with this message
 		NWRequest outgoingRequest=new NWRequest(utils.generate_req_id(),msg,centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
-		System.out.println("Request Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
+		Constants.globalLog.debug("Request Conn-sending Break incoming to:"+centralRequest.getBreakFormMessage().getWaitForConnIpAddress());
 		//send the request over the neighbor connection
 		//currently only one neighbor
 		NeighborConnection conn=null;
@@ -117,7 +117,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		conn.send_request(outgoingRequest);
 		//close the socket to neighbor
 		conn.closeSocket();
-		System.out.println("Closed outgoing neighbor connection");
+		Constants.globalLog.debug("Closed outgoing neighbor connection");
 		synchronized(neighborRequestConns){
 			//remove current connection in list
 			neighborRequestConns.remove(conn);
@@ -130,7 +130,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			for(String IP:newNeighbors){
 				NeighborConnection newNeighborConnection=new NeighborConnection(IP, NetworkConstants.INCOMING_NEIGHBOR_PORT);
 				neighborRequestConns.add(newNeighborConnection);
-				System.out.println("Request- Connected to new neighbor:"+IP);
+				Constants.globalLog.debug("Request- Connected to new neighbor:"+IP);
 			}
 		}
 	}
@@ -150,9 +150,9 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		ObjectMapper mapper = new ObjectMapper();
 		NWRequest request=null;
 		//currently using scanner. Scanner waits for a newLine character which marks the end of an object
-		System.out.println("Waiting for a message from the server");
+		Constants.globalLog.debug("Waiting for a message from the server");
 		while(!inputScanner.hasNextLine());
-		System.out.println("Got message from server");
+		Constants.globalLog.debug("Got message from server");
 
 		try {
 			request=mapper.readValue(inputScanner.nextLine(), NWRequest.class);

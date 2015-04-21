@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.heartbeat.exception.NodeGoneDownException;
 import edu.tomr.protocol.HeartBeatMessage;
+import edu.tomr.utils.Constants;
 
 public class Server {
 
@@ -35,7 +36,7 @@ public class Server {
 	}
 
 	public void startServer() throws IOException{
-		System.out.println("started listening for connections");
+		Constants.globalLog.debug("started listening for connections");
 		server = new ServerSocket(this.portNumber);
 		try {
 			while (true) {
@@ -59,7 +60,7 @@ public class Server {
 			try {
 				in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			} catch (IOException e1) {
-				System.out.println("Server:run buff reader");
+				Constants.globalLog.debug("Server:run buff reader");
 				e1.printStackTrace();
 			}
 
@@ -71,7 +72,7 @@ public class Server {
 
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("object deserialed error");
+				Constants.globalLog.debug("object deserialed error");
 				e.printStackTrace();
 			}
 			if (message == null) {
@@ -79,7 +80,7 @@ public class Server {
 			}
 			synchronized (controller.clients) {
 
-				System.out.println("updated ip address and timestamp for server at: "
+				Constants.globalLog.debug("updated ip address and timestamp for server at: "
 						+message.toString()+" with time: "+message.getTimeStamp());
 				if(controller.clients.containsKey(message.toString())) {
 					new TimerCheck(message.toString()).start();
@@ -90,7 +91,7 @@ public class Server {
 			try {
 				client.close();
 			} catch (IOException e) {
-				System.out.println("client connection closed");
+				Constants.globalLog.debug("client connection closed");
 				e.printStackTrace();
 			}
 		}
@@ -116,13 +117,13 @@ public class Server {
 					e.printStackTrace();
 				} catch (NodeGoneDownException e) {
 
-					System.out.println("NodeGoneDownException thrown");
+					Constants.globalLog.debug("NodeGoneDownException thrown");
 					running = false;
 					e.printStackTrace();
 				}
 			}
 
-			System.out.println("Checker thread stopping");
+			Constants.globalLog.debug("Checker thread stopping");
 			controller.clients.remove(clientKey);
 		}
 

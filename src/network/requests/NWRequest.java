@@ -1,7 +1,7 @@
 package network.requests;
 
 import network.NetworkConstants;
-import static network.NetworkConstants.Requests;
+import network.NetworkConstants.Requests;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

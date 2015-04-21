@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.protocol.Message;
+import edu.tomr.utils.Constants;
 
 public class Simple_Server {
 	
@@ -18,7 +19,7 @@ public class Simple_Server {
 		try {
 			socket=new ServerSocket(port_num);
 		} catch (IOException e) {
-			System.out.println("Error creating socket at port:"+port_num);
+			Constants.globalLog.debug("Error creating socket at port:"+port_num);
 			e.printStackTrace();
 		}
 	}
@@ -50,7 +51,7 @@ public class Simple_Server {
 		
 		
 		return sb.toString();*/
-		System.out.println(msg.toJSON(msg));
+		Constants.globalLog.debug(msg.toJSON(msg));
 		
 		return null;
 	}

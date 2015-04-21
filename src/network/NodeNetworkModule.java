@@ -26,6 +26,7 @@ import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.utils.Constants;
 //Main network module. An object of this is created on every Node in the cluster
 public class NodeNetworkModule {
 	
@@ -143,7 +144,7 @@ public class NodeNetworkModule {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Couldn't close the Client Socket");
+			Constants.globalLog.debug("Couldn't close the Client Socket");
 		}
 		
 		
@@ -164,7 +165,7 @@ public class NodeNetworkModule {
 		try {
 			output_stream= new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Unable to open output stream to host:"+socket.getInetAddress());
 			e.printStackTrace();
 			return;
 		}
@@ -176,13 +177,13 @@ public class NodeNetworkModule {
 			output_stream.writeChar('\n');
 			output_stream.flush();
 		} catch (JsonGenerationException e) {
-			System.out.println("Problem Generating JSON");
+			Constants.globalLog.debug("Problem Generating JSON");
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			System.out.println("Problem with JSON mapping");
+			Constants.globalLog.debug("Problem with JSON mapping");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Problem with IO with host:"+socket.getInetAddress());
 			e.printStackTrace();
 		}
 	}

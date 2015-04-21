@@ -5,16 +5,15 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.UUID;
 
 import network.exception.NetworkException;
 import network.requests.NWRequest;
-import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 
 public class NetworkUtilities {

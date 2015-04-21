@@ -23,6 +23,7 @@ import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
 import edu.tomr.queue.NodeQueueProcessor;
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 /*
  * Should contain a network module to handle the connections
@@ -117,7 +118,7 @@ public class Node implements INode {
 		try {
 			this.networkModule = new NodeNetworkModule(this);
 		} catch (NetworkException e) {
-			System.out.println("Error while instantiating network module");
+			Constants.globalLog.debug("Error while instantiating network module");
 			e.printStackTrace();
 		}
 		this.networkModule.initializeNetworkFunctionality();
@@ -180,7 +181,7 @@ public class Node implements INode {
 	@Override
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
 		
-		System.out.println("handling update ring requests in node: "+this.getSelfAddress());
+		Constants.globalLog.debug("handling update ring requests in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
 		if(message.isAdd())
 			originalNodes.add(message.getNewNode());
@@ -238,7 +239,7 @@ public class Node implements INode {
 				for(String key: entry.getValue()){
 					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
 					pairs.add(pair);
-					System.out.println("Move key: "+key+" to node: "+entry.getKey());
+					Constants.globalLog.debug("Move key: "+key+" to node: "+entry.getKey());
 					operation.delete(key);
 				}
 				RedistributionMessage message = new RedistributionMessage(pairs);
