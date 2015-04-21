@@ -42,7 +42,9 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 						this.mainNodeObject.redistributionRequest(request.getRedistributionMessage());
 					}
 					else if(NetworkConstants.requestToString(Requests.BREAK_INCOMING_CONNECTION).equals(request.getRequestType())){
+						System.out.println("Request Conn-Received a request to break incoming neighbor Conn");
 						changeIncomingNeighborConnection();
+						System.out.println("Request Conn-A new neighbor has connected to me");
 					}
 				}
 				else{ //either not meant for this node or null

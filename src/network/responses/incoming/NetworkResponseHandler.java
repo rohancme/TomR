@@ -40,7 +40,9 @@ public class NetworkResponseHandler extends PersistentIncomingConnectionHandler 
 				
 				if(ownIP.equals(response.getDestIP())){
 					if(response.isResetIncomingResponseMsg()){
+						System.out.println("Response Conn-Received a request to break incoming neighbor Conn");
 						changeIncomingNeighborConnection();
+						System.out.println("Response Conn-A new neighbor has connected to me");
 					}
 					//call method to handle response
 					else{
