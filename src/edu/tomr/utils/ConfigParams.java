@@ -14,8 +14,6 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.tomr.handler.NodeMessageHandler;
-
 public class ConfigParams {
 
 	static Properties prop = new Properties();

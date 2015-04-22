@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NetworkUtilities;
 import network.NodeNetworkModule;
 import network.exception.NetworkException;
 import edu.tomr.client.KeyValuePair;
@@ -19,7 +18,6 @@ import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NodeMessage;
 import edu.tomr.protocol.RedistributionMessage;
-import edu.tomr.protocol.UpdateNodeAckMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
@@ -197,13 +195,9 @@ public class Node implements INode {
 			new Thread(new Runnable() {
 			    @Override
 				public void run() {
-			    	try {
-						redistributeKeys();
-					} catch (NetworkException e) {
-						
-						e.printStackTrace();
-					}
-			    }
+			
+					redistributeKeys();
+				}
 			}).start();
 		}
 	}
@@ -231,12 +225,10 @@ public class Node implements INode {
 			operation.put(pair.getKey(), pair.getValue());
 	}
 
-	private void redistributeKeys() throws NetworkException {
+	private void redistributeKeys() {
 
 		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());
-		NetworkUtilities utils = null;
-
-		utils = new NetworkUtilities();
+		
 		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 
 			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
@@ -266,18 +258,20 @@ public class Node implements INode {
 
 		ConsistentHashing.updateCircle(originalNodes);
 		
-		new Thread(new Runnable() {
+		/*new Thread(new Runnable() {
 		    @Override
 			public void run() {
-		    	try {
-					redistributeKeys();
+		    	try {*/
+					
+						redistributeKeys();
+					
 					//Send ack to LB at some static port
-					//networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
+					/*networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
 				} catch (NetworkException e) {
 					
 					e.printStackTrace();
 				}
 		    }
-		}).start();
+		}).start();*/
 	}
 }

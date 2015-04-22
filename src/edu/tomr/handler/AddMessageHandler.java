@@ -49,9 +49,7 @@ public class AddMessageHandler implements Runnable {
 			message = request.getupdateConnMessage();
 			
 			if(message.isAdd()) {
-				//List of addresses before adding the new node
-				List<String> originalNodes = ConfigParams.getIpAddresses();
-	
+				
 				updateConsistentHash(message.getNewNodeIpAddress());
 				String predec = ConfigParams.getPredecessorNode(message.getNewNodeIpAddress());
 				//Need to send update ring request to all existing nodes
@@ -60,7 +58,7 @@ public class AddMessageHandler implements Runnable {
 				List<String> temp = new ArrayList<String>();
 				temp.add(ConfigParams.getSuccesorNode(message.getNewNodeIpAddress()));
 	
-				NWRequest newStartUpRequest = utils.getNewStartupRequest(new StartupMessage("New_node", temp, ConfigParams.getIpAddresses()));
+				NWRequest newStartUpRequest = utils.getNewStartupRequest(new StartupMessage(true, "New_node", temp, ConfigParams.getIpAddresses()));
 				Connection temp_connection=new Connection(message.getNewNodeIpAddress() ,NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(newStartUpRequest);
 				Constants.globalLog.debug("AddMessageHandler: Sending startup request to node: "+message.getNewNodeIpAddress());
@@ -72,13 +70,7 @@ public class AddMessageHandler implements Runnable {
 				temp_connection.send_request(breakFormRequest);
 				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
 				
-				/*try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					
-					e.printStackTrace();
-				}
-				sendUpdateRingMessage(ConfigParams.getIpAddresses(), message.getNewNodeIpAddress(), message.isAdd());*/
+				temp_connection.getnextResponse();
 	
 			} else {
 				
@@ -87,23 +79,24 @@ public class AddMessageHandler implements Runnable {
 				Connection temp_connection=new Connection(nodeToRemove ,NetworkConstants.C_SERVER_LISTEN_PORT);
 				NWRequest newInitRedisRequest = utils.getNewInitRedisRequest(new InitRedistributionMessage(nodeToRemove));
 				temp_connection.send_request(newInitRedisRequest);
-				/*List<String> originalNodes = ConfigParams.getIpAddresses();
 				
-				String nodeToRemove = message.getNewNodeIpAddress();
+				//Wait for acknowledgement
+				temp_connection.getnextResponse();
+				
+				List<String> originalNodes = ConfigParams.getIpAddresses();
+				
 				String predec = ConfigParams.getPredecessorNode(nodeToRemove);
 				originalNodes.remove(nodeToRemove);
-				
-				//Send init redistribution to node to be removed
 				
 				String newNodeSucessor = ConfigParams.getSuccesorNode(message.getNewNodeIpAddress());
 				NWRequest breakFormRequest = utils.getNewBreakFormRequest(new 
 						BreakFormationMessage("Break_Form", newNodeSucessor, newNodeSucessor));
-				Connection temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
+				temp_connection=new Connection(predec , NetworkConstants.C_SERVER_LISTEN_PORT);
 				temp_connection.send_request(breakFormRequest);
 				Constants.globalLog.debug("AddMessageHandler: Break from request to node: "+predec);
 				
 				ConsistentHashing.updateCircle(originalNodes);
-				ConfigParams.removeIpAddress(nodeToRemove);*/
+				ConfigParams.removeIpAddress(nodeToRemove);
 			}
 
 			//TODO: Remove the whole try catch for add and remove msgs
@@ -112,9 +105,9 @@ public class AddMessageHandler implements Runnable {
 			} catch (InterruptedException e) {
 				
 				e.printStackTrace();
-			}
+			}*/
 			sendUpdateRingMessage(ConfigParams.getIpAddresses(), message.getNewNodeIpAddress(), message.isAdd());
-			*/
+			
 		} catch (IOException e) {
 
 			Constants.globalLog.debug("IOException while adding new node");

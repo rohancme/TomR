@@ -12,6 +12,8 @@ public class StartupMessage extends Message {
 	@JsonProperty private ArrayList<String> neighborList;
 	@JsonProperty private List<String> nodeList;
 	
+	@JsonProperty private boolean dynamicAdd;
+	
 	public StartupMessage(){
 	
 	}
@@ -38,6 +40,16 @@ public class StartupMessage extends Message {
 		//in case the neighbor list is a list of a different kind
 		neighborList=new ArrayList<String>();
 		neighborList.addAll(neighbors);
+	}
+	
+	public StartupMessage(boolean dynamicAdd, String msg,List<String> neighbors, List<String> nodeList){
+		
+		this(msg, nodeList);
+		this.msg=msg;
+		//in case the neighbor list is a list of a different kind
+		neighborList=new ArrayList<String>();
+		neighborList.addAll(neighbors);
+		this.dynamicAdd = dynamicAdd;
 	}
 
 	public String getMsg() {
@@ -72,4 +84,8 @@ public class StartupMessage extends Message {
 		this.nodeList = nodeList;
 	}
 
+	public boolean isDynamicAdd() {
+		return dynamicAdd;
+	}
+	
 }
