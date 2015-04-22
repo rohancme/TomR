@@ -1,5 +1,6 @@
 package network.requests.incoming;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ import network.requests.outgoing.NodeNeighborModule;
 import network.responses.NWResponse;
 import network.responses.outgoing.NodeResponseModule;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.tomr.node.base.INode;
@@ -56,10 +60,24 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 			handleBreakRequestFormation(centralRequest);
 
 			Constants.globalLog.debug("Connected to a new outgoing neighbor request connection");
-
+			
+			Constants.globalLog.debug("Now need to wait for ACK that new neighbor has successfully made outgoing request conn");
+			
+			waitForRequestAck();
+			
 			handleBreakResponseFormation(centralRequest);
 			
 			Constants.globalLog.debug("Connected to a new outgoing neighbor response connection");
+			
+			Constants.globalLog.debug("Now need to wait for ACK that new neighbor has successfully made outgoing response conn");
+			
+			//waitForAck();
+			waitForResponseAck();
+			
+			//send ACK back to server:
+			NWResponse serverResponse=new NWResponse(this.utils.getSelfIP(),socket.getInetAddress().getHostAddress());
+			
+			sendOutgoingResponse(socket,serverResponse);
 
 		}
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.UPDATE_RING))){
@@ -68,6 +86,22 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.INIT_REDISTRIBUTION))){
 			Constants.globalLog.debug("Received init redistribution request for node to be removed");
 			this.mainNode.handleInitRedistribtion(centralRequest.getInitRedisMessage());
+		}
+	}
+
+	private void waitForRequestAck() {
+		
+		for(NeighborConnection con:neighborRequestConns){
+			//any response here will be the right one since there are no other direct responses over this conn
+			con.getnextResponse();
+		}
+		
+	}
+	
+	private void waitForResponseAck(){
+		for(NeighborConnection con:neighborResponseConns){
+			//any response here will be the right one since there are no other direct responses over this conn
+			con.getnextResponse();
 		}
 	}
 

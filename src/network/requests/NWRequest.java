@@ -35,7 +35,7 @@ public class NWRequest {
 	
 	@JsonProperty protected RedistributionMessage redistributionMessage=null;
 	@JsonProperty protected UpdateRingMessage updateRingMessage=null;
-
+	
 	public DBMessage getdBMessage() {
 		return dBMessage;
 	}

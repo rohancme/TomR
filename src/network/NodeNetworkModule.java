@@ -76,13 +76,23 @@ public class NodeNetworkModule {
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
 		this.mainNodeObject.handleStartupRequest(startupRequest.getStartupMessage().getNodeList());
-		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
+		//if this is a dynamic addition:
+		if(startupRequest.getStartupMessage().isDynamicAdd())
+			this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject,true);
+		//else
+		else
+			this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject,false);
 		neighborModule.startServicingRequests();
 		
 		//everyone needs to start listening on port 5002 first
 		NetworkResponseHandler incomingResponseHandler=null;
 		try {
-			incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
+			//if this is a dynamic addtion:
+			if(startupRequest.getStartupMessage().isDynamicAdd())
+				incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject,true);
+			//else
+			else
+				incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
 		} catch (NetworkException e) {
 					
 			e.printStackTrace();
@@ -102,6 +112,7 @@ public class NodeNetworkModule {
 		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.responseModule,this.utils,this.mainNodeObject);
 		Thread serverHandlerThread=new Thread(serverHandler);
 		serverHandlerThread.start();
+		
 	}
 	
 	/**
@@ -241,7 +252,7 @@ public class NodeNetworkModule {
 	}
 
 	
-	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage, Node mainNodeObject) {
+	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage, Node mainNodeObject,boolean sendInitACK) {
 		
 		//Use following:
 		//NeighborConnection in order to establish a connection with neighbor
@@ -254,7 +265,7 @@ public class NodeNetworkModule {
 		NeighborConnectionHandler incomingNeighborConnectionHandler = null;
 		
 		try {
-			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this,mainNodeObject);
+			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this,mainNodeObject,sendInitACK);
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}

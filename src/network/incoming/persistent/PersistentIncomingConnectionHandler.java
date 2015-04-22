@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import network.exception.NetworkException;
 import network.incoming.IncomingConnectionHandler;
+import network.responses.NWResponse;
 import edu.tomr.utils.Constants;
 
 //starts listening on a particular port for incoming msgs. Use for persistent connections.
@@ -65,6 +66,9 @@ public class PersistentIncomingConnectionHandler extends IncomingConnectionHandl
 			e.printStackTrace();
 		}
 		Constants.globalLog.debug("Accepted new incoming neighbor connection");
+		//send an ACK response
+		NWResponse incomingNeighborResponse=new NWResponse(null,null);
+		sendOutgoingResponse(this.clientSocket,incomingNeighborResponse);
 	}
 
 

@@ -272,7 +272,7 @@ public class Node implements INode {
 		    	try {
 					redistributeKeys();
 					//Send ack to LB at some static port
-					networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
+					//networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
 				} catch (NetworkException e) {
 					
 					e.printStackTrace();
