@@ -16,8 +16,6 @@ public final class NetworkConstants {
 	 */
 	public static final int LB_ADD_LISTEN_PORT = 8002;
 	
-	public static final int LB_NODE_LISTEN_PORT = 8003;
-	
 	public static final int INCOMING_NEIGHBOR_PORT=5001;
 	
 	public static final int INCOMING_RESPONSE_PORT=5002;

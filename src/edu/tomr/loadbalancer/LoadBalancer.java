@@ -10,7 +10,6 @@ import network.exception.NetworkException;
 import network.requests.NWRequest;
 import network.requests.incoming.LBClientServer;
 import edu.tomr.handler.AddMessageHandler;
-import edu.tomr.handler.NodeMessageHandler;
 import edu.tomr.handler.PortRequestHandler;
 import edu.tomr.network.heartbeat.server.ServerBeatController;
 import edu.tomr.protocol.StartupMessage;
@@ -97,10 +96,6 @@ public class LoadBalancer {
 		Thread addMsgThread = new Thread(addMsgHandler);
 		addMsgThread.start();
 		
-		PortRequestHandler<NodeMessageHandler> nodeMsgHandler = new PortRequestHandler<NodeMessageHandler>(NetworkConstants.LB_NODE_LISTEN_PORT,
-				NodeMessageHandler.class.getName());
-		Thread nodeMsgThread = new Thread(nodeMsgHandler);
-		nodeMsgThread.start();
 	}
 	
 	public static void main(String[] args) {
