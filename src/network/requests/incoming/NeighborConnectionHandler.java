@@ -6,6 +6,7 @@ import network.NodeNetworkModule;
 import network.exception.NetworkException;
 import network.incoming.persistent.RequestHandler;
 import network.requests.NWRequest;
+import network.responses.NWResponse;
 import edu.tomr.node.base.Node;
 import edu.tomr.utils.Constants;
 //handles incoming requests from neighbors
@@ -13,6 +14,7 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 	
 	private NodeNetworkModule networkModule=null;
 	private final Node mainNodeObject;
+	private boolean sendInitialResponse=false;
 
 	@Override
 	public void run() { //This needs to listen to incoming neighbor connections and requests
@@ -24,6 +26,12 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 			e.printStackTrace();
 		}
 		String ownIP=networkModule.utils.getSelfIP();
+		
+		if(sendInitialResponse){
+			NWResponse incomingNeighborResponse=new NWResponse(ownIP,null);
+			super.sendOutgoingResponse(clientSocket, incomingNeighborResponse);
+		}
+				
 		//listen and handle all requests
 		while(true){
 			NWRequest request=getNextRequest();
@@ -68,6 +76,13 @@ public class NeighborConnectionHandler extends RequestHandler implements Runnabl
 		super(incoming_port);	
 		this.networkModule=module;
 		this.mainNodeObject=mainNodeObject;
+	}
+	
+	public NeighborConnectionHandler(int incoming_port,NodeNetworkModule module, Node mainNodeObject,boolean sendInit) throws NetworkException{
+		super(incoming_port);	
+		this.networkModule=module;
+		this.mainNodeObject=mainNodeObject;
+		this.sendInitialResponse=sendInit;
 	}
 
 }

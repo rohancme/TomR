@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.NetworkUtilities;
 import network.NodeNetworkModule;
 import network.exception.NetworkException;
 import edu.tomr.client.KeyValuePair;
@@ -16,6 +15,7 @@ import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NodeMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.UpdateRingMessage;
@@ -189,18 +189,17 @@ public class Node implements INode {
 			originalNodes.remove(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
-
-		new Thread(new Runnable() {
-		    @Override
-			public void run() {
-		    	try {
+		
+		//Only to call when node is added
+		if(message.isAdd()){
+			new Thread(new Runnable() {
+			    @Override
+				public void run() {
+			
 					redistributeKeys();
-				} catch (NetworkException e) {
-					
-					e.printStackTrace();
 				}
-		    }
-		}).start();
+			}).start();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -226,12 +225,10 @@ public class Node implements INode {
 			operation.put(pair.getKey(), pair.getValue());
 	}
 
-	private void redistributeKeys() throws NetworkException {
+	private void redistributeKeys() {
 
-		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());//ConsistentHashing.redistributeKeys(null);
-		NetworkUtilities utils = null;
-
-		utils = new NetworkUtilities();
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());
+		
 		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 
 			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
@@ -251,5 +248,30 @@ public class Node implements INode {
 	public void handleStartupRequest(List<String> nodeList) {
 		
 		ConfigParams.loadProperties(nodeList);
+	}
+	
+	public void handleInitRedistribtion(InitRedistributionMessage message) {
+		
+		Constants.globalLog.debug("handling init redistribution in node: "+this.getSelfAddress());
+		List<String> originalNodes = ConfigParams.getIpAddresses();
+		originalNodes.remove(getSelfAddress());
+
+		ConsistentHashing.updateCircle(originalNodes);
+		
+		/*new Thread(new Runnable() {
+		    @Override
+			public void run() {
+		    	try {*/
+					
+						redistributeKeys();
+					
+					//Send ack to LB at some static port
+					/*networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
+				} catch (NetworkException e) {
+					
+					e.printStackTrace();
+				}
+		    }
+		}).start();*/
 	}
 }

@@ -92,11 +92,12 @@ public class LoadBalancer {
 
 		//Start servicing add message port LB_ADD_LISTEN_PORT
 		PortRequestHandler<AddMessageHandler> addMsgHandler = new PortRequestHandler<AddMessageHandler>(NetworkConstants.LB_ADD_LISTEN_PORT,
-				"edu.tomr.handler.AddMessageHandler");
+				AddMessageHandler.class.getName());
 		Thread addMsgThread = new Thread(addMsgHandler);
 		addMsgThread.start();
+		
 	}
-
+	
 	public static void main(String[] args) {
 	
 		LoadBalancer loadBalancer = new LoadBalancer();

@@ -9,6 +9,7 @@ import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.BreakIncomingNeighborConnectionMessage;
 import edu.tomr.protocol.ClientServiceMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.NewNeighborConnectionMessage;
 import edu.tomr.protocol.RedistributionMessage;
@@ -30,10 +31,11 @@ public class NWRequest {
 	@JsonProperty protected DBMessage dBMessage=null;
 	@JsonProperty protected BreakIncomingNeighborConnectionMessage breakIncomingNeighborMsg=null;
 	@JsonProperty protected UpdateConnMessage updateConnMessage=null;
+	@JsonProperty protected InitRedistributionMessage initRedisMessage=null;
 	
 	@JsonProperty protected RedistributionMessage redistributionMessage=null;
 	@JsonProperty protected UpdateRingMessage updateRingMessage=null;
-
+	
 	public DBMessage getdBMessage() {
 		return dBMessage;
 	}
@@ -138,6 +140,12 @@ public class NWRequest {
 		this.request_type=NetworkConstants.requestToString(Requests.REDISTRIBUTION);
 	}
 
+	public NWRequest(String req_id, InitRedistributionMessage msg){
+		this.request_id=req_id;
+		this.initRedisMessage=msg;
+		this.request_type=NetworkConstants.requestToString(Requests.REDISTRIBUTION);
+	}
+	
 	@JsonProperty("request_type")
 	public String getRequestType(){
 		return this.request_type;
@@ -166,6 +174,11 @@ public class NWRequest {
 	@JsonProperty("updateConnMessage")
 	public UpdateConnMessage getupdateConnMessage() {
 		return updateConnMessage;
+	}
+
+	@JsonProperty("initRedisMessage")
+	public InitRedistributionMessage getInitRedisMessage() {
+		return initRedisMessage;
 	}
 
 	@JsonProperty("destIP")
