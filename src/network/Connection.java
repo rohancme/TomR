@@ -10,9 +10,11 @@ import network.requests.NWRequest;
 import network.responses.NWResponse;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.JsonGenerator;
+
+import edu.tomr.utils.Constants;
 
 //handles connections to a particular server on a port
 public class Connection {
@@ -23,10 +25,10 @@ public class Connection {
 		try {
 			socket =new Socket(IP_Address,port_num);
 		} catch (UnknownHostException e) {
-			System.out.println("Unknown Host:"+IP_Address);
+			Constants.globalLog.debug("Unknown Host:"+IP_Address);
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Some kind of IO Exception at Host:"+IP_Address);
+			Constants.globalLog.debug("Some kind of IO Exception at Host:"+IP_Address);
 			e.printStackTrace();
 		}
 	}
@@ -35,7 +37,7 @@ public class Connection {
 		try {
 			socket = clientSocket;
 		} catch (Exception e) {
-			System.out.println("Some kind of IO Exception: ");
+			Constants.globalLog.debug("Some kind of IO Exception: ");
 			e.printStackTrace();
 		}
 	}
@@ -57,7 +59,7 @@ public class Connection {
 		try {
 			output_stream= new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Unable to open output stream to host:"+socket.getInetAddress());
 			e.printStackTrace();
 			return;
 		}
@@ -69,13 +71,13 @@ public class Connection {
 			output_stream.writeChar('\n');
 			output_stream.flush();
 		} catch (JsonGenerationException e) {
-			System.out.println("Problem Generating JSON");
+			Constants.globalLog.debug("Problem Generating JSON");
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			System.out.println("Problem with JSON mapping");
+			Constants.globalLog.debug("Problem with JSON mapping");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Problem with IO with host:"+socket.getInetAddress());
 			e.printStackTrace();
 		}
 		
@@ -89,7 +91,7 @@ public class Connection {
 		try {
 			output_stream= new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Unable to open output stream to host:"+socket.getInetAddress());
 			e.printStackTrace();
 			return;
 		}
@@ -101,13 +103,13 @@ public class Connection {
 			output_stream.writeChar('\n');
 			output_stream.flush();
 		} catch (JsonGenerationException e) {
-			System.out.println("Problem Generating JSON");
+			Constants.globalLog.debug("Problem Generating JSON");
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			System.out.println("Problem with JSON mapping");
+			Constants.globalLog.debug("Problem with JSON mapping");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Problem with IO with host:"+socket.getInetAddress());
 			e.printStackTrace();
 		}
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 
@@ -44,5 +45,11 @@ public interface INode {
 	 * @param nodeList
 	 */
 	public void handleStartupRequest(List<String> nodeList);
+	
+	/**
+	 * Handler for initializing redistribution of keys for node to be removed
+	 * @param message
+	 */
+	public void handleInitRedistribtion(InitRedistributionMessage message);
 
 }

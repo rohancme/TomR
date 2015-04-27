@@ -6,20 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import network.Connection;
-import network.NetworkConstants;
-import network.exception.NetworkException;
-import network.NetworkUtilities;
 import network.NodeNetworkModule;
-import network.requests.NWRequest;
+import network.exception.NetworkException;
 import edu.tomr.client.KeyValuePair;
 import edu.tomr.hash.ConsistentHashing;
-
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NodeMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.UpdateRingMessage;
@@ -27,6 +23,7 @@ import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
 import edu.tomr.queue.NodeQueueProcessor;
 import edu.tomr.utils.ConfigParams;
+import edu.tomr.utils.Constants;
 
 /*
  * Should contain a network module to handle the connections
@@ -121,7 +118,7 @@ public class Node implements INode {
 		try {
 			this.networkModule = new NodeNetworkModule(this);
 		} catch (NetworkException e) {
-			System.out.println("Error while instantiating network module");
+			Constants.globalLog.debug("Error while instantiating network module");
 			e.printStackTrace();
 		}
 		this.networkModule.initializeNetworkFunctionality();
@@ -183,22 +180,26 @@ public class Node implements INode {
 	 */
 	@Override
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
+		
+		Constants.globalLog.debug("handling update ring requests in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
-		originalNodes.add(message.getNewNode());
+		if(message.isAdd())
+			originalNodes.add(message.getNewNode());
+		else
+			originalNodes.remove(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
-
-		new Thread(new Runnable() {
-		    @Override
-			public void run() {
-		    	try {
+		
+		//Only to call when node is added
+		if(message.isAdd()){
+			new Thread(new Runnable() {
+			    @Override
+				public void run() {
+			
 					redistributeKeys();
-				} catch (NetworkException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-		    }
-		}).start();
+			}).start();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -224,12 +225,10 @@ public class Node implements INode {
 			operation.put(pair.getKey(), pair.getValue());
 	}
 
-	private void redistributeKeys() throws NetworkException {
+	private void redistributeKeys() {
 
-		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());//ConsistentHashing.redistributeKeys(null);
-		NetworkUtilities utils = null;
-
-		utils = new NetworkUtilities();
+		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());
+		
 		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 
 			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
@@ -237,12 +236,11 @@ public class Node implements INode {
 				for(String key: entry.getValue()){
 					KeyValuePair pair = new KeyValuePair(key, operation.get(key));
 					pairs.add(pair);
+					Constants.globalLog.debug("Move key: "+key+" to node: "+entry.getKey());
+					operation.delete(key);
 				}
 				RedistributionMessage message = new RedistributionMessage(pairs);
-				NWRequest redisRequest = utils.getNewRedisRequest(message);
-
-				Connection temp_connection=new Connection(entry.getKey(), NetworkConstants.C_SERVER_LISTEN_PORT);
-				temp_connection.send_request(redisRequest);
+				this.networkModule.sendOutgoingRequest(message, entry.getKey());
 			}
 		}
 	}
@@ -250,5 +248,30 @@ public class Node implements INode {
 	public void handleStartupRequest(List<String> nodeList) {
 		
 		ConfigParams.loadProperties(nodeList);
+	}
+	
+	public void handleInitRedistribtion(InitRedistributionMessage message) {
+		
+		Constants.globalLog.debug("handling init redistribution in node: "+this.getSelfAddress());
+		List<String> originalNodes = ConfigParams.getIpAddresses();
+		originalNodes.remove(getSelfAddress());
+
+		ConsistentHashing.updateCircle(originalNodes);
+		
+		/*new Thread(new Runnable() {
+		    @Override
+			public void run() {
+		    	try {*/
+					
+						redistributeKeys();
+					
+					//Send ack to LB at some static port
+					/*networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
+				} catch (NetworkException e) {
+					
+					e.printStackTrace();
+				}
+		    }
+		}).start();*/
 	}
 }

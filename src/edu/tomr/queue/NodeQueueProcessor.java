@@ -6,6 +6,7 @@ import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.ClientRequestPayload;
 import edu.tomr.protocol.DBMessage;
 import edu.tomr.protocol.NodeMessage;
+import edu.tomr.utils.Constants;
 
 public class NodeQueueProcessor implements Runnable {
 
@@ -47,11 +48,13 @@ public class NodeQueueProcessor implements Runnable {
 		boolean success = false;
 		
 		switch(message.getRequestType()) {
-			case ADD: 	operation.put(tempPayload.getKey(), tempPayload.getValue());
+			case ADD: 	Constants.globalLog.debug("Hanlding put request for key: "+tempPayload.getKey()+" at node: "+parentNode.getSelfAddress());
+						operation.put(tempPayload.getKey(), tempPayload.getValue());
 						success = true;
 						break;
 						
-			case GET:	val = operation.get(tempPayload.getKey());
+			case GET:	Constants.globalLog.debug("Hanlding get request for key: "+tempPayload.getKey()+" at node: "+parentNode.getSelfAddress());
+						val = operation.get(tempPayload.getKey());
 						if(val != null)
 							success = true;
 						break;

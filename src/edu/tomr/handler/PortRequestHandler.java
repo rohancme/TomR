@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import edu.tomr.utils.Constants;
+
 public class PortRequestHandler<T> implements Runnable {
 
 	private int port;
@@ -19,7 +21,7 @@ public class PortRequestHandler<T> implements Runnable {
 	@Override
 	public void run() {
 
-		System.out.println("started listening for connections");
+		Constants.globalLog.debug("started listening for connections");
 		ServerSocket server = null;
 		try {
 			server = new ServerSocket(this.port);

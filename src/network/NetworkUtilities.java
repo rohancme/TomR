@@ -5,15 +5,16 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.UUID;
 
 import network.exception.NetworkException;
 import network.requests.NWRequest;
 import edu.tomr.protocol.BreakFormationMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.InitRedistributionMessage;
 import edu.tomr.protocol.NeighborMessage;
 import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.protocol.UpdateConnMessage;
 import edu.tomr.protocol.UpdateRingMessage;
 
 public class NetworkUtilities {
@@ -102,7 +103,17 @@ public class NetworkUtilities {
 		return request;
 	}
 
-	public NWRequest getNewRedisRequest(RedistributionMessage msg) {
+	public NWRequest getNewRedisRequest(RedistributionMessage msg,String destIP) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg,this.getSelfIP(),destIP);
+		return request;
+	}
+	
+	public NWRequest getNewAddNodeRequest(UpdateConnMessage msg) {
+		NWRequest request = new NWRequest(this.generate_req_id(), msg);
+		return request;
+	}
+	
+	public NWRequest getNewInitRedisRequest(InitRedistributionMessage msg) {
 		NWRequest request = new NWRequest(this.generate_req_id(), msg);
 		return request;
 	}

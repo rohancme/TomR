@@ -1,12 +1,7 @@
 package edu.tomr.loadbalancer;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import network.Connection;
 import network.NetworkConstants;
@@ -97,11 +92,12 @@ public class LoadBalancer {
 
 		//Start servicing add message port LB_ADD_LISTEN_PORT
 		PortRequestHandler<AddMessageHandler> addMsgHandler = new PortRequestHandler<AddMessageHandler>(NetworkConstants.LB_ADD_LISTEN_PORT,
-				"edu.tomr.handler.AddMessageHandler");
+				AddMessageHandler.class.getName());
 		Thread addMsgThread = new Thread(addMsgHandler);
 		addMsgThread.start();
+		
 	}
-
+	
 	public static void main(String[] args) {
 	
 		LoadBalancer loadBalancer = new LoadBalancer();
