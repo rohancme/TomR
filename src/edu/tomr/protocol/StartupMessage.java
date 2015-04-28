@@ -11,29 +11,30 @@ public class StartupMessage extends Message {
 	@JsonProperty private boolean connectFirst;
 	@JsonProperty private ArrayList<String> neighborList;
 	@JsonProperty private List<String> nodeList;
-	
+
 	@JsonProperty private boolean dynamicAdd;
-	
+	@JsonProperty private boolean replica;
+
 	public StartupMessage(){
-	
+
 	}
-	
+
 	private StartupMessage(String msg, List<String> nodeList){
 		this.msg = msg;
 		this.nodeList = nodeList;
 	}
-	
+
 	public StartupMessage(String msg, List<String> neighbors, List<String> nodeList){
-		
+
 		this(msg, nodeList);
 		//in case the neighbor list is a list of a different kind
 		neighborList=new ArrayList<String>();
 		neighborList.addAll(neighbors);
-		
+
 	}
-	
+
 	public StartupMessage(String msg,List<String> neighbors, List<String> nodeList, boolean connectFirst){
-		
+
 		this(msg, nodeList);
 		this.connectFirst=connectFirst;
 		this.msg=msg;
@@ -41,15 +42,37 @@ public class StartupMessage extends Message {
 		neighborList=new ArrayList<String>();
 		neighborList.addAll(neighbors);
 	}
-	
+
 	public StartupMessage(boolean dynamicAdd, String msg,List<String> neighbors, List<String> nodeList){
-		
+
 		this(msg, nodeList);
 		this.msg=msg;
 		//in case the neighbor list is a list of a different kind
 		neighborList=new ArrayList<String>();
 		neighborList.addAll(neighbors);
 		this.dynamicAdd = dynamicAdd;
+	}
+
+	/**
+	 * Constructor for replica startup message
+	 * @param msg
+	 * @param primaryNode
+	 * @param nodeList
+	 */
+	public StartupMessage(boolean isReplica, String msg, String primaryNode, List<String> nodeList) {
+		this(msg, nodeList);
+		this.replica = isReplica;
+		List<String> temp = new ArrayList<String>();
+		temp.add(primaryNode);
+		this.nodeList = temp;
+	}
+
+	public boolean isReplica() {
+		return replica;
+	}
+
+	public void setReplica(boolean replica) {
+		this.replica = replica;
 	}
 
 	public String getMsg() {
@@ -87,5 +110,5 @@ public class StartupMessage extends Message {
 	public boolean isDynamicAdd() {
 		return dynamicAdd;
 	}
-	
+
 }

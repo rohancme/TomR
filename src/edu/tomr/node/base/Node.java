@@ -22,6 +22,8 @@ import edu.tomr.protocol.UpdateRingMessage;
 import edu.tomr.queue.ClientQueueProcessor;
 import edu.tomr.queue.MessageQueue;
 import edu.tomr.queue.NodeQueueProcessor;
+import edu.tomr.replica.Replicator;
+import edu.tomr.replica.handler.ReplicatorHandler;
 import edu.tomr.utils.ConfigParams;
 import edu.tomr.utils.Constants;
 
@@ -77,6 +79,12 @@ public class Node implements INode {
 	 */
 	private Map<String, String> requestMapper;
 
+
+	private Replicator replicator;
+
+	public Replicator getReplicator() {
+		return replicator;
+	}
 
 	public Map<String, String> getRequestMapper() {
 		return requestMapper;
@@ -180,7 +188,7 @@ public class Node implements INode {
 	 */
 	@Override
 	public void handleUpdateRingRequest(UpdateRingMessage message) {
-		
+
 		Constants.globalLog.debug("handling update ring requests in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
 		if(message.isAdd())
@@ -189,13 +197,13 @@ public class Node implements INode {
 			originalNodes.remove(message.getNewNode());
 
 		ConsistentHashing.updateCircle(originalNodes);
-		
+
 		//Only to call when node is added
 		if(message.isAdd()){
 			new Thread(new Runnable() {
 			    @Override
 				public void run() {
-			
+
 					redistributeKeys();
 				}
 			}).start();
@@ -228,7 +236,7 @@ public class Node implements INode {
 	private void redistributeKeys() {
 
 		Map<String, List<String>> map = ConsistentHashing.redistributeKeys(inMemMap.keySet());
-		
+
 		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 
 			if(! entry.getKey().equalsIgnoreCase(getSelfAddress())) {
@@ -244,31 +252,49 @@ public class Node implements INode {
 			}
 		}
 	}
-	
+
+	@Override
 	public void handleStartupRequest(List<String> nodeList) {
-		
+
+		Constants.globalLog.debug("Handling startup request for server replica node");
 		ConfigParams.loadProperties(nodeList);
+		this.replicator = new Replicator(getOperation(), true);
+		ReplicatorHandler handler = new ReplicatorHandler(this.replicator);
+		Thread repThread = new Thread(handler);
+		repThread.start();
 	}
-	
+
+	@Override
+	public void handleStartupRequest(String primaryNode, boolean isServer) {
+
+		Constants.globalLog.debug("Handling startup request for client replica node");
+		this.replicator = new Replicator(getOperation(), isServer, primaryNode);
+		ReplicatorHandler handler = new ReplicatorHandler(this.replicator);
+		Thread repThread = new Thread(handler);
+		repThread.start();
+		//ConfigParams.loadProperties(nodeList);
+	}
+
+	@Override
 	public void handleInitRedistribtion(InitRedistributionMessage message) {
-		
+
 		Constants.globalLog.debug("handling init redistribution in node: "+this.getSelfAddress());
 		List<String> originalNodes = ConfigParams.getIpAddresses();
 		originalNodes.remove(getSelfAddress());
 
 		ConsistentHashing.updateCircle(originalNodes);
-		
+
 		/*new Thread(new Runnable() {
 		    @Override
 			public void run() {
 		    	try {*/
-					
+
 						redistributeKeys();
-					
+
 					//Send ack to LB at some static port
 					/*networkModule.sendOutgoingLBResponse(new UpdateNodeAckMessage(false, getSelfAddress()));
 				} catch (NetworkException e) {
-					
+
 					e.printStackTrace();
 				}
 		    }
