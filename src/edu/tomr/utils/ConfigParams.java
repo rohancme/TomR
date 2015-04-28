@@ -23,9 +23,9 @@ public class ConfigParams {
 	public static void loadProperties(List<String> ipAddresses) {
 
 		reloadProperties();
-		
+
 		prop.setProperty("Node_IP_Addresses", getCSIpAdds(ipAddresses));
-		
+
 		String propFilePath = System.getenv(tomrEnvVar);
 		StringBuilder builder = new StringBuilder();
 		builder.append(propFilePath).append(propertyFileName);
@@ -48,7 +48,7 @@ public class ConfigParams {
 	}
 
 	public static void loadProperties() {
-		
+
 		String propFilePath = System.getenv(tomrEnvVar);
 
 
@@ -73,21 +73,21 @@ public class ConfigParams {
 			System.exit(-1);
 		}
 	}
-	
+
 	private static String getCSIpAdds(List<String> ips) {
-		
+
 		int i=0;
 		StringBuilder builder = new StringBuilder();
 		for(; i<ips.size()-1; i++) {
 			builder.append(ips.get(i)).append(',');
 		}
 		builder.append(ips.get(i));
-		
+
 		return builder.toString();
 	}
-	
+
 	private static void reloadProperties() {
-		
+
 		String propFilePath = System.getenv(tomrEnvVar);
 
 		StringBuilder builder = new StringBuilder();
@@ -111,9 +111,9 @@ public class ConfigParams {
 			System.exit(-1);
 		}
 	}
-	
+
 	private static void addPropertyToFile() {
-		
+
 		String propFilePath = System.getenv(tomrEnvVar);
 		StringBuilder builder = new StringBuilder();
 		builder.append(propFilePath).append(propertyFileName);
@@ -134,7 +134,7 @@ public class ConfigParams {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static String getProperty(String key) {
 
 		String val = prop.getProperty(key);
@@ -278,6 +278,21 @@ public class ConfigParams {
 			}
 		}
 		return retIpAdd;
+	}
+
+	public static List<String> getReplicaAddresses() {
+
+		String ipAdds = prop.getProperty("Replica_IP_Addresses");
+
+		String[] ipAddsArray = ipAdds.split(",");
+
+		List<String> list = new ArrayList<String>();
+		for(int i=0; i<ipAddsArray.length; ++i) {
+			if(ipAddsArray[i] != null)
+				list.add(ipAddsArray[i].trim());
+		}
+
+		return list;
 	}
 
 	/*public static void main(String[] args) {

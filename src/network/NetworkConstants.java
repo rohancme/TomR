@@ -7,7 +7,9 @@ public final class NetworkConstants {
 	 * Client ports
 	 */
 	public static final int C_SERVER_LISTEN_PORT = 5000;
-	
+
+	public static final int C_REPLICA_LISTEN_PORT = 4000;
+
 	//Client Heartbeat port
 	public static final int C_BEAT_PORT = 5010;
 
@@ -15,9 +17,9 @@ public final class NetworkConstants {
 	 * Server or Load Balancer ports
 	 */
 	public static final int LB_ADD_LISTEN_PORT = 8002;
-	
+
 	public static final int INCOMING_NEIGHBOR_PORT=5001;
-	
+
 	public static final int INCOMING_RESPONSE_PORT=5002;
 
 	public NetworkConstants() {

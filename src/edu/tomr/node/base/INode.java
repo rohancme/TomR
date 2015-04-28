@@ -40,12 +40,19 @@ public interface INode {
 	 * @param message
 	 */
 	public void redistributionRequest(RedistributionMessage message);
-	
+
 	/**
 	 * @param nodeList
 	 */
 	public void handleStartupRequest(List<String> nodeList);
-	
+
+	/**
+	 * For replica startup  messages
+	 * @param primaryNode
+	 * @param isServer
+	 */
+	public void handleStartupRequest(String primaryNode, boolean isServer);
+
 	/**
 	 * Handler for initializing redistribution of keys for node to be removed
 	 * @param message
