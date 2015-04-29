@@ -2,11 +2,11 @@ package edu.tomr.start;
 
 import java.util.ArrayList;
 
-import edu.tomr.protocol.StartupMessage;
 import network.Connection;
 import network.NetworkUtilities;
 import network.exception.NetworkException;
 import network.requests.NWRequest;
+import edu.tomr.protocol.StartupMessage;
 
 public class CentralStarterClass {
 	

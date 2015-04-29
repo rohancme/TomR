@@ -1,7 +1,5 @@
 package edu.tomr.protocol;
 
-import java.util.ArrayList;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class BreakIncomingNeighborConnectionMessage extends Message {

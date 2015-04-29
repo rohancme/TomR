@@ -37,12 +37,12 @@ public class ConfigParams {
 			output.close();
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		} catch (IOException e) {
 
-			System.out.println("Could not add IP Address to config file");
+			Constants.globalLog.debug("Could not add IP Address to config file");
 			e.printStackTrace();
 		}
 	}
@@ -60,7 +60,7 @@ public class ConfigParams {
 			input = new FileInputStream(builder.toString());
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -68,7 +68,7 @@ public class ConfigParams {
 		try {
 			prop.load(input);
 		} catch (IOException e) {
-			System.out.println("Problem loading property file '" + builder.toString());
+			Constants.globalLog.debug("Problem loading property file '" + builder.toString());
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -98,7 +98,7 @@ public class ConfigParams {
 			input = new FileInputStream(builder.toString());
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -106,7 +106,7 @@ public class ConfigParams {
 		try {
 			prop.load(input);
 		} catch (IOException e) {
-			System.out.println("Problem loading property file '" + builder.toString());
+			Constants.globalLog.debug("Problem loading property file '" + builder.toString());
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -125,12 +125,12 @@ public class ConfigParams {
 			output.close();
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		} catch (IOException e) {
 
-			System.out.println("Could not add IP Address to config file");
+			Constants.globalLog.debug("Could not add IP Address to config file");
 			e.printStackTrace();
 		}
 	}
@@ -188,12 +188,12 @@ public class ConfigParams {
 			output.close();
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		} catch (IOException e) {
 
-			System.out.println("Could not add IP Address to config file");
+			Constants.globalLog.debug("Could not add IP Address to config file");
 			e.printStackTrace();
 		}
 
@@ -223,12 +223,12 @@ public class ConfigParams {
 			output.close();
 		} catch (FileNotFoundException e) {
 
-			System.out.println("property file '" + builder.toString() + "' not found ");
+			Constants.globalLog.debug("property file '" + builder.toString() + "' not found ");
 			e.printStackTrace();
 			System.exit(-1);
 		} catch (IOException e) {
 
-			System.out.println("Could not remove IP Address from config file");
+			Constants.globalLog.debug("Could not remove IP Address from config file");
 			e.printStackTrace();
 		}
 		reloadProperties();
@@ -285,20 +285,20 @@ public class ConfigParams {
 		ConfigParams config = new ConfigParams();
 		config.loadProperties();
 
-		System.out.println(getPredecessorNode("192.168.1.103"));
-		System.out.println(getSuccesorNode("192.168.1.103"));
+		Constants.globalLog.debug(getPredecessorNode("192.168.1.103"));
+		Constants.globalLog.debug(getSuccesorNode("192.168.1.103"));
 
 		addIpAddress("1.2.3.4");
 		loadProperties();
 
-		System.out.println(getPredecessorNode("192.168.1.103"));
-		System.out.println(getSuccesorNode("192.168.1.103"));
+		Constants.globalLog.debug(getPredecessorNode("192.168.1.103"));
+		Constants.globalLog.debug(getSuccesorNode("192.168.1.103"));
 
 		removeIpAddress("1.2.3.4");
 		loadProperties();
 
-		System.out.println(getPredecessorNode("192.168.1.103"));
-		System.out.println(getSuccesorNode("192.168.1.103"));
+		Constants.globalLog.debug(getPredecessorNode("192.168.1.103"));
+		Constants.globalLog.debug(getSuccesorNode("192.168.1.103"));
 
 
 	}*/
@@ -308,7 +308,7 @@ public class ConfigParams {
 		Enumeration<String> enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
 
 		removeIpAddress("1.2.3.4");
@@ -317,9 +317,9 @@ public class ConfigParams {
 		enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
-		System.out.println(">>>>>>>> "+getIpAddresses()+" \n\n\n");
+		Constants.globalLog.debug(">>>>>>>> "+getIpAddresses()+" \n\n\n");
 
 
 		addIpAddress("1.2.3.4");
@@ -328,7 +328,7 @@ public class ConfigParams {
 		enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
 
 		removeIpAddress("192.168.1.103");
@@ -337,9 +337,9 @@ public class ConfigParams {
 		enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
-		System.out.println(">>>>>>>> "+getIpAddresses()+" \n\n\n");
+		Constants.globalLog.debug(">>>>>>>> "+getIpAddresses()+" \n\n\n");
 
 		addIpAddress("192.168.1.103");
 		loadProperties();
@@ -347,7 +347,7 @@ public class ConfigParams {
 		enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
 
 		removeIpAddress("1.2.3.4");
@@ -356,9 +356,9 @@ public class ConfigParams {
 		enumeration = (Enumeration<String>) config.prop.propertyNames();
 		while(enumeration.hasMoreElements()) {
 			String key = enumeration.nextElement();
-			System.out.println("key: "+key+" value: "+config.prop.getProperty(key));
+			Constants.globalLog.debug("key: "+key+" value: "+config.prop.getProperty(key));
 		}
-		System.out.println(">>>>>>>> "+getIpAddresses()+" \n\n\n");
+		Constants.globalLog.debug(">>>>>>>> "+getIpAddresses()+" \n\n\n");
 
 	}*/
 

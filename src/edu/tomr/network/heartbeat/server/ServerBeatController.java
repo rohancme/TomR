@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.tomr.utils.Constants;
+
 public class ServerBeatController {
 
 	static int beatPortNumber = 8080;
@@ -18,7 +20,7 @@ public class ServerBeatController {
 		try {
 			beatServer.startServer();
 		} catch (IOException e) {
-			System.out.println("server controller start: IOException");
+			Constants.globalLog.debug("server controller start: IOException");
 			e.printStackTrace();
 		}
 		

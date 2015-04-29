@@ -1,9 +1,16 @@
 package edu.tomr.client;
 
-public class KeyValuePair {
-	private final String key;
-	private final byte[] value;
+import org.codehaus.jackson.annotate.JsonProperty;
 
+public class KeyValuePair {
+	@JsonProperty("key")private final String key;
+	@JsonProperty("value")private final byte[] value;
+
+	private KeyValuePair(){
+		this.key=null;
+		this.value=null;
+	}
+	
 	public KeyValuePair(String key, byte[] value){
 		this.key = key;
 		this.value = value;

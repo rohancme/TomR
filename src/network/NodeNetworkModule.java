@@ -24,7 +24,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import edu.tomr.node.base.Node;
 import edu.tomr.protocol.AckMessage;
 import edu.tomr.protocol.DBMessage;
+import edu.tomr.protocol.RedistributionMessage;
 import edu.tomr.protocol.StartupMessage;
+import edu.tomr.utils.Constants;
 //Main network module. An object of this is created on every Node in the cluster
 public class NodeNetworkModule {
 	
@@ -70,13 +72,23 @@ public class NodeNetworkModule {
 	public void initializeNetworkFunctionality(){
 		NWRequest startupRequest=getStartUpRequest(startupMsgPort);
 		this.mainNodeObject.handleStartupRequest(startupRequest.getStartupMessage().getNodeList());
-		this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject);
+		//if this is a dynamic addition:
+		if(startupRequest.getStartupMessage().isDynamicAdd())
+			this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject,true);
+		//else
+		else
+			this.neighborModule=setupNeighborConnections(startupRequest.getStartupMessage(),mainNodeObject,false);
 		neighborModule.startServicingRequests();
 		
 		//everyone needs to start listening on port 5002 first
 		NetworkResponseHandler incomingResponseHandler=null;
 		try {
-			incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
+			//if this is a dynamic addtion:
+			if(startupRequest.getStartupMessage().isDynamicAdd())
+				incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject,true);
+			//else
+			else
+				incomingResponseHandler = new NetworkResponseHandler(responsePort,this,mainNodeObject);
 		} catch (NetworkException e) {
 					
 			e.printStackTrace();
@@ -93,9 +105,10 @@ public class NodeNetworkModule {
 		incomingClientThread.start();
 		
 		//Start listening for Server Messages
-		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.utils);
+		NodeCentralServerMessageHandler serverHandler=new NodeCentralServerMessageHandler(NetworkConstants.C_SERVER_LISTEN_PORT,this.neighborModule,this.responseModule,this.utils,this.mainNodeObject);
 		Thread serverHandlerThread=new Thread(serverHandler);
 		serverHandlerThread.start();
+		
 	}
 	
 	/**
@@ -104,6 +117,11 @@ public class NodeNetworkModule {
 	 */
 	public void sendOutgoingRequest(DBMessage msg,String destIP){
 		NWRequest request=utils.getNewDBRequest(msg, destIP);
+		this.neighborModule.insertOutgoingRequest(request);
+	}
+	
+	public void sendOutgoingRequest(RedistributionMessage msg,String destIP){
+		NWRequest request=utils.getNewRedisRequest(msg, destIP);
 		this.neighborModule.insertOutgoingRequest(request);
 	}
 	
@@ -137,11 +155,13 @@ public class NodeNetworkModule {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Couldn't close the Client Socket");
+			Constants.globalLog.error("Couldn't close the Client Socket");
 		}
 		
 		
 	}
+	
+	
 	
 	/********************************Private Methods********************************************************/
 	
@@ -158,7 +178,7 @@ public class NodeNetworkModule {
 		try {
 			output_stream= new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			System.out.println("Unable to open output stream to host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Unable to open output stream to host:"+socket.getInetAddress());
 			e.printStackTrace();
 			return;
 		}
@@ -170,13 +190,13 @@ public class NodeNetworkModule {
 			output_stream.writeChar('\n');
 			output_stream.flush();
 		} catch (JsonGenerationException e) {
-			System.out.println("Problem Generating JSON");
+			Constants.globalLog.debug("Problem Generating JSON");
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			System.out.println("Problem with JSON mapping");
+			Constants.globalLog.debug("Problem with JSON mapping");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Problem with IO with host:"+socket.getInetAddress());
+			Constants.globalLog.debug("Problem with IO with host:"+socket.getInetAddress());
 			e.printStackTrace();
 		}
 	}
@@ -200,7 +220,7 @@ public class NodeNetworkModule {
 	}
 
 	
-	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage, Node mainNodeObject) {
+	private NodeNeighborModule setupNeighborConnections(StartupMessage startupMessage, Node mainNodeObject,boolean sendInitACK) {
 		
 		//Use following:
 		//NeighborConnection in order to establish a connection with neighbor
@@ -213,7 +233,7 @@ public class NodeNetworkModule {
 		NeighborConnectionHandler incomingNeighborConnectionHandler = null;
 		
 		try {
-			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this,mainNodeObject);
+			incomingNeighborConnectionHandler = new NeighborConnectionHandler(selfServerPort,this,mainNodeObject,sendInitACK);
 		} catch (NetworkException e) {
 			e.printStackTrace();
 		}

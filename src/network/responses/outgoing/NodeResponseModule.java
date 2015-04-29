@@ -13,6 +13,10 @@ public class NodeResponseModule {
 		private ArrayList<NeighborConnection> outgoingNeighborConnections=null;
 		private ConcurrentLinkedQueue<NWResponse> outgoingResponseQueue=null;
 		
+		public ArrayList<NeighborConnection> getOutgoingNeighborConnections() {
+			return outgoingNeighborConnections;
+		}
+		
 		public NodeResponseModule(List<String> neighborList,int neighborResponseServerPort){
 			
 			this.outgoingNeighborConnections=getConnectionList(neighborList,neighborResponseServerPort);
