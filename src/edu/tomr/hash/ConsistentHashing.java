@@ -22,6 +22,7 @@ public class ConsistentHashing {
 	public static void calculateCircle(List<String> nodes){
 		// Evenly distributing the nodes on the unit circle using the concept of virtual replicas
 		try{
+			unitCircle = new TreeMap<Double, String>();
 			for(String node : nodes){
 				unitCircle.put(getHash(node), node);
 				unitCircle.put((getHash(node) + .33)%.99, node);
