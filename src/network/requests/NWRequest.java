@@ -143,7 +143,7 @@ public class NWRequest {
 	public NWRequest(String req_id, InitRedistributionMessage msg){
 		this.request_id=req_id;
 		this.initRedisMessage=msg;
-		this.request_type=NetworkConstants.requestToString(Requests.REDISTRIBUTION);
+		this.request_type=NetworkConstants.requestToString(Requests.INIT_REDISTRIBUTION);
 	}
 	
 	@JsonProperty("request_type")
