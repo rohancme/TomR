@@ -13,7 +13,7 @@ import edu.tomr.utils.Constants;
 public class ClientConnectionHandler implements Runnable {
 	private Socket clientSocket;
 	private UUID clientUID;
-	private static int turnOf = 0;
+	private static volatile Integer turnOf = 0;
 	
 	static{
 		//ConfigParams.loadProperties();
@@ -62,23 +62,26 @@ public class ClientConnectionHandler implements Runnable {
 
 
 
-	private synchronized String getIPAddress() {
+	private  String getIPAddress() {
 		String IPAddress = null;
-		try{
-
-		if(turnOf > ConfigParams.getIpAddresses().size() - 1){
-			turnOf = 0;
-		}		
-		IPAddress = ConfigParams.getIpAddresses().get(turnOf);
-		turnOf++;
-		}
-		catch(Exception e){
-			Constants.globalLog.debug("Error while trying to access the IP Addresses for scheduling");
-			e.printStackTrace();
-			
+		synchronized(turnOf){
+			try{
+	
+			if(turnOf > ConfigParams.getIpAddresses().size() - 1){
+				turnOf = 0;
+			}		
+			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+			turnOf++;
+			}
+			catch(Exception e){
+				Constants.globalLog.debug("Error while trying to access the IP Addresses for scheduling");
+				e.printStackTrace();
+				
+			}
 		}
 		return IPAddress;
 		
-	}
+		}
+	
 
 }
