@@ -27,8 +27,12 @@ public class NodeResponseModule {
 		}
 		
 		public void startServicingResponses(){
-			Thread servicer=new Thread(new OutgoingResponseServicer(outgoingResponseQueue,outgoingNeighborConnections));
-			servicer.start();
+			Thread nwResponseServicer=new Thread(new OutgoingResponseServicer(outgoingResponseQueue,outgoingNeighborConnections));
+			nwResponseServicer.start();
+			
+			//Starts the thread servicing client responses
+			Thread clientResponseServicer=new Thread(new OutgoingClientResponseServicer(outgoingClientResponseQueue));
+			clientResponseServicer.start();
 		}
 		
 		private ArrayList<NeighborConnection> getConnectionList(List<String> neighborList,int neighborServerPort) {	
@@ -47,7 +51,7 @@ public class NodeResponseModule {
 		}	
 		
 		public void insertOutgoingClientResponse(ClientResponseWrapper response){
-			
+			outgoingClientResponseQueue.add(response);
 		}
 		
 		private void initializeQueue(){
