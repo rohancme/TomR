@@ -1,6 +1,7 @@
 package edu.tomr.node.map.operations;
 
 import java.util.Map;
+import java.util.Set;
 
 public class MapOperation implements IMapOperation {
 	
@@ -23,5 +24,11 @@ public class MapOperation implements IMapOperation {
 	
 	public byte[] delete(String key) {
 		return this.memoryMap.remove(key);
+	}
+
+	@Override
+	public Set<String> getKeySet() {
+
+		return this.memoryMap.keySet();
 	}
 }
