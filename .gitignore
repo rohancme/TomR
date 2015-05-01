@@ -16,3 +16,4 @@ hs_err_pid*
 .settings/org.eclipse.jdt.core.prefs
 /target/
 *.config
+src/main/resources/logback.xml

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import network.outgoing.NeighborConnection;
+import network.responses.ClientResponseWrapper;
 import network.responses.NWResponse;
 //handles all outgoing response messages from this node
 public class NodeResponseModule {
@@ -12,6 +13,7 @@ public class NodeResponseModule {
 		//this might need to be a copy-on-write later when the neighborConnections become dynamic
 		private ArrayList<NeighborConnection> outgoingNeighborConnections=null;
 		private ConcurrentLinkedQueue<NWResponse> outgoingResponseQueue=null;
+		private ConcurrentLinkedQueue<ClientResponseWrapper> outgoingClientResponseQueue=null;
 		
 		public ArrayList<NeighborConnection> getOutgoingNeighborConnections() {
 			return outgoingNeighborConnections;
@@ -20,6 +22,7 @@ public class NodeResponseModule {
 		public NodeResponseModule(List<String> neighborList,int neighborResponseServerPort){
 			
 			this.outgoingNeighborConnections=getConnectionList(neighborList,neighborResponseServerPort);
+			outgoingClientResponseQueue=new ConcurrentLinkedQueue<ClientResponseWrapper>();
 			initializeQueue();
 		}
 		
@@ -42,6 +45,10 @@ public class NodeResponseModule {
 		public void insertOutgoingNWResponse(NWResponse response){
 			outgoingResponseQueue.add(response);
 		}	
+		
+		public void insertOutgoingClientResponse(ClientResponseWrapper response){
+			
+		}
 		
 		private void initializeQueue(){
 			this.outgoingResponseQueue=new ConcurrentLinkedQueue<NWResponse>();

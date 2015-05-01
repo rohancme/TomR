@@ -12,6 +12,7 @@ import network.requests.incoming.NodeCentralServerMessageHandler;
 import network.requests.incoming.NodeClientRequestHandler;
 import network.requests.incoming.StartupMessageHandler;
 import network.requests.outgoing.NodeNeighborModule;
+import network.responses.ClientResponseWrapper;
 import network.responses.NWResponse;
 import network.responses.incoming.NetworkResponseHandler;
 import network.responses.outgoing.NodeResponseModule;
@@ -149,6 +150,8 @@ public class NodeNetworkModule {
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
 		NWResponse response=new NWResponse(message);
 		Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		ClientResponseWrapper clientResponse=new ClientResponseWrapper(response,clientSocket);
+		
 		sendResponse(clientSocket,response);
 		try {
 			clientSocket.close();
