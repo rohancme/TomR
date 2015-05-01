@@ -163,7 +163,7 @@ public class ConfigParams {
 
 		List<String> list = new ArrayList<String>();
 		for(int i=0; i<ipAddsArray.length; ++i) {
-			if(ipAddsArray[i] != null)
+			if(! ipAddsArray[i].trim().equalsIgnoreCase(""))
 				list.add(ipAddsArray[i].trim());
 		}
 
@@ -226,6 +226,7 @@ public class ConfigParams {
 			String string = (String) iter.next();
 			builder.append(string).append(',');
 		}
+		builder.setCharAt(builder.length()-1, ' ');
 		prop.setProperty("Node_IP_Addresses", builder.toString());
 		/*Pattern p = Pattern.compile(ipAddress+"+(\\s)?+(,)?");
 		Matcher m = p.matcher(nodes);
