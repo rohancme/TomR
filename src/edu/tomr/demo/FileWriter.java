@@ -12,7 +12,7 @@ public class FileWriter implements Runnable {
 
 	private final String filePath;
 	private final IMapOperation operation;
-	
+
 	public FileWriter(String filePath, IMapOperation operation) {
 		this.filePath = filePath;
 		this.operation = operation;
@@ -20,15 +20,15 @@ public class FileWriter implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		while(true){
 			try {
 				PrintWriter writer = new PrintWriter(this.filePath);
-				
+
 				Iterator<String> iter = this.operation.getKeySet().iterator();
 				while (iter.hasNext()) {
-					String string = (String) iter.next();
-					writer.println(string);
+					String string = iter.next();
+					writer.append(string).append(',');
 				}
 				writer.close();
 				Thread.sleep(5000);
