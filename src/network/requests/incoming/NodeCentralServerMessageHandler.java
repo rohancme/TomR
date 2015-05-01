@@ -86,6 +86,9 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		else if(centralRequest.getRequestType().equals(NetworkConstants.requestToString(Requests.INIT_REDISTRIBUTION))){
 			Constants.globalLog.debug("Received init redistribution request for node to be removed");
 			this.mainNode.handleInitRedistribtion(centralRequest.getInitRedisMessage());
+			//send ACK back to server:
+			NWResponse serverResponse=new NWResponse(this.utils.getSelfIP(),socket.getInetAddress().getHostAddress());
+			sendOutgoingResponse(socket,serverResponse);
 		}
 	}
 
