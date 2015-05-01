@@ -6,12 +6,13 @@ import network.NetworkUtilities;
 import network.exception.NetworkException;
 import network.requests.NWRequest;
 import edu.tomr.protocol.UpdateConnMessage;
+import edu.tomr.utils.ConfigParams;
 
 public class Admin {
 
 	public static void main(String[] args) {
 		
-		Connection conn=new Connection("10.139.61.182", NetworkConstants.LB_ADD_LISTEN_PORT);
+		Connection conn=new Connection(ConfigParams.getProperty("LB_IP"), NetworkConstants.LB_ADD_LISTEN_PORT);
 		
 		NetworkUtilities utils = null;
 		try {
