@@ -199,7 +199,7 @@ public class NodeCentralServerMessageHandler extends NonPersistentIncomingConnec
 		}
 
 		//closing the socket
-		inputScanner.close();
+		//inputScanner.close();
 
 		return request;
 	}
