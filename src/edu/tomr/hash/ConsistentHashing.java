@@ -26,7 +26,7 @@ public class ConsistentHashing {
 			for(String node : nodes){
 				unitCircle.put(getHash(node), node);
 				unitCircle.put((getHash(node) + .33)%.99, node);
-				//unitCircle.put((getHash(node) + .6)%.99, node);
+				unitCircle.put((getHash(node) + .6)%.99, node);
 			}
 		}
 		catch(NullPointerException e){
