@@ -97,6 +97,7 @@ public class Node implements INode {
 		clientInbox = new MessageQueue<ClientMessage>();
 		nodeInbox = new MessageQueue<NodeMessage>();
 		requestMapper = new HashMap<String, String>();
+		writeKeysToFile();
 	}
 
 	public String getSelfAddress() {
