@@ -27,16 +27,11 @@ public class NodeQueueProcessor implements Runnable {
 		boolean running = true;
 
 		while(running) {
-			try {
-				Thread.sleep(50);
+			
 				if(!queue.isEmpty()){
 					DBMessage msg = (DBMessage)queue.dequeueMessage();
 					handleMessage(msg);
 				}
-			} catch (InterruptedException e) {
-				running = false;
-				e.printStackTrace();
-			}
 		}
 	}
 	

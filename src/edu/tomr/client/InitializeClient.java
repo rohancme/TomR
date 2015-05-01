@@ -50,7 +50,7 @@ public class InitializeClient {
 			e.printStackTrace();
 		}
 		String randomString = generateString(requestLength);
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		ExecutorService executor = Executors.newFixedThreadPool(10);
 		for(int i=1; i<=numOfRequests; i++){
 			//ClientServiceMessage serviceMessage = getServiceMessage();
 			//Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
@@ -81,7 +81,11 @@ public class InitializeClient {
 	}
 
 	public static void main(String[] args) {
-
-		generateRequests(ClientRequestType.ADD, 50, 5);
+		serverIP = ConfigParams.getProperty("LB_IP");
+		long startTime = System.nanoTime();
+		//generateRequests(ClientRequestType.ADD, 1000, 2000);
+		generateRequests(ClientRequestType.GET, 50, 2000);
+		long endTime = System.nanoTime();
+		System.out.println("Took "+((endTime - startTime)/1000000) + " ms"); 
 	}
 }
