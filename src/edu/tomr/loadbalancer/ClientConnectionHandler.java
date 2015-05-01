@@ -65,15 +65,12 @@ public class ClientConnectionHandler implements Runnable {
 	private synchronized String getIPAddress() {
 		String IPAddress = null;
 		try{
-		if(turnOf == ConfigParams.getIpAddresses().size() - 1){
-			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+
+		if(turnOf > ConfigParams.getIpAddresses().size() - 1){
 			turnOf = 0;
-			
-			}
-		else{
-			IPAddress = ConfigParams.getIpAddresses().get(turnOf);
-			turnOf++;
-			}
+		}		
+		IPAddress = ConfigParams.getIpAddresses().get(turnOf);
+		turnOf++;
 		}
 		catch(Exception e){
 			Constants.globalLog.debug("Error while trying to access the IP Addresses for scheduling");
