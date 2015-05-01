@@ -97,7 +97,7 @@ public class Node implements INode {
 		clientInbox = new MessageQueue<ClientMessage>();
 		nodeInbox = new MessageQueue<NodeMessage>();
 		requestMapper = new HashMap<String, String>();
-		writeKeysToFile();
+		
 	}
 
 	public String getSelfAddress() {
@@ -250,6 +250,7 @@ public class Node implements INode {
 	public void handleStartupRequest(List<String> nodeList) {
 		
 		ConfigParams.loadProperties(nodeList);
+		writeKeysToFile();
 	}
 	
 	public void handleInitRedistribtion(InitRedistributionMessage message) {
