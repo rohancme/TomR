@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -203,17 +205,39 @@ public class ConfigParams {
 	public static void removeIpAddress(String ipAddress) {
 
 		String nodes = prop.getProperty("Node_IP_Addresses");
-
-		Pattern p = Pattern.compile(ipAddress+"+(\\s)?+(,)?");
+		String x[] = nodes.split(",");
+		
+		List<String> list = new ArrayList<String>(Arrays.asList(x));
+		Iterator<String> iter = list.iterator();
+		while (iter.hasNext()) {
+			String string = (String) iter.next();
+			if(string.equalsIgnoreCase(ipAddress)){
+				iter.remove();
+				break;
+			}
+		}
+		
+		
+		//Convert to string
+		StringBuilder builder = new StringBuilder();
+		
+		iter = list.iterator();
+		while (iter.hasNext()) {
+			String string = (String) iter.next();
+			builder.append(string).append(',');
+		}
+		prop.setProperty("Node_IP_Addresses", builder.toString());
+		/*Pattern p = Pattern.compile(ipAddress+"+(\\s)?+(,)?");
 		Matcher m = p.matcher(nodes);
 
 		if(m.find()){
 			 String updateNodes = nodes.replace(nodes.substring(m.start(), m.end()), "");
 			 prop.setProperty("Node_IP_Addresses", updateNodes);
-		}
+		}*/
 
+		
 		String propFilePath = System.getenv(tomrEnvVar);
-		StringBuilder builder = new StringBuilder();
+		builder = new StringBuilder();
 		builder.append(propFilePath).append(propertyFileName);
 
 		OutputStream output = null;
