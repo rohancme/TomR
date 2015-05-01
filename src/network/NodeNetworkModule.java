@@ -149,7 +149,8 @@ public class NodeNetworkModule {
 	//DUMMY-Waiting for ClientResponse Class
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
 		NWResponse response=new NWResponse(message);
-		Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		//Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		Socket clientSocket=clientConnectionList.get(message.getRequestIdServiced());
 		ClientResponseWrapper clientResponse=new ClientResponseWrapper(response,clientSocket);
 		this.responseModule.insertOutgoingClientResponse(clientResponse);
 		//remove this entry from the list of clients. The socket has been closed
