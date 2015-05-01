@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import network.outgoing.NeighborConnection;
+import network.responses.ClientResponseWrapper;
 import network.responses.NWResponse;
 //handles all outgoing response messages from this node
 public class NodeResponseModule {
@@ -12,6 +13,7 @@ public class NodeResponseModule {
 		//this might need to be a copy-on-write later when the neighborConnections become dynamic
 		private ArrayList<NeighborConnection> outgoingNeighborConnections=null;
 		private ConcurrentLinkedQueue<NWResponse> outgoingResponseQueue=null;
+		private ConcurrentLinkedQueue<ClientResponseWrapper> outgoingClientResponseQueue=null;
 		
 		public ArrayList<NeighborConnection> getOutgoingNeighborConnections() {
 			return outgoingNeighborConnections;
@@ -20,12 +22,17 @@ public class NodeResponseModule {
 		public NodeResponseModule(List<String> neighborList,int neighborResponseServerPort){
 			
 			this.outgoingNeighborConnections=getConnectionList(neighborList,neighborResponseServerPort);
+			outgoingClientResponseQueue=new ConcurrentLinkedQueue<ClientResponseWrapper>();
 			initializeQueue();
 		}
 		
 		public void startServicingResponses(){
-			Thread servicer=new Thread(new OutgoingResponseServicer(outgoingResponseQueue,outgoingNeighborConnections));
-			servicer.start();
+			Thread nwResponseServicer=new Thread(new OutgoingResponseServicer(outgoingResponseQueue,outgoingNeighborConnections));
+			nwResponseServicer.start();
+			
+			//Starts the thread servicing client responses
+			Thread clientResponseServicer=new Thread(new OutgoingClientResponseServicer(outgoingClientResponseQueue));
+			clientResponseServicer.start();
 		}
 		
 		private ArrayList<NeighborConnection> getConnectionList(List<String> neighborList,int neighborServerPort) {	
@@ -42,6 +49,10 @@ public class NodeResponseModule {
 		public void insertOutgoingNWResponse(NWResponse response){
 			outgoingResponseQueue.add(response);
 		}	
+		
+		public void insertOutgoingClientResponse(ClientResponseWrapper response){
+			outgoingClientResponseQueue.add(response);
+		}
 		
 		private void initializeQueue(){
 			this.outgoingResponseQueue=new ConcurrentLinkedQueue<NWResponse>();

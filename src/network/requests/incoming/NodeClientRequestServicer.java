@@ -34,7 +34,7 @@ public class NodeClientRequestServicer implements Runnable {
 	private void handleRequest(NWRequest request){
 		//currently clients are only sending DBMessage. Don't see this changing
 		DBMessage msg=request.getdBMessage();
-		clientConnectionList.put(msg.getClientInfo().getIpAddress(), mySocket);
+		clientConnectionList.put(msg.getRequestId(), mySocket);
 		myNode.handleRequest(msg);
 	}
 	

@@ -50,6 +50,9 @@ public class NodeStarter {
 
 	public static void main(String[] args) {
 
+
+		System.setProperty("java.net.preferIPv4Stack" , "true");
+		
 		NodeStarter nodeStarter = new NodeStarter();
 		//nodeStarter.startBeatClient();
 

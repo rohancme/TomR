@@ -12,6 +12,7 @@ import network.requests.incoming.NodeCentralServerMessageHandler;
 import network.requests.incoming.NodeClientRequestHandler;
 import network.requests.incoming.StartupMessageHandler;
 import network.requests.outgoing.NodeNeighborModule;
+import network.responses.ClientResponseWrapper;
 import network.responses.NWResponse;
 import network.responses.incoming.NetworkResponseHandler;
 import network.responses.outgoing.NodeResponseModule;
@@ -148,15 +149,20 @@ public class NodeNetworkModule {
 	//DUMMY-Waiting for ClientResponse Class
 	public void sendOutgoingClientResponse(AckMessage message, String clientIPAddress){
 		NWResponse response=new NWResponse(message);
-		Socket clientSocket=clientConnectionList.get(clientIPAddress);
-		sendResponse(clientSocket,response);
+		//Socket clientSocket=clientConnectionList.get(clientIPAddress);
+		Socket clientSocket=clientConnectionList.get(message.getRequestIdServiced());
+		ClientResponseWrapper clientResponse=new ClientResponseWrapper(response,clientSocket);
+		this.responseModule.insertOutgoingClientResponse(clientResponse);
+		//remove this entry from the list of clients. The socket has been closed
+		clientConnectionList.remove(clientIPAddress);
+		/*sendResponse(clientSocket,response);
 		try {
 			clientSocket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Constants.globalLog.error("Couldn't close the Client Socket");
-		}
+		}*/
 		
 		
 	}
@@ -170,36 +176,7 @@ public class NodeNetworkModule {
 		
 	}
 	
-	public void sendResponse(Socket socket,NWResponse response) {
-		// TODO Auto-generated method stub
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-		DataOutputStream output_stream=null;
-		try {
-			output_stream= new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			Constants.globalLog.debug("Unable to open output stream to host:"+socket.getInetAddress());
-			e.printStackTrace();
-			return;
-		}
-		
-		try {
-			//mapper.writeValue(System.out, request);
-			mapper.writeValue(output_stream, response);
-			//end of message marker.
-			output_stream.writeChar('\n');
-			output_stream.flush();
-		} catch (JsonGenerationException e) {
-			Constants.globalLog.debug("Problem Generating JSON");
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			Constants.globalLog.debug("Problem with JSON mapping");
-			e.printStackTrace();
-		} catch (IOException e) {
-			Constants.globalLog.debug("Problem with IO with host:"+socket.getInetAddress());
-			e.printStackTrace();
-		}
-	}
+	
 	
 	private NWRequest getStartUpRequest(int startUpMsgPort) {
 		
