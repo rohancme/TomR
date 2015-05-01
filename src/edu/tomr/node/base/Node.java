@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import network.NodeNetworkModule;
 import network.exception.NetworkException;
 import edu.tomr.client.KeyValuePair;
+import edu.tomr.demo.FileWriter;
 import edu.tomr.hash.ConsistentHashing;
 import edu.tomr.node.map.operations.IMapOperation;
 import edu.tomr.node.map.operations.MapOperation;
@@ -96,6 +97,7 @@ public class Node implements INode {
 		clientInbox = new MessageQueue<ClientMessage>();
 		nodeInbox = new MessageQueue<NodeMessage>();
 		requestMapper = new HashMap<String, String>();
+		writeKeysToFile();
 	}
 
 	public String getSelfAddress() {
@@ -273,5 +275,12 @@ public class Node implements INode {
 				}
 		    }
 		}).start();*/
+	}
+	
+	public void writeKeysToFile() {
+		
+		FileWriter writer = new FileWriter(ConfigParams.getProperty("KEYS_FILE_PATH"), this.operation);
+		Thread t = new Thread(writer);
+		t.start();
 	}
 }
