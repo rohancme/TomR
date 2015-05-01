@@ -1,6 +1,8 @@
 package edu.tomr.client;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import network.Connection;
 import network.NetworkUtilities;
@@ -47,20 +49,23 @@ public class InitializeClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		String randomString = generateString(requestLength);
+		ExecutorService executor = Executors.newFixedThreadPool(5);
 		for(int i=1; i<=numOfRequests; i++){
-			ClientServiceMessage serviceMessage = getServiceMessage();
-			Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
-			String randomString = generateString(requestLength);
-			DBMessage query=new DBMessage(requestType, new ClientRequestPayload("File-"+i, randomString.getBytes()), new ClientInfo(utils.getSelfIP()), serviceMessage.getPayloadID());
-			NWRequest request=new NWRequest(serviceMessage.getPayloadID(),query);
-			nodeConnection.send_request(request);
+			//ClientServiceMessage serviceMessage = getServiceMessage();
+			//Connection nodeConnection=new Connection(serviceMessage.getServiceIPAddress(),servicerNodePort);
+			
+			//DBMessage query=new DBMessage(requestType, new ClientRequestPayload("File-"+i, randomString.getBytes()), new ClientInfo(utils.getSelfIP()), serviceMessage.getPayloadID());
+			//NWRequest request=new NWRequest(serviceMessage.getPayloadID(),query);
+			//nodeConnection.send_request(request);
 			//this is block wait method
-			NWResponse response=nodeConnection.getnextResponse();
-
-			Constants.globalLog.debug(response.getAckMsg().toString());
-
+			//NWResponse response=nodeConnection.getnextResponse();
+			 Runnable worker = new ClientRunner(serverIP,lbPort,servicerNodePort,randomString,requestType,i,utils.getSelfIP());
+			 executor.execute(worker);	
 		}
+		 executor.shutdown();
+	     while (!executor.isTerminated());
+	     Constants.globalLog.debug("All client threads finished executing");
 	}	
 
 	private static String generateString(int requestLength) {
